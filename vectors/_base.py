@@ -1,7 +1,5 @@
 from math import sqrt
 
-from vectors.vector import Vector
-
 
 class VectorBase:
     def __init__(self, x, y, z):
@@ -29,9 +27,10 @@ class VectorBase:
         return self.length
 
     def __str__(self):  # возвращает координаты вектора в виде строки
-        return '(' + self.x + ', ' + self.y + ', ' + self.z + ')'
+        return '(' + str(self.x) + ', ' + str(self.y) + ', ' + str(self.z) + ')'
 
     def __eq__(self, other):  # проверка двух векторов на равенство
-        if not isinstance(other, Vector):  # проверка принадлежности other к Vector
-            return False
-        return self.x == other.x and self.y == other.y and self.z == other.y
+        try:
+            return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
+        except:  # other не принадлежит к типу Vector
+            return False  # в этом случае сразу вернем false
