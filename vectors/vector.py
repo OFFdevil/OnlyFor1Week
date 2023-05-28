@@ -9,15 +9,15 @@ Horizontal = namedtuple("Horizontal", ["h", "a", "r"])
 class Vector(VectorBase):
     # TODO: implement
     @staticmethod
-    def from_first_equatorial(d, t, radius=1):
+    def from_first_equatorial(d, t, radius=1): #перевод из первой формы экваториальной системы
         raise NotImplementedError("TODO")
 
     @staticmethod
-    def from_second_equatorial(d, a, radius=1):
+    def from_second_equatorial(d, a, radius=1): ##перевод из второй формы экваториальной системы
         raise NotImplementedError("TODO")
 
     @staticmethod
-    def from_horizontal(h, a, radius=1):
+    def from_horizontal(h, a, radius=1):  #перевод из полярной в декартову систему
         a = to_radian(a)
         h = to_radian(h)
         return Vector(cos(-a) * cos(h), cos(h) * sin(-a), sin(h)) * radius
@@ -38,7 +38,7 @@ class Vector(VectorBase):
     def __add__(self, other):
         return Vector(other.x + self.x, other.y + self.y, other.z + self.z)
 
-    def __mul__(self, other):
+    def __mul__(self, other): #произведение вектора на число
         if isinstance(other, float) or isinstance(other, int):
             return Vector(self.x * other, self.y * other, self.z * other)
         else:
