@@ -22,7 +22,7 @@ class VectorBase:
         return self._z
 
     @property
-    def length(self):  # посчитали длину вектора по формуле
+    def length(self):  # посчитали длину вектора по нужной формуле
         return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def __len__(self):  # возвращает длину вектора
