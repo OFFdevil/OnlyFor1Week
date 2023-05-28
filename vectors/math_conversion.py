@@ -2,8 +2,8 @@ from math import pi
 
 
 def to_degree(radian):  # перевод из радиан в градусы
-    return radian / pi * 180
+    return 180.0*radian/pi
 
 
 def to_radian(degree):  # перевод из градусов в радианы
-    return degree / 180 * pi
+    return pi*degree/180
