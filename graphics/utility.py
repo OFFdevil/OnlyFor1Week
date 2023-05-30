@@ -1,6 +1,5 @@
 from vectors.vector import Vector
 
-
 DIRECTIONS = {
     'up': Vector(0, 0, 1),
     'down': Vector(0, 0, -1),
