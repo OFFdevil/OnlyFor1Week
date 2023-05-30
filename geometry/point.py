@@ -10,7 +10,7 @@ class Point:  # точка в пространстве
         self._z = z
 
     @property
-    def x(self):  # геттер
+    def x(self):  #геттер
         return self._x
 
     @property

@@ -66,7 +66,7 @@ class Horizontal(Base):  # декартова система координат
         y = r * math.sin(a)
         return Point(x, y, z)
 
-    def __add__(self, other):  # сложение
+    def __add__(self, other):  #сложение
         return Horizontal(self.alpha + other.alpha, self.delta + other.delta)
 
     def angle_to(self, other_point):  # угол между векторами в градусах(сначала переводим в оба к типу Point)

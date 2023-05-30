@@ -3,7 +3,7 @@ class Horizontal:
         self._a = a
         self._d = d
 
-    @property  # геттер. возвращает угол альфа
+    @property  # геттер. возвращает угол a
     def a(self):
         return self._a
 
