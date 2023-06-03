@@ -20,7 +20,7 @@ class SkySphere:
     def get_constellations(self):
         return self._constellations
 
-    def get_visible_stars(self, observer, date_time: datetime.datetime):
+    def get_visible_stars(self):
         visible_stars = []
         for star in self._stars:
             if not isinstance(star.position, SecondEquatorial):

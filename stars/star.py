@@ -1,4 +1,4 @@
-from geometry.equatorial import almost_equal, SecondEquatorial
+from geometry.equatorial import SecondEquatorial
 
 
 class Star:
