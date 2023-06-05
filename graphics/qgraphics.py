@@ -31,5 +31,5 @@ class StarsWindow(QtWidgets.QMainWindow):
         panel.setLayout(layout)
         layout.addWidget(self._sky_watch, 0, 0)
 
-        self.setWindowTitle("Stars")  # назвали так окно
+        self.setWindowTitle("Sky")  # назвали так окно
         self.show()
