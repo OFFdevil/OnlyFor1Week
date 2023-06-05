@@ -1,14 +1,14 @@
 import datetime
 
-from geometry.equatorial import SecondEquatorial
+from geometry.avector import Equatorial
 from stars.star import Star
 
 
-class SkySphere:
+class SkyBase:
     def __init__(self, stars):
         self._stars = stars
-        self._nadir = Star(SecondEquatorial(0, 90), 3, '')
-        self._zenith = Star(SecondEquatorial(0, -90), 3, '')
+        self._nadir = Star(Equatorial(0, 90), 3, '')
+        self._zenith = Star(Equatorial(0, -90), 3, '')
         self._constellations = {star.constellation for star in stars}
 
     def get_zenith(self):
@@ -23,7 +23,7 @@ class SkySphere:
     def get_visible_stars(self):
         visible_stars = []
         for star in self._stars:
-            if not isinstance(star.position, SecondEquatorial):
+            if not isinstance(star.position, Equatorial):
                 print("!")
                 continue
             visible_stars.append(star)

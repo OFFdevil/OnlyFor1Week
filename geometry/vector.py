@@ -3,7 +3,7 @@ from math import sqrt, acos
 import numpy
 
 
-class Point:  # точка в пространстве
+class Vector:  # точка в пространстве
     def __init__(self, x, y, z):
         self._x = x
         self._y = y
@@ -38,13 +38,13 @@ class Point:  # точка в пространстве
         x = numpy.linalg.det([[self.y, self.z], [other.y, other.z]])
         y = -numpy.linalg.det([[self.x, self.z], [other.x, other.z]])
         z = numpy.linalg.det([[self.x, self.y], [other.x, other.y]])
-        return Point(x, y, z)
+        return Vector(x, y, z)
 
     def mul_to_matrix(self, matrix):  # выводит произведение вектора на matrix
-        return Point(*numpy.matmul(list(self), matrix))
+        return Vector(*numpy.matmul(list(self), matrix))
 
     def rmul_to_matrix(self, matrix):  # выводит произведение matrix на вектор
-        return Point(*numpy.matmul(matrix, list(self)))
+        return Vector(*numpy.matmul(matrix, list(self)))
 
     def change_basis(self, x, y, z):  # переход от одного базиса к другому
         return self.rmul_to_matrix(numpy.array([list(x), list(y), list(z)]))
@@ -56,10 +56,10 @@ class Point:  # точка в пространстве
         return self + t * plane_normal_vector
 
     def __add__(self, other):  # сложение векторов
-        return Point(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __mul__(self, other):  # скаляр произведение
-        return Point(self.x * other, self.y * other, self.z * other)
+        return Vector(self.x * other, self.y * other, self.z * other)
 
     def __rmul__(self, other):
         return self * other

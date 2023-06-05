@@ -5,14 +5,14 @@ from collections import namedtuple
 
 from PyQt5 import QtWidgets
 
-from geometry.equatorial import SecondEquatorial
+from geometry.avector import Equatorial
 from graphics.qgraphics import StarsWindow
 from graphics.renderer.camera import Camera
 from stars.parser import TxtDataBaseParser
-from stars.skybase import SkySphere
+from stars.skybase import SkyBase
 
 
-def run(observer: Camera, sky_sphere: SkySphere, start_time: datetime.datetime):
+def run(observer: Camera, sky_sphere: SkyBase, start_time: datetime.datetime):
     """Запуск логики «Неба»"""
     app = QtWidgets.QApplication([])
 
@@ -32,15 +32,15 @@ def main():
     # TODO
 
     try:
-        start_time = datetime.datetime.strptime(args.datetime, "%d-%m-%Y %H:%M:%S")
+        start_time = datetime.datetime.strptime(args.datetime, "%d-%mass-%Y %H:%M:%S")
     except Exception:
         start_time = datetime.datetime.now()
     # TODO
-    sight_vector = SecondEquatorial(args.vector[0], args.vector[1])
+    sight_vector = Equatorial(args.vector[0], args.vector[1])
     observer = Camera(args.position[0], args.position[1], args.radius, sight_vector)
     star_parser = TxtDataBaseParser()
     stars = star_parser.parse_dir(args.catalog)
-    sky_sphere = SkySphere(stars)
+    sky_sphere = SkyBase(stars)
     sys.exit(run(observer, sky_sphere, start_time))
 
 

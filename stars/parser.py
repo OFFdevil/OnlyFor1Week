@@ -1,7 +1,7 @@
 import re
 import os
 
-from geometry.equatorial import SecondEquatorial
+from geometry.avector import Equatorial
 from stars.star import Star
 
 
@@ -20,7 +20,7 @@ class TxtDataBaseParser:
         regex_str_alpha_to_delta = r" "  # промежуток между альфа и дельта
         regex_str_delta = r"(?P<d_degrees>[\+-] ?\d+): ?(?P<d_minutes>\d+): ?(?P<d_seconds>\d+)"  # шаблон для поиска Delta: [-90; 90] : [0; 59] : [0; 59] - degree : degree minutes : degree seconds
         regex_str_delta_to_m = r" *?\d+\.\d+ *?-? ?\d+\.\d+.*?"  # от дельта до массы
-        regex_str_m = r"(?P<m>\d+\.\d+)"  # шаблон для поиска массы
+        regex_str_m = r"(?P<mass>\d+\.\d+)"  # шаблон для поиска массы
         regex_str_class = r".*?(?P<class>[OBAFGKM])"  # класс звезды
 
         regex_str = regex_str_beginning + regex_str_alpha + regex_str_alpha_to_delta + regex_str_delta + regex_str_delta_to_m + regex_str_m + regex_str_class
@@ -59,7 +59,7 @@ class TxtDataBaseParser:
         delta = self._parse_delta(match)  # парсим дельта. в delta лежит float
         m = self._parse_m(match)  # парсим массу
         spectral_class = self._parse_class(match)
-        return Star(SecondEquatorial(alpha, delta), m, constellation, spectral_class)
+        return Star(Equatorial(alpha, delta), m, constellation, spectral_class)
 
     @staticmethod
     def _parse_delta(match):  # парсит дельта
@@ -81,7 +81,7 @@ class TxtDataBaseParser:
 
     @staticmethod
     def _parse_m(match):  # на вход принимается общий шаблон match
-        m = match.group('m')  # ищем по конкретному шаблону m( для поиска массы)
+        m = match.group('mass')  # ищем по конкретному шаблону m( для поиска массы)
         return float(m)
 
     @staticmethod

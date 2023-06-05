@@ -1,5 +1,5 @@
 import datetime
-from geometry.equatorial import Horizontal
+from geometry.avector import Horizontal
 
 
 class Camera:

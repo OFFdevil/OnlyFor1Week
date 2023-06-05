@@ -4,14 +4,14 @@ from PyQt5 import QtWidgets
 
 from graphics.renderer.camera import Camera
 from graphics.renderer.crenderer import ControllableRenderer
-from stars.skybase import SkySphere
+from stars.skybase import SkyBase
 
 
 # создаем класс, которой наследуется от QtWidgets.QMainWindow
 class StarsWindow(QtWidgets.QMainWindow):
     """Главное окно приложения"""
 
-    def __init__(self, observer: Camera, sky_sphere: SkySphere, start_time: datetime.datetime):
+    def __init__(self, observer: Camera, sky_sphere: SkyBase, start_time: datetime.datetime):
         # создаем конструктор
         # наследуем от классов camera, skysphere
         super().__init__()
