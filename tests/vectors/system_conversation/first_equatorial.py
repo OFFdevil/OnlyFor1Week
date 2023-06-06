@@ -4,11 +4,11 @@ from vectors.vector import Vector, Horizontal
 
 
 class FirstEquatorialConversationTest(unittest.TestCase):
-    #тестирование перевода из/в первую экваториальную систему координат
+    # тестирование перевода из/в первую экваториальную систему координат
     def setUp(self):
         self.epsilon = 0.001
 
-    @staticmethod #вычисление расстояния  между векторами в полярной системе координат
+    @staticmethod  # вычисление расстояния  между векторами в полярной системе координат
     def distance(a: Horizontal, b: Horizontal):
         return max(abs(a.h - b.h), abs(a.a - b.a))
 

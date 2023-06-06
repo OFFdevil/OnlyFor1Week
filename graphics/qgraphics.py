@@ -23,12 +23,15 @@ class StarsWindow(QtWidgets.QMainWindow):
         self._sky_watch.setFocus()  # устанавливаем фокус на само окно
 
     def _init_ui(self):
+        # создаем виджет panel и устанавливаем его как центральный виджет (наследник от QMainWidget)
         panel = QtWidgets.QWidget()
-        self.setCentralWidget(panel)  # расположили текстовое поле посередине
+        self.setCentralWidget(panel)
 
-        # TODO
+        # создаем элемент layout c использованием сеточного размещения QGridLayout
         layout = QtWidgets.QGridLayout()
+        # устанавливаем его в виджет panel
         panel.setLayout(layout)
+        # добавляем новый виджет в ячейку (0, 0) в layout
         layout.addWidget(self._sky_watch, 0, 0)
 
         self.setWindowTitle("Sky")  # назвали так окно
