@@ -1,5 +1,5 @@
 import datetime
-from geometry.sky_math import StarTimeHelper
+from stars.sky_math import StarTimeHelper
 
 '''https://en.wikipedia.org/wiki/Sidereal_time'''
 
