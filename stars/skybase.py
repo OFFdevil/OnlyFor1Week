@@ -15,11 +15,12 @@ class SkyBase:  # класс-база данных со всеми звезда�
     def constellations(self):  # геттер.
         return self._constellations.keys()  # функция keys по сути возвращает ключи словаря(то есть названия созвездий)
 
-    def get_stars(self, avaible_constellations: set):  # передаем set из созвездий
+    def get_stars(self,
+                  available_constellations: set):  # возвращает звезды данных созвездий(передаем set из созвездий)
         stars = []
-        for constellation in avaible_constellations:
-            if not constellation in self._constellations:
+        for constellation in available_constellations:
+            if not constellation in self._constellations:  # если переданного созвездия не существует
                 continue
-            for star in self._constellations[constellation]:  # и из всех выбираем только те
+            for star in self._constellations[constellation]:  # добавляем все звезды всех созвездий
                 stars.append(star)
             return stars
