@@ -1,3 +1,7 @@
+from PyQt5.QtWidgets import QWidget
+
+from graphics.autogui.cast_tools import to_widget
+
 from graphics.autogui.item import Item
 from graphics.autogui.label import Label
 
@@ -32,7 +36,10 @@ class GUI(Item):
         self.try_load()  # метод, чтобы загрузить обновленное состояние вложенных элементов
         # из предыдущего сохранения
 
-
-#example:
-#layout = GUI()
-#layout.add()
+    # example:
+    # layout = GUI()
+    # layout.add()
+    def to_widget(self) -> QWidget:
+        widget = to_widget(self)
+        # widget.setStyleSheet("QWidget {margin: 0px}")
+        return widget

@@ -8,7 +8,7 @@ from graphics.crenderer import StarsWindow
 from graphics.renderer.camera import Camera
 from graphics.renderer.watcher import Watcher
 from stars.parser import TxtDataBaseParser
-from stars.skybase import SkyBase
+from stars.skydatabase import SkyDataBase
 
 
 # TODO: create sky_logic.pu
@@ -34,7 +34,7 @@ def get_all_lines_in_dir(path: str, ext: str):
                 # в виде кортежа
 
 
-def run(watcher: Watcher, sky_sphere: SkyBase):  # создает и запускает графический интерфейс
+def run(watcher: Watcher, sky_sphere: SkyDataBase):  # создает и запускает графический интерфейс
     """Запуск логики «Неба»"""
     app = QtWidgets.QApplication([])  # создали объект приложения
 

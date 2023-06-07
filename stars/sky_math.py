@@ -35,8 +35,8 @@ class StarTimeHelper:
         return hours
 
     @staticmethod
-    def get_julian_day(dt: datetime): #передаем в функцию дату
-        day = sum(jdcal.gcal2jd(dt.year, dt.month, dt.day)) #gcal2jd - перевод из григорианской в юлианскую
+    def get_julian_day(dt: datetime):  # передаем в функцию дату
+        day = sum(jdcal.gcal2jd(dt.year, dt.month, dt.day))  # gcal2jd - перевод из григорианской в юлианскую
         day += dt.hour / 24
         day += dt.minute / 24 / 60
         day += dt.second / 24 / 60 / 60
@@ -44,16 +44,15 @@ class StarTimeHelper:
         return day
 
 
-class TimeHelper: #класс со вспомогательными функциями для работы со временем
+class TimeHelper:  # класс со вспомогательными функциями для работы со временем
     @staticmethod
     def time_to_seconds(h, m, s):
         return float(h) * 3600 + float(m) * 60 + float(s)
 
     @staticmethod
     def seconds_to_degree(s):
-        return s*15/3600
+        return s * 15 / 3600
 
     @staticmethod
     def time_to_degree(h, m, s):
         return TimeHelper.seconds_to_degree(TimeHelper.time_to_seconds(h, m, s))
-

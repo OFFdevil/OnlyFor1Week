@@ -1,11 +1,8 @@
-import datetime
-
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
 from geometry.avector import Horizontal, Equatorial
-from geometry.sky_math import StarTimeHelper
-from graphics.renderer.camera import Camera
+
 from graphics.renderer.settings import RenderSettings
 from graphics.renderer.watcher import Watcher
 from stars.star import Star
@@ -106,8 +103,8 @@ def render(self, stars: list) -> QImage:  # возвращает объект и
     for o in stars:
         self._draw_objects(o, self._painter)  # прорисовываем каждую звезду
     self.settings.apply_color("up", self._painter)
-    self._draw_objects(Star(Equatorial(0, 90), ''), self._painter, False)
+    self._draw_object(Star(Equatorial(0, 90), ''), self._painter, False)
     self.settings.apply_color("down", self._painter)
-    self._draw_objects(Star(Equatorial(0, -90), ''), self._painter, False)
+    self._draw_object(Star(Equatorial(0, -90), ''), self._painter, False)
     self._painter.end()
     return self._buffer

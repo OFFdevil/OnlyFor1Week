@@ -24,13 +24,16 @@ class CheckBoxSet(Item):
             # устанавливает флажок, начальное состояние
             item.setCheckState(False)
             item.setCheckable(True)
+            item.setEditable(False)
             self._model.appendRow(item)
 
         # создаем виджет и устанавливаем обработчик щелчка на элементы списка
         view = QListView()
         view.setModel(self._model)
         view.clicked.connect(lambda: self._on_change())
+        self._model.itemChanged.connect(lambda: self._on_change())
 
+        self._lock = False
         self._widget = view
         self.addWidget(self._widget)
 
@@ -46,6 +49,8 @@ class CheckBoxSet(Item):
         self.addWidget(ball)
 
     def _on_change(self):  # вызывается каждый раз, когда происходят изменения в модели
+        if self._lock:
+            return
         selected = set()
         for i in range(0, self._model.rowCount()):  # перебираем строки в таблице модели от 0 до количества строк в
             # модели
@@ -56,19 +61,21 @@ class CheckBoxSet(Item):
         for h in self._handlers:
             h(selected)
 
-    def _change_state_for_all(self, mode):   # изменяет состояние флага для всех элементов модели
-        for i in range(0, self._model.rowCount()):   # обходим все строки модели
-            self._model.item(i, 0).setCheckState(mode)   # устанавливаем флаг в соответствии с mode
+    def _change_state_for_all(self, mode):  # изменяет состояние флага для всех элементов модели
+        self._lock = True
+        for i in range(0, self._model.rowCount()):  # обходим все строки модели
+            self._model.item(i, 0).setCheckState(mode)  # устанавливаем флаг в соответствии с mode
+        self._lock = False
         self._on_change()
 
     @property
-    def selected(self):   # геттер для переменной _selected
+    def selected(self):  # геттер для переменной _selected
         return self._selected
 
-    def connect(self, handler):   # добавляет обработчик в список
+    def connect(self, handler):  # добавляет обработчик в список
         self._handlers.append(handler)
 
-    def try_load(self):   # загрузка данных
+    def try_load(self):  # загрузка данных
         pass
 
     def try_save(self):  # сохранение данных
