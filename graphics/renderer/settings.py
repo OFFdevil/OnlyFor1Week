@@ -16,13 +16,15 @@ class RenderSettings:
         self._earth_color = QColor(0, 100, 100)
         self._star_color = QColor(255, 255, 255)
         self._sky_color = QColor(0, 0, 0)
-        self._point_color = QColor(255, 0, 255)
+        self._up_color = QColor(255, 0, 255)
+        self._down_color = QColor(0, 255, 255)
         # создает кисть для окрашивания области, которая соответствует объекту
         # кортеж является набором инструментов, которые используем для отрисовки объектов
         self._earth_drawer = (QBrush(self._earth_color), QPen(self._earth_color))
         self._star_drawer = (QBrush(self._star_color), QPen(self._star_color))
         self._sky_drawer = (QBrush(self._sky_color), QPen(self._sky_color))
-        self._point_drawer = (QBrush(self._point_color), QPen(self._point_color))
+        self._up_drawer = (QBrush(self._up_color), QPen(self._up_color))
+        self._down_drawer = (QBrush(self._down_color), QPen(self._down_color))
 
     def get_drawer(self, color_name: str):  # шаблон для создания имен соответствующих
         # атрибутов

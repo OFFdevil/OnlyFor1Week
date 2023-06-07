@@ -4,18 +4,19 @@ from graphics.autogui.field_item import set_attribute, get_attribute
 from graphics.autogui.item import Item
 
 
-class BoolItem(Item):
+class BoolItem(
+    Item):  # класс, наследующийся от Item, который отвечает selectable buttons(за квадратики где либо стоит галочка либо нет)
     def __init__(self, obj: object, fname: str):
         super().__init__()
-        self._widget = QCheckBox(fname)
+        self._widget = QCheckBox(fname)  # создаем виджет
         self.addWidget(self._widget)
         self._buffer = None
         self._lock = False
-        self._setter = lambda v: set_attribute(obj, fname, v)
+        self._setter = lambda v: set_attribute(obj, fname, v)  # сеттер/геттер устанавливаем как соотв. функции из FieldItem
         self._getter = lambda: get_attribute(obj, fname)
         self._widget.stateChanged.connect(self._on_changed)
 
-    def _on_changed(self):
+    def _on_changed(self): #функция которая вызывается при изменении состояния boolItem
         if self._lock:
             return
         s = self._widget.checkState() != 0

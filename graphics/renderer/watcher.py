@@ -1,7 +1,7 @@
 import datetime
 
 from geometry.avector import Horizontal
-from geometry.sky_math import StarTime
+from stars.star_time import StarTime
 from graphics.renderer.camera import Camera
 
 
