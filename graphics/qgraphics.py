@@ -3,7 +3,7 @@ import datetime
 from PyQt5 import QtWidgets
 
 from graphics.renderer.camera import Camera
-from graphics.renderer.crenderer import ControllableRenderer
+from graphics.crenderer import ControllableRenderer
 from stars.skybase import SkyBase
 
 

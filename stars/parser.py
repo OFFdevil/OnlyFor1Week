@@ -24,7 +24,7 @@ def num_regexp(name: str):  # функция общего вида регуля�
     return r"(?P<{}>[\+-]? *?[\d\.]+)".format(name)
 
 
-def any_num_regexp(separator: str, name: str, count: int): # функция общего вида регулярного выражения для неск. чисел
+def any_num_regexp(separator: str, name: str, count: int):  # функция общего вида регулярного выражения для неск. чисел
     tmp = ""
     for i in range(0, count - 1):
         tmp += num_regexp(name + '_' + str(i)) + "{} ?".format(separator)
@@ -32,10 +32,11 @@ def any_num_regexp(separator: str, name: str, count: int): # функция об
     return tmp
 
 
-print(any_num_regexp(':', "alf", 3)) #пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
+print(
+    any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
 
 
-def extract_nums(parsed, name: str, count: int): #функция извлечения распарсенных чисел
+def extract_nums(parsed, name: str, count: int):  # функция извлечения распарсенных чисел
     nums = []
     for i in range(0, count):
         nm = name + '_' + str(i)

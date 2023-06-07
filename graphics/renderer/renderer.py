@@ -1,12 +1,14 @@
-import math
 import datetime
+
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget
 from geometry.avector import Horizontal, Equatorial
+from geometry.sky_math import StarTimeHelper
 from graphics.renderer.camera import Camera
 from graphics.renderer.settings import RenderSettings
-from stars.skybase import SkyBase
+from graphics.renderer.watcher import Watcher
 from stars.star import Star
 
 
@@ -14,73 +16,97 @@ from stars.star import Star
 # вычисляет координаты точки на изображении с помощью формулы с использованием: dx, dy- координаты точки на плоском
 # изображении, sight_radius - радиус обзора широкоугольной камеры, z - расстояние между плоскостью
 # изображения и центром камеры
-def fisheye_distortion(dx, dy, sight_radius, z):
-    r = sight_radius * 10 / (1 - abs(z))
-    return dx * r, dy * r
+def fisheye_distortion(x, y, sight_radius, z):
+    r = sight_radius * 10 / (1 - abs(z)) ** 2
+    return x * r, y * r
+
+
+# функция осуществляет шкалирование координат x, y на основе радиуса обзора
+def scale_distortion(x, y, sight_radius, z):
+    return x * sight_radius * 10, y * sight_radius * 10
 
 
 # создали класс Canvas, наследующийся от QWidget
 # в целом класс отвечает за прорисовку неба и звезд, содержит в себе несколько методов для рисования звезд на виджете
-class Canvas(QWidget):
-    def __init__(self, camera: Camera, dt: datetime):
+class Renderer:
+    def __init__(self, watcher: Watcher):
         super().__init__()
-        self._buffer = QImage(self.size(), QImage.Format_RGB32)
+        self._buffer = QImage(QSize(0, 0), QImage.Format_RGB32)  # создаем объект размером 0*0
         self._painter = QPainter()
-        # используем настройки и камеру из других файлов
         self.settings = RenderSettings()
-        self.camera = camera
-        self.datetime = dt
+        self.watcher = watcher
 
+        # ширина и высота изображения, заданного для отрисовки
         self._width = 0
         self._height = 0
-        self.objects = []
+        self._distortion = fisheye_distortion  # хранит значение искажения в съемке с широкоугольной камеры
 
-    def repaint(self):
-        self._width, self._height = self.width(), self.height()  # определяем высоту, ширину
-        self._painter.begin(self._buffer)
-        self._draw_background(self._painter)  # закрашивание холста
-        self.settings.apply_color("star", self._painter)  # установка цвета
-        for o in self.objects:  # отображение всех объектов на холсте
-            self._draw_objects(o, self._painter)
-        self.settings.apply_color("point", self._painter)
-        # прорисовка звезд на северном и южном полушариях
-        self._draw_objects(Star(Equatorial(0, 90), 3, ''), self._painter, False)
-        self._draw_objects(Star(Equatorial(0, -90), 3, ''), self._painter, False)
-        self._painter.end()  # закончили покраску
-        super().repaint()  # добавление изменений на холст перед отображением
+    @property
+    def width(self):  # геттер ширины
+        return self._width
 
-    # функция вычисляет положение звезды на небосводе в данный момент, далее метод либо переводит координаты звезды в
-    # горизонтальную систему, либо использует уже подготовленные
+    @property
+    def height(self):  # геттер ширины
+        return self._height
+
+    @width.setter  # сеттер ширины
+    def width(self, value):
+        if value != self.width:  # если новое значение отличается от старого, то устанавливает новое и создает буфер
+            # изображения, используя стандартный формат
+            self._width = value
+            self._buffer = QImage(QSize(self.width, self.height), QImage.Format_RGB32)
+
+    @height.setter  # сеттер высоты, аналогично для нее
+    def height(self, value):
+        if value != self.height:
+            self._height = value
+            self._buffer = QImage(QSize(self.width, self.height), QImage.Format_RGB32)
+
+    # используем значение параметра fisheye, по нему определяем нужно ли имитировать эффект съёмки широкоугольной
+    # камеры или нет
+    def _load_distortion(self):
+        self.distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
+
+    # функция выводит звездное небо в 3D, принимает на вход объект star, координаты которого будут нарисованы на экране
+    # флаг translate указывает нужно ли переводить координаты звезды в горизонтальную систему координат
     def _draw_objects(self, star: Star, p, translate=True):
-        pos = star.position.to_horizontal_system(
-            self.camera.latitude,
-            self.camera.get_lst(self.datetime) * 15  # TODO: WTF???
-        )
-        if not translate:
+        # выполняем перевод в горизонт систему координат, учитывая широту и текущее время
+        pos = star.position.to_horizontal_system(self.watcher.position.delta, self.watcher.star_time.total_degree)
+        if not translate:  # если флаг не установлен, то используем оригинальную систему координат
             pos = Horizontal(star.position.alpha, star.position.delta)
 
-            diameter = 2
-            delta = pos.to_point() - self.camera.sight_vector.to_point()
-            prj_delta = delta.rmul_to_matrix(self.camera.transformation_matrix)
-            r = self.camera.sight_vector.angle_to(pos)
-            # В зависимости от положения звезды на небосводе и угла обзора камеры, метод отображает звезду на графике
-            # с помощью эллипса определенного размера
-            if r <= self.camera.sight_radius:
-                dx, dy = fisheye_distortion(prj_delta.x, prj_delta.y, self.camera.sight_radius, prj_delta.z)
-                cx, cy = self._width // 2 + dx, self._height // 2 + dy
-                x, y = cx - diameter // 2, cy - diameter // 2
-                p.drawEllipse(x, y, diameter, diameter)
+        diameter = 0.01  # значение по умолчанию
+        # вычисляем изменение координаты звезды относительно направления камеры и проецируем на плоскость экрана
+        delta = pos.to_point() - self.watcher.sight_vector.to_point()
+        prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
+        # находим угол между направлением взгляда камеры и направлением на звезду
+        r = self.watcher.sight_vector.angle_to(pos)
+        if r <= self.watcher.sight_radius:  # если угол <= радиусу обзора, то звезда отображается на экране
+            # используем функцию distortion которая на основе координат в трехмерном пространстве и радиуса обзора
+            # камеры вычисляет искажение изображения, а именно смещение координат и уменьшение диаметра звезды
+            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.sight_radius, prj_delta.z)
+            diameter, _ = self._distortion(diameter, 0, self.watcher.sight_radius, prj_delta.z)
+            # вычисляются координаты отрисовки эллипса на плоскости экрана
+            cx, cy = self._width // 2 + dx, self._height // 2 + dy
+            x, y = cx - diameter // 2, cy - diameter // 2
+            p.drawEllipse(x, y, diameter, diameter)
 
     def _draw_background(self, p):
         self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
-        p.drawRect(0, 0, self.width(),
-                   self.height())  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
+        p.drawRect(0, 0, self.width,
+                   self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
 
-    def resizeEvent(self, event):  # смена размера
-        self._buffer = self._buffer.scaled(self.size())
+    def render(self, stars: list) -> QImage:  # возвращает объект изображения
+        self._load_distortion()
 
-    def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
-        painter.drawImage(0, 0, self._buffer)  # рисуем изображение начиная с точки (0, 0)
-        painter.end()
+        self._painter.begin(self._buffer)
+        self._draw_background(self._painter)  # рисуем фон
+        self.settings.apply_color("star", self._painter)  # задаем цвет звезд
+        for o in stars:
+            self._draw_object(o, self._painter)  # прорисовываем каждую звезду
+        self.settings.apply_color("point", self._painter)  # задаем цвет точки
+        # прорисовываем полюса
+        self._draw_object(Star(Equatorial(0, 90), 3, ''), self._painter, False)
+        self._draw_object(Star(Equatorial(0, -90), 3, ''), self._painter, False)
+        self._painter.end()
+        return self._buffer

@@ -26,7 +26,7 @@ class Equatorial(AngleVector):  # в экваториальной системе
     def apply_time(self, sidereal_time):  # ?
         return Equatorial(self.alpha + sidereal_time, self.delta)
 
-    def to_horizontal_system(self, latitude, star_time_degree): #перевод из экваториальной в горизонтальную
+    def to_horizontal_system(self, latitude, star_time_degree):  # перевод из экваториальной в горизонтальную
         timed = self.apply_time(star_time_degree)
         d = math.radians(timed.delta)
         t = math.radians(timed.alpha)
