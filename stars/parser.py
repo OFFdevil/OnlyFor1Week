@@ -1,8 +1,7 @@
 import re
-import os
 
 from geometry.avector import Equatorial
-from stars.sky_math import TimeHelper
+from geometry.sky_math import TimeHelper
 from stars.skybase import SkyBase
 from stars.star import Star
 

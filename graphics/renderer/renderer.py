@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
 from geometry.avector import Horizontal, Equatorial
-from stars.sky_math import StarTimeHelper
+from geometry.sky_math import StarTimeHelper
 from graphics.renderer.camera import Camera
 from graphics.renderer.settings import RenderSettings
 from graphics.renderer.watcher import Watcher

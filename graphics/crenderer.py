@@ -141,11 +141,14 @@ class ControllableRenderer(QtWidgets.QWidget):
         self._renderer.watcher.up_rotation += dr
         self.setFocus()
 
-    # TODO
+    # обновление изображения в объекте viewer
     def _update_image(self):
+        # self.viewer.width() и height - текущая ширина и высота объекта, устанавливаем их
         self._renderer.width = self.viewer.width()
         self._renderer.height = self.viewer.height()
+        # генерируем новое изображение на основе объекта objects
         image = self._renderer.render(self._objects)
+        # устанавливаем новое изображение
         self.viewer.image = image
 
     # обновление текущего времени клика
@@ -156,7 +159,7 @@ class ControllableRenderer(QtWidgets.QWidget):
         self.gui.handle()
 
     # обновление текущего времени
-    # TODO
+    # если speed != 0, то обновление current_time
     def _update_current_time(self):
         now = datetime.datetime.now()
         seconds_passed = (now - self._last_tick_time).total_seconds()
@@ -164,8 +167,8 @@ class ControllableRenderer(QtWidgets.QWidget):
                                                                                                    seconds_passed * self.settings.speed)
         self._last_tick_time = now
 
-    # TODO
-    def _apply_constellation_filter(self, slctd):
+    # определяем небесное телескопическое зрение
+    def _apply_constellation_filter(self, slctd):  # передаем координаты звезд
         stars = self._sky_sphere.get_stars(slctd)
         self._objects = stars
         self._update_image()
