@@ -68,9 +68,9 @@ class Renderer:
 
     # функция выводит звездное небо в 3D, принимает на вход объект star, координаты которого будут нарисованы на экране
     # флаг translate указывает нужно ли переводить координаты звезды в горизонтальную систему координат
-    def _draw_objects(self, star: Star, p, translate=True):
+    def _draw_object(self, star: Star, p, translate=True):
         # выполняем перевод в горизонт систему координат, учитывая широту и текущее время
-        pos = star.position.to_horizontal_system(self.watcher.position.delta, self.watcher.star_time.total_degree)
+        pos = star.position.to_horizontal_system(self.watcher.position.delta, self.watcher.star_time.total_degree % 360)
         if not translate:  # если флаг не установлен, то используем оригинальную систему координат
             pos = Horizontal(star.position.alpha, star.position.delta)
 
@@ -79,33 +79,35 @@ class Renderer:
         delta = pos.to_point() - self.watcher.sight_vector.to_point()
         prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
         # находим угол между направлением взгляда камеры и направлением на звезду
-        r = self.watcher.sight_vector.angle_to(pos)
-        if r <= self.watcher.sight_radius:  # если угол <= радиусу обзора, то звезда отображается на экране
+        # если угол <= радиусу обзора, то звезда отображается на экране
+        if self.watcher.sight_vector.angle_to(pos) <= self.watcher.eye_radius:
             # используем функцию distortion которая на основе координат в трехмерном пространстве и радиуса обзора
             # камеры вычисляет искажение изображения, а именно смещение координат и уменьшение диаметра звезды
-            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.sight_radius, prj_delta.z)
-            diameter, _ = self._distortion(diameter, 0, self.watcher.sight_radius, prj_delta.z)
+            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.eye_radius, prj_delta.z)
+            diameter, _ = self._distortion(diameter, 0, self.watcher.eye_radius, prj_delta.z)
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self._width // 2 + dx, self._height // 2 + dy
             x, y = cx - diameter // 2, cy - diameter // 2
             p.drawEllipse(x, y, diameter, diameter)
 
-    def _draw_background(self, p):
-        self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
-        p.drawRect(0, 0, self.width,
-                   self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
 
-    def render(self, stars: list) -> QImage:  # возвращает объект изображения
-        self._load_distortion()
+def _draw_background(self, p):
+    self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
+    p.drawRect(0, 0, self.width,
+               self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
 
-        self._painter.begin(self._buffer)
-        self._draw_background(self._painter)  # рисуем фон
-        self.settings.apply_color("star", self._painter)  # задаем цвет звезд
-        for o in stars:
-            self._draw_objects(o, self._painter)  # прорисовываем каждую звезду
-        self.settings.apply_color("up", self._painter)
-        self._draw_objects(Star(Equatorial(0, 90), ''), self._painter, False)
-        self.settings.apply_color("down", self._painter)
-        self._draw_objects(Star(Equatorial(0, -90), ''), self._painter, False)
-        self._painter.end()
-        return self._buffer
+
+def render(self, stars: list) -> QImage:  # возвращает объект изображения
+    self._load_distortion()
+
+    self._painter.begin(self._buffer)
+    self._draw_background(self._painter)  # рисуем фон
+    self.settings.apply_color("star", self._painter)  # задаем цвет звезд
+    for o in stars:
+        self._draw_objects(o, self._painter)  # прорисовываем каждую звезду
+    self.settings.apply_color("up", self._painter)
+    self._draw_objects(Star(Equatorial(0, 90), ''), self._painter, False)
+    self.settings.apply_color("down", self._painter)
+    self._draw_objects(Star(Equatorial(0, -90), ''), self._painter, False)
+    self._painter.end()
+    return self._buffer
