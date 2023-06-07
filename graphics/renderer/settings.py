@@ -1,7 +1,12 @@
+import math
 from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPen
+
+
+def sign(n):  # знак числа n
+    return -1 if n < 0 else (0 if n == 0 else 1)
 
 
 class RenderSettings:
@@ -37,3 +42,18 @@ class ControllableRenderSettings:  # класс, который сохраняе
         self.fps = 30
         self.speed = 1
         self.zoom = 1
+
+    @property
+    def speed_rank(self):  # ранг для скорости текущего объекта
+        # в зависимости от ее значения.
+        if self.speed == 0:
+            return 0
+        return (math.log10(abs(self.speed)) + 1) * sign(self.speed)
+
+    @speed_rank.setter
+    def speed_rank(self, value):
+        # автоматически вычисляет и изменяет
+        # значение атрибута speed в соответствии с заданным значением.
+        self.speed = 10 ** (abs(value) - 1) * sign(value)
+        # новое значение атрибута speed
+        # в зависимости от значения атрибута speed_rank.

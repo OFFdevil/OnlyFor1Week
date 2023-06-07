@@ -5,18 +5,23 @@ from collections import namedtuple
 
 from PyQt5 import QtWidgets
 
-from geometry.avector import Equatorial
+from geometry.avector import Equatorial, Horizontal
 from graphics.qgraphics import StarsWindow
 from graphics.renderer.camera import Camera
+from graphics.renderer.watcher import Watcher
 from stars.parser import TxtDataBaseParser
 from stars.skybase import SkyBase
 
 
-def run(observer: Camera, sky_sphere: SkyBase, start_time: datetime.datetime):
+#TODO: create sky_logic.pu
+#TODO: upgrade ui
+#TODO: create see to contellar
+
+def run(watcher: Watcher, sky_sphere: SkyBase):
     """Запуск логики «Неба»"""
     app = QtWidgets.QApplication([])
 
-    wnd = StarsWindow(observer, sky_sphere, start_time)
+    wnd = StarsWindow(watcher, sky_sphere)
     center = app.desktop().availableGeometry().center()
     wnd.move(center.x() - wnd.width() // 2, center.y() - wnd.height() // 2)
     wnd.show()
@@ -36,12 +41,13 @@ def main():
     except Exception:
         start_time = datetime.datetime.now()
     # TODO
-    sight_vector = Equatorial(args.vector[0], args.vector[1])
-    observer = Camera(args.position[0], args.position[1], args.radius, sight_vector)
+    sight_vector = Horizontal(args.vector[0], args.vector[1])
+    camera = Camera(args.radius, sight_vector)
+    watcher = Watcher(Horizontal(args.position[0], args.position[1]), start_time, camera)
     star_parser = TxtDataBaseParser()
     stars = star_parser.parse_dir(args.catalog)
     sky_sphere = SkyBase(stars)
-    sys.exit(run(observer, sky_sphere, start_time))
+    sys.exit(run(watcher, sky_sphere))
 
 
 if __name__ == '__main__':
