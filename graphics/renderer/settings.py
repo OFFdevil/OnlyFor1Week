@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPen
 
 class RenderSettings:
     def __init__(self):
+        self.fisheye = True  # для обзора - чтобы было искажение рыбьего глаза
         # задаем цвета
         self._earth_color = QColor(0, 100, 100)
         self._star_color = QColor(255, 255, 255)
