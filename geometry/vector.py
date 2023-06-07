@@ -2,27 +2,15 @@ from math import sqrt, acos
 
 import numpy
 
+from geometry.nvector import NVector
 
-class Vector:  # точка в пространстве
+
+class Vector(NVector):
     def __init__(self, x, y, z):
-        self._x = x
-        self._y = y
-        self._z = z
+        super().__init__((x, y, z))
 
     @property
-    def x(self):  #геттер
-        return self._x
-
-    @property
-    def y(self):  # геттер
-        return self._y
-
-    @property
-    def z(self):  # геттер
-        return self._z
-
-    @property
-    def length(self):  # возвращает длину вектора
+    def length(self):  # длина вектора
         return sqrt(self.scalar_mul(self))
 
     def angle_to(self, other):  # угол между векторами
@@ -55,30 +43,33 @@ class Vector:  # точка в пространстве
         t = -mul / sqr
         return self + t * plane_normal_vector
 
+    # геттеры
+    @property
+    def x(self):
+        return self[0]
+
+    @property
+    def y(self):
+        return self[1]
+
+    @property
+    def z(self):
+        return self[2]
+
     def __add__(self, other):  # сложение векторов
-        return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Vector(*self._add_(other))
 
     def __mul__(self, other):  # скаляр произведение
-        return Vector(self.x * other, self.y * other, self.z * other)
+        return Vector(*self._mul_(other))
 
     def __rmul__(self, other):
-        return self * other
+        return Vector(*self._mul_(other))
 
     def __sub__(self, other):  # разность векторов
-        return self + other * -1
-
-    def __iter__(self):
-        yield self.x  # yield - аналог return, только возвращает генератор
-        yield self.y
-        yield self.z
-
-    def __next__(self):
-        yield self.x
-        yield self.y
-        yield self.z
+        return Vector(*self._sub_(other))
 
     def __str__(self):  # выводит вектор в заданном формате
-        return "({}, {}, {})".format(*self)  # * перед аргументом - аналог (self.x, self.y, self.z)
+        return "({}, {}, {})".format(*self)  # * перед аргументом - перечисляем все поля
 
     def __eq__(self, other):  # проверяет равенство
         return self.x == other.x and self.y == other.y and self.z == other.z
