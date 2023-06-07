@@ -56,6 +56,8 @@ class ControllableRenderSettings:  # класс, который сохраняе
     def speed_rank(self, value):
         # автоматически вычисляет и изменяет
         # значение атрибута speed в соответствии с заданным значением.
+        if value > 10:
+            raise ValueError()
         self.speed = 10 ** (abs(value) - 1) * sign(value)
         # новое значение атрибута speed
         # в зависимости от значения атрибута speed_rank.

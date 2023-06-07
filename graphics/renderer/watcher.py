@@ -10,7 +10,7 @@ class Watcher(Camera):
         # функция создает объект наблюдатель.
         # имеет координаты позиции, локальное и звездное время
         # рассчитываются на основании координат позиции и локального времени
-        super().__init__(camera.sight_radius, camera.sight_vector)
+        super().__init__(camera.eye_radius, camera.sight_vector)
         self._position = position
         self._local_time = local_time
         self._star_time = StarTime.from_local(position.alpha, local_time)  # вычисляем звездное время
