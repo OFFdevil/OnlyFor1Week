@@ -12,7 +12,7 @@ class Camera:
             # уменьшить вероятность ошибок
         self._sight_radius = sight_radius  # радиус обзора
         self._sight_vector = Horizontal(sight_vector.alpha, sight_vector.delta)
-        # protected уда смотрим - направление взгляда
+        # protected куда смотрим - направление взгляда
         if sight_vector.delta == 90 or sight_vector.delta == -90:
             sight_vector.delta += 1e-9  # погрешность
         self._longitude = longitude  # долгота

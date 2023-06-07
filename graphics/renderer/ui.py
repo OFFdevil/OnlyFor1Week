@@ -1,4 +1,6 @@
 import datetime
+
+from PyQt5.QtWidgets import QCheckBox
 from PyQt5.QtWidgets import QLineEdit
 
 
@@ -25,8 +27,23 @@ def _create_widget(data_parent, data_name: str, parser, builder, nonable: bool) 
     return widget  # возвращает виджет, который готов к использованию
 
 
+def _on_change(w: QCheckBox, data_parent, data_name):  #
+    # характеризует изменение
+    # списка (где надо ставить галочки)
+    data_parent.__setattr__(data_name, w.checkState())
+
+
+def create_bool_widget(name: str, data_parent, data_name: str) -> QCheckBox:
+    # создает виджет QCheckBox для булевого значения,
+    # связывает его с методом `_on_change` для отслеживания изменений значения
+    box = QCheckBox(name)  # флажок
+    box.setChecked(data_parent.__getattribute__(data_name))  # есть галочка или нет
+    box.stateChanged.connect(lambda: _on_change(box, data_parent, data_name))
+    return box  # возвращает созданный виджет.
+
+
 def create_float_widget(data_parent, data_name: str) -> QLineEdit:
-    # функция для редактирования значеения вещественного атрибута объекта
+    # функция для редактирования значения вещественного атрибута объекта
     return _create_widget(data_parent, data_name, float, str, False)
 
 
