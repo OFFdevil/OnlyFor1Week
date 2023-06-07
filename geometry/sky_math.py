@@ -31,7 +31,7 @@ class StarTimeHelper:
     def get_star_hour(longitude, date_time: datetime.datetime):
         d = StarTimeHelper.get_julian_day(date_time)
         t = d / 36525
-        hours = (280.46061837 + 360.98564736629 * d + 0.000388 * (t ** 2) + longitude) % 360 / 15
+        hours = (280.46061837 + 360.98564736629 * d + 0.000388 * (t ** 2) + longitude) / 15
         return hours
 
     @staticmethod

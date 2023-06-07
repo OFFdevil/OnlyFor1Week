@@ -2,7 +2,6 @@ from geometry.avector import Equatorial
 
 
 class Star:
-    POGSON_RATIO = 100 ** 0.2
 
     def __init__(self, pos: Equatorial, mass, constellation, spectral_class='O'):
         self.position = pos
