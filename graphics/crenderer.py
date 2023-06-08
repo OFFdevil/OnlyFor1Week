@@ -38,7 +38,7 @@ class StarsWindow(QMainWindow):
         }
 
         self._timer = QtCore.QTimer(self)
-        self._timer.setInterval(1000 / self.settings.fps)
+        self._timer.setInterval(int(1000 / self.settings.fps))
         self._timer.timeout.connect(self._on_timer_tick)
 
         self._constellations = sky_sphere.constellations

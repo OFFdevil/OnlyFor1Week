@@ -32,8 +32,8 @@ def any_num_regexp(separator: str, name: str, count: int):  # функция о�
     return tmp
 
 
-print(
-    any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
+#print(
+    #any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
 
 
 def extract_nums(parsed, name: str, count: int):  # функция извлечения распарсенных чисел
