@@ -8,7 +8,7 @@ from graphics.crenderer import StarsWindow
 from graphics.renderer.camera import Camera
 from graphics.renderer.watcher import Watcher
 from stars.parser import TxtDataBaseParser
-from stars.skydatabase import SkyDataBase
+from stars.skybase import SkyBase
 
 
 # TODO: create sky_logic.pu
@@ -34,7 +34,7 @@ def get_all_lines_in_dir(path: str, ext: str):
                 # в виде кортежа
 
 
-def run(watcher: Watcher, sky_sphere: SkyDataBase):  # создает и запускает графический интерфейс
+def run(watcher: Watcher, sky_sphere: SkyBase):  # создает и запускает графический интерфейс
     """Запуск логики «Неба»"""
     app = QtWidgets.QApplication([])  # создали объект приложения
 
@@ -53,7 +53,8 @@ def main():
     #           LONGITUDE LATITUDE,       ...      AZIMUTH ALTITUDE , ..., ..., ..., ...
     Args = namedtuple("Args", ["position", "radius", "vector", "datetime", "catalog"])
     # создали именованный кортеж
-    args = Args((60.6125, 56.8575), 60, (0, 89), None, r'C:\Users\..\Github\pysky\stars\stars\txt')
+    # TODO каждому исправить путь до базы данных локально и не коммитить это
+    args = Args((60.6125, 56.8575), 60, (0, 89), None, r'D:\Space-second-try\stars\stars')
     # TODO
 
     try:

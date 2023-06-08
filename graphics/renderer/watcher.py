@@ -14,8 +14,6 @@ class Watcher(Camera):
         self._position = position
         self._local_time = local_time
         self._star_time = StarTime.from_local(position.alpha, local_time)  # вычисляем звездное время
-        # if latitude == 90 or latitude == -90:
-        # latitude += 1e-9
 
     @property
     def local_time(self):

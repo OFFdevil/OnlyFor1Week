@@ -4,7 +4,7 @@ from geometry.avector import Equatorial
 from stars.star import Star
 
 
-class SkyDataBase:  # класс-база данных со всеми звездами
+class SkyBase:  # класс-база данных со всеми звездами
     def __init__(self, stars):  # атрибуты классы - звезды и созвездия
         self._stars = stars
         self._constellations = {star.constellation: [] for star in stars}  # созвездие - это массив звезд

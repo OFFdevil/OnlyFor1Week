@@ -1,8 +1,9 @@
 import re
+import os
 
 from geometry.avector import Equatorial
 from stars.sky_math import TimeHelper
-from stars.skydatabase import SkyDataBase
+from stars.skybase import SkyBase
 from stars.star import Star
 
 
@@ -54,7 +55,7 @@ class TxtDataBaseParser:  # сам парсер
 
     def parse(self, line_const_tuples):
         stars = [i for i in (self.parse_star(t) for t in line_const_tuples) if i is not None]  # генератор
-        return SkyDataBase(stars)  # заполняем базу данных звезд
+        return SkyBase(stars)  # заполняем базу данных звезд
 
     def parse_star(self, pair) -> Star:  # парсим звезду
         try:

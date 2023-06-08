@@ -87,24 +87,22 @@ class Renderer:
             x, y = cx - diameter // 2, cy - diameter // 2
             p.drawEllipse(x, y, diameter, diameter)
 
+    def _draw_background(self, p):
+        self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
+        p.drawRect(0, 0, self.width,
+                   self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
 
-def _draw_background(self, p):
-    self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
-    p.drawRect(0, 0, self.width,
-               self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
+    def render(self, stars: list) -> QImage:  # возвращает объект изображения
+        self._load_distortion()
 
-
-def render(self, stars: list) -> QImage:  # возвращает объект изображения
-    self._load_distortion()
-
-    self._painter.begin(self._buffer)
-    self._draw_background(self._painter)  # рисуем фон
-    self.settings.apply_color("star", self._painter)  # задаем цвет звезд
-    for o in stars:
-        self._draw_objects(o, self._painter)  # прорисовываем каждую звезду
-    self.settings.apply_color("up", self._painter)
-    self._draw_object(Star(Equatorial(0, 90), ''), self._painter, False)
-    self.settings.apply_color("down", self._painter)
-    self._draw_object(Star(Equatorial(0, -90), ''), self._painter, False)
-    self._painter.end()
-    return self._buffer
+        self._painter.begin(self._buffer)
+        self._draw_background(self._painter)  # рисуем фон
+        self.settings.apply_color("star", self._painter)  # задаем цвет звезд
+        for o in stars:
+            self._draw_object(o, self._painter)  # прорисовываем каждую звезду
+        self.settings.apply_color("up", self._painter)
+        self._draw_object(Star(Equatorial(0, 90), ''), self._painter, False)
+        self.settings.apply_color("down", self._painter)
+        self._draw_object(Star(Equatorial(0, -90), ''), self._painter, False)
+        self._painter.end()
+        return self._buffer
