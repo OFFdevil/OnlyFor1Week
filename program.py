@@ -31,12 +31,13 @@ class City(Horizontal):
 
 
 MAGNITOGORSK = City(53, 59)
+YEKATERINBURG = City(56, 60)
 
 
 def main():
     sky_base = TxtDataBaseParser().parse(
-        get_all_lines_in_dir(r'stars\stars', '.txt'))
-    camera = Camera(Horizontal(0, 89), 60)
+        get_all_lines_in_dir(r'/home/nasty/Space-second-try/stars', '.txt'))
+    camera = Camera(Horizontal(0, 90), 60)
     watcher = Watcher(MAGNITOGORSK, datetime.datetime.now(), camera)
 
     app = QtWidgets.QApplication([])

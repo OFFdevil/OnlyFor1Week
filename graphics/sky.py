@@ -24,12 +24,13 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._sky_sphere = sky_base
 
         # QTimer - работа с таймером
-        self._timer = QtCore.QTimer(self)  # создаем таймер
-        self._timer.setInterval(33)  # устанавливаем интервал 33 милисекунды
-        self._timer.timeout.connect(self._rerender)  # соединяем таймер с тем, что будем обрабатывать
 
         self._create_ui()
         self.setFocus()  # передает фокус ввода с клавиатуры этому виджету, если этот виджет или один из его родителей является активным окном.
+
+        self._timer = QtCore.QTimer(self)  # создаем таймер
+        self._timer.timeout.connect(self._rerender)  # соединяем таймер с тем, что будем обрабатывать
+        self._timer.setInterval(33)  # устанавливаем интервал 33 милисекунды
 
         self._rerender()
         self._timer.start()  # запуск таймера
@@ -45,7 +46,7 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self._main = main
 
-        self.setWindowTitle("Sky")
+        self.setWindowTitle("Space Simulator")
         self.resize(1000, 700)
         self.setCentralWidget(to_widget(main))
         self.show()
@@ -68,10 +69,17 @@ class Sky(QMainWindow):  # окно со звездным небом
     def _rerender(self, exec_delta: datetime.timedelta):
         if exec_delta is None:
             return
-        datetime.timedelta(0, 0, )
-        self._renderer.watcher.local_time = self._renderer.watcher.local_time + datetime.timedelta(0, 0,
-                                                                                                   exec_delta.microseconds * self.settings.speed)
+
+        self._renderer.watcher.local_time += exec_delta * self.settings.second_per_second
         self._update_image()
 
     def mousePressEvent(self, QMouseEvent):
         self.setFocus()
+
+    @property
+    def delay(self):
+        return self._timer.interval()
+
+    @delay.setter
+    def delay(self, value):
+        self._timer.setInterval(value)

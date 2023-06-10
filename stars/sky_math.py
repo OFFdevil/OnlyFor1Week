@@ -54,4 +54,3 @@ class StarTimeHelper:
         day += dt.microsecond / 24 / 60 / 60 / 1000000
         return day
 
-    # TODO: alt + F8 - reformat file

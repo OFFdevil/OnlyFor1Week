@@ -19,10 +19,10 @@ def set_attribute(obj, fname, value):
 
 
 class FieldItem(TextItem):
-    def __init__(self, obj: object, fname: str, builder, parser, ro: bool):
+    def __init__(self, obj: object, fname: str, builder, parser, ro: bool, label=None):
         setter = lambda v: set_attribute(obj, fname, parser(v))
         getter = lambda: builder(get_attribute(obj, fname))
-        super().__init__(fname, setter, getter, ro)
+        super().__init__(fname, setter, getter, ro, label)
 
 
 class IntItem(FieldItem):

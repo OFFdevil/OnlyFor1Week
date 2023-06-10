@@ -1,7 +1,8 @@
 from graphics.autogui.action_item import ActionItem
 from graphics.autogui.bool_item import BoolItem
-from graphics.autogui.field_item import FloatItem, DateTimeItem
+from graphics.autogui.field_item import FloatItem, DateTimeItem, IntItem
 from graphics.autogui.gui import GUI
+from graphics.autogui.label_item import LabelItem
 from graphics.autogui.set_item import CheckBoxSet
 from graphics.horizontal_item import HorizontalItem
 from graphics.renderer.watcher import Watcher
@@ -17,15 +18,16 @@ class ControllableSky(Sky):  # пользовательский интерфей
 
         camera = gui.add(GUI("CAMERA"))  # объект камера, gui - интерфейс для
         # взаимодействия пользователя с программой с помощью клавы и мыши
-        camera.add(HorizontalItem(self._renderer.watcher, "position"))  # позиция
+        camera.add(HorizontalItem(self._renderer.watcher, "position", label="(долгота, широта)"))  # позиция
         camera.add(HorizontalItem(self._renderer.watcher, "see"))  # точка обзора
         camera.add(FloatItem(self._renderer.watcher, "up_rotation"))  # вращение вверх
 
         time = gui.add(GUI("DATE & TIME"))
         time.add(DateTimeItem(self._renderer.watcher, "local_time"))  # отображение текущего времени
         time.add(FloatItem(self._renderer.watcher, "star_time", True))
-        time.add(FloatItem(self.settings, "speed"))  # отображение скорости изменения времени
+        time.add(FloatItem(self.settings, "second_per_second"))  # отображение скорости изменения времени
         time.add(FloatItem(self.settings, "speed_rank"))  # изменение значения скорости
+        time.add(IntItem(self, "delay"))
 
         other = gui.add(GUI("OTHER"))
         other.add(BoolItem(self._renderer.settings, "fisheye"))  # эффект рыбьего глаза
@@ -49,8 +51,8 @@ class ControllableSky(Sky):  # пользовательский интерфей
 
     # определяем небесное телескопическое зрение
 
-    def _apply_constellation_filter(self, slctd):  # передаем координаты звезд
-        stars = self._sky_sphere.get_stars(slctd)
+    def _apply_constellation_filter(self, selected):  # передаем координаты звезд
+        stars = self._sky_sphere.get_stars(selected)
         self._objects = stars
         self._update_image()
 

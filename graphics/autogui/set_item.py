@@ -1,8 +1,10 @@
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QListView
 from PyQt5.QtWidgets import QPushButton
 
+from graphics.autogui.cast_tools import to_widget
 from graphics.autogui.item import Item
 
 
@@ -38,15 +40,19 @@ class CheckBoxSet(Item):
         self.addWidget(self._widget)
 
     def _create_buttons(self):
+        buttons = QGridLayout()  # создаем кнопку- сеточный макет
+        buttons.setSpacing(0)  # устанавливаем интервалы = 0 по вертикали и горизонтали
+        buttons.setContentsMargins(0, 0, 0, 0)  # устанавливаем поля
         # создаем кнопку none, обработчик событий по нажатию, который передает 0
         bclear = QPushButton("none")
         bclear.clicked.connect(lambda: self._change_state_for_all(0))
-        self.addWidget(bclear)
+        buttons.addWidget(bclear, 0, 0)
         # создаем кнопку all, обработчик событий по нажатию, который передает 2
         ball = QPushButton("all")
         ball.clicked.connect(lambda: self._change_state_for_all(2))
         # обе кнопки добавляются в пользовательский интерфейс
-        self.addWidget(ball)
+        buttons.addWidget(ball, 0, 1)
+        self.addWidget(to_widget(buttons))  # переводим кнопку в виджет и добавляем в макет
 
     def _on_change(self):  # вызывается каждый раз, когда происходят изменения в модели
         if self._lock:

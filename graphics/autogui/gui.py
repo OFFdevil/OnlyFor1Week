@@ -3,14 +3,14 @@ from PyQt5.QtWidgets import QWidget
 from graphics.autogui.cast_tools import to_widget
 
 from graphics.autogui.item import Item
-from graphics.autogui.label import Label
+from graphics.autogui.label_item import LabelItem
 
 
 class GUI(Item):
     def __init__(self, name: str):
         super().__init__()
         self._nested = []  # храним инфу про вложенные виджеты и контейнеры
-        self.addLayout(Label(name, True), 0, 0)  # метод для добавления
+        self.addLayout(LabelItem(name, True), 0, 0)  # метод для добавления
         # нового компонента в текущую сетку
         self.setContentsMargins(10, 1, 1, 10)  # устанавливает величины
         # полей содержимого виджета

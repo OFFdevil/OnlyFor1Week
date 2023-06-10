@@ -2,11 +2,15 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
 
 from graphics.autogui.item import Item
-from graphics.autogui.label import Label
+from graphics.autogui.label_item import LabelItem
+
+
+def camel_case_to_normal(s: str):
+    return s.replace('_', ' ')
 
 
 class TextItem(Item):
-    def __init__(self, name: str, setter, getter, ro: bool):  # настраивает виджет
+    def __init__(self, name: str, setter, getter, ro: bool, label: str = None):  # настраивает виджет
         super().__init__()
         self._setter = setter
         self._getter = getter
@@ -14,8 +18,9 @@ class TextItem(Item):
         self._widget = QLineEdit()
         self._edit_mode = False  # false <=> не происходит редактирования
         self._apply_edit = False  # false <=> настройки не применены
-        self.addWidget(QLabel(name), 0, 0)  # виджет для названия параметра
-        self.addWidget(self._widget, 0, 1)  # виджет для изменения значения параметра
+        #self.addWidget(QLabel(name), 0, 0)  # виджет для названия параметра
+        label = label if label is not None else camel_case_to_normal(name)
+        self.addWidget(QLabel(label), 0, 0)
         self.setSpacing(1)  # все внутренние расстояния между виджетами = 1
         self._widget.returnPressed.connect(self._inverse_editing)  # вызывает метод при нажатии
         # клавиши энтер

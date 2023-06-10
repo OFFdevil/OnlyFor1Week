@@ -65,4 +65,4 @@ class TxtDataBaseParser:  # сам парсер
             d = dtime_to_degree(d_d, d_m, d_s)
             return Star(Equatorial(a, d), pair[1])
         except Exception as ex:
-            print(ex)
+            pass

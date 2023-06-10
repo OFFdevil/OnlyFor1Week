@@ -5,8 +5,8 @@ from geometry.horizontal import Horizontal
 
 class Camera:
     def __init__(self, see: Horizontal, radius):
-        self._radius = radius  # радиус обзора
         self._see = see
+        self._radius = radius  # радиус обзора
         self._up_rotation = 0  # вращение вверх
         self._oy = Horizontal(0, 0)
         self._update()

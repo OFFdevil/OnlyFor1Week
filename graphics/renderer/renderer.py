@@ -64,21 +64,21 @@ class Renderer:
         self._distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
 
         self._painter.begin(self._buffer)
-        self._draw_background(self._painter)  # рисуем фон
+        self._draw_background()  # рисуем фон
         self.settings.apply_color("star", self._painter)  # задаем цвет звезд
         for o in (self._apply_time_rotation(s) for s in stars):
-            self._draw_object(o, self._painter)  # прорисовываем каждую звезду
+            self._draw_object(o)  # прорисовываем каждую звезду
         self.settings.apply_color("up", self._painter)
-        self._draw_object(Horizontal(0, 90), self._painter)
-        self.settings.apply_color("down", self._painter)  # TODO: what is it? Повторить отображения координат
-        self._draw_object(Horizontal(0, -90), self._painter)
+        self._draw_object(Horizontal(0, 90))
+        self.settings.apply_color("down", self._painter)
+        self._draw_object(Horizontal(0, -90))
         self._painter.end()
         return self._buffer
 
     def _apply_time_rotation(self, star: Star):
         return star.position.to_horizontal_system(self.watcher.star_time.total_degree % 360, self.watcher.position.h)
 
-    def _draw_object(self, pos: Horizontal, p):
+    def _draw_object(self, pos: Horizontal):
         diameter = 0.005  # значение по умолчанию
         # находим угол между направлением взгляда камеры и направлением на звезду
         # если угол <= радиусу обзора, то звезда отображается на экране
@@ -93,9 +93,9 @@ class Renderer:
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self._width // 2 + dx, self._height // 2 + dy
             x, y = cx - diameter // 2, cy - diameter // 2
-            p.drawEllipse(int(x), int(y), int(diameter), int(diameter))
+            self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
 
-    def _draw_background(self, p):
-        self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p
-        p.drawRect(0, 0, self.width,
-                   self.height)  # рисуем прямоугольник с координатами (0, 0) с определенной высотой и шириной
+    def _draw_background(self):
+        self.settings.apply_color("sky", self._painter)  # использует свет фона sky
+        self._painter.drawRect(0, 0, self.width,
+                               self.height)  # рисуем прямоугольник с координатами (0, 0) с данной высотой и шириной
