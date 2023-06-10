@@ -1,7 +1,7 @@
 import datetime
 import os
 from PyQt5 import QtWidgets
-from geometry.avector import Horizontal
+from geometry.horizontal import Horizontal
 from graphics.crenderer import StarsWindow
 from geometry.horizontal import Horizontal
 from graphics.qt_stars import QtStars

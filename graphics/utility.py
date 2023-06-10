@@ -1,7 +1,7 @@
 import datetime
 
 
-def profile(foo):
+def profile(foo): #профилирование функций. Декоратор для функций, у которых хотим узнать производительность/время работы
     def decorated(*args, **kwargs):
         prev = foo.__last_call_time if "__last_call_time" in dir(foo) else None
         lct = foo.__last_call_time = datetime.datetime.now()

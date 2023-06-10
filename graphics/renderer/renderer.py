@@ -61,7 +61,7 @@ class Renderer:
     # используем значение параметра fisheye, по нему определяем нужно ли имитировать эффект съёмки широкоугольной
     # камеры или нет
     def render(self, stars: list) -> QImage:
-        self.distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
+        self._distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
 
         self._painter.begin(self._buffer)
         self._draw_background(self._painter)  # рисуем фон
