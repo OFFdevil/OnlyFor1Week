@@ -18,7 +18,7 @@ class Configurator(GUI):  # пользовательский интерфейс
         # взаимодействия пользователя с программой с помощью клавы и мыши
 
         camera.add(HorizontalItem(watcher, "position"))  # позиция
-        camera.add(HorizontalItem(watcher, "sight_vector"))  # точка обзора
+        camera.add(HorizontalItem(watcher, "see"))  # точка обзора
         camera.add(FloatItem(watcher, "up_rotation"))  # вращение вверх
 
         time = self.add(GUI("DATE & TIME"))
@@ -28,7 +28,9 @@ class Configurator(GUI):  # пользовательский интерфейс
 
         other = self.add(GUI("OTHER"))
         other.add(BoolItem(render_settings, "fisheye"))  # эффект рыбьего глаза
-        other.add(CheckBoxSet(sorted(constellations), lambda s: self.constellationsChangedHandler(s)))
+        self.constellation_filter = other.add(
+            CheckBoxSet(sorted(constellations), lambda s: self.constellationsChangedHandler(s)))
+
         # набор флажков для выбора созвездий
 
         self.add(ActionItem("Save image", lambda: self.imageSaveRequestedHandler()))

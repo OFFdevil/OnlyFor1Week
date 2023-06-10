@@ -93,7 +93,7 @@ class Renderer:
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self._width // 2 + dx, self._height // 2 + dy
             x, y = cx - diameter // 2, cy - diameter // 2
-            p.drawEllipse(x, y, diameter, diameter)
+            p.drawEllipse(int(x), int(y), int(diameter), int(diameter))
 
     def _draw_background(self, p):
         self.settings.apply_color("sky", p)  # использует свет фона sky и принимает его к p

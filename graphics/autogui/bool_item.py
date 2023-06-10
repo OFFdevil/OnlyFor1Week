@@ -4,8 +4,7 @@ from graphics.autogui.field_item import set_attribute, get_attribute
 from graphics.autogui.item import Item
 
 
-class BoolItem(
-    Item):  # класс, наследующийся от Item, который отвечает selectable buttons(за квадратики где либо стоит галочка либо нет)
+class BoolItem(Item):  # класс отвечающий за selectable buttons(за квадратики где либо стоит галочка либо нет)
     def __init__(self, obj: object, fname: str):
         super().__init__()
         self._widget = QCheckBox(fname)  # создаем виджет
