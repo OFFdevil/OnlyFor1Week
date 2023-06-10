@@ -6,7 +6,7 @@ from graphics.autogui.label import Label
 
 
 class TextItem(Item):
-    def __init__(self, name: str, setter, getter):  # настраивает виджет
+    def __init__(self, name: str, setter, getter, ro: bool):  # настраивает виджет
         super().__init__()
         self._setter = setter
         self._getter = getter
@@ -19,6 +19,7 @@ class TextItem(Item):
         self.setSpacing(1)  # все внутренние расстояния между виджетами = 1
         self._widget.returnPressed.connect(self._inverse_editing)  # вызывает метод при нажатии
         # клавиши энтер
+        self._widget.setReadOnly(ro)
 
     def _inverse_editing(self):  # находится ли виджет в режиме
         # редактирования

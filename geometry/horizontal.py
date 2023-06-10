@@ -1,16 +1,14 @@
 import math
 
+from geometry.angle_helpers import to_0_360, to_cos_period_cutted
 from geometry.nvector import NVector
 from geometry.vector import Vector
 
 
 class Horizontal(NVector):
-    @staticmethod
-    def star_compatible(a, d):
-        return Horizontal((a + 360) % 360, d)
 
-    def __init__(self, a, d):
-        super().__init__((a, d))
+    def __init__(self, a, h):  # TODO: все брать по модулю 360 и в -90 до 90 по умолчанию!!!!
+        super().__init__((to_0_360(a), to_cos_period_cutted(h)))
 
     def to_point(self, radius=1) -> Vector:
         a = math.radians(-self.a)

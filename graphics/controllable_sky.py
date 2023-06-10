@@ -17,12 +17,13 @@ class ControllableSky(Sky):  # пользовательский интерфей
 
         camera = gui.add(GUI("CAMERA"))  # объект камера, gui - интерфейс для
         # взаимодействия пользователя с программой с помощью клавы и мыши
-        camera.add(HorizontalItem(watcher, "position"))  # позиция
-        camera.add(HorizontalItem(watcher, "see"))  # точка обзора
-        camera.add(FloatItem(watcher, "up_rotation"))  # вращение вверх
+        camera.add(HorizontalItem(self._renderer.watcher, "position"))  # позиция
+        camera.add(HorizontalItem(self._renderer.watcher, "see"))  # точка обзора
+        camera.add(FloatItem(self._renderer.watcher, "up_rotation"))  # вращение вверх
 
         time = gui.add(GUI("DATE & TIME"))
-        time.add(DateTimeItem(watcher, "local_time"))  # отображение текущего времени
+        time.add(DateTimeItem(self._renderer.watcher, "local_time"))  # отображение текущего времени
+        time.add(FloatItem(self._renderer.watcher, "star_time", True))
         time.add(FloatItem(self.settings, "speed"))  # отображение скорости изменения времени
         time.add(FloatItem(self.settings, "speed_rank"))  # изменение значения скорости
 

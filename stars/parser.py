@@ -1,8 +1,7 @@
 import re
-import os
 
+from geometry.angle_helpers import dtime_to_degree, time_to_degree
 from geometry.equatorial import Equatorial
-from stars.sky_math import DegreeHelper
 from stars.skydatabase import SkyDataBase
 from stars.star import Star
 
@@ -62,8 +61,8 @@ class TxtDataBaseParser:  # сам парсер
             parsed = self._regex.match(pair[0]).groupdict()
             a_h, a_m, a_s = extract_nums(parsed, 'alf', 3)
             d_d, d_m, d_s = extract_nums(parsed, 'del', 3)
-            a = DegreeHelper.time_to_degree(a_h, a_m, a_s)
-            d = DegreeHelper.dtime_to_degree(d_d, d_m, d_s)
+            a = time_to_degree(a_h, a_m, a_s)
+            d = dtime_to_degree(d_d, d_m, d_s)
             return Star(Equatorial(a, d), pair[1])
         except Exception as ex:
             print(ex)

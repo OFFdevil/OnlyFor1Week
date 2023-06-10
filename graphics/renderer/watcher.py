@@ -35,9 +35,6 @@ class Watcher(Camera):
 
     @position.setter
     def position(self, value: Horizontal):
-        h = value.h if 90 <= value.h <= -90 else (90 if value.h > 0 else -90)
-        self._position = Horizontal(value.a % 360, h)
-        # ограничения угла альфа от -90 до 90, приводит альфа от 0 до 360
-        # берем остаток от деления на 360
+        self._position = value
         self._star_time = StarTime.from_local(self.position.a, self.local_time)
         # пересчет звездного времени в зависимости от обновленных координат

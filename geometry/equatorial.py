@@ -1,4 +1,6 @@
 import math
+
+from geometry.angle_helpers import to_0_360, to_cos_period_cutted, apply
 from geometry.horizontal import Horizontal
 from geometry.nvector import NVector
 from stars.sky_math import FirstEquatorialToHorizontal
@@ -6,16 +8,11 @@ from stars.sky_math import FirstEquatorialToHorizontal
 
 class Equatorial(NVector):
     def __init__(self, a, d):
-        super().__init__((a, d))
+        super().__init__((to_0_360(a), to_cos_period_cutted(d)))
 
-    def apply_time(self, star_time):
-        return Equatorial(self.a + star_time, self.d)
-
-    def to_horizontal_system(self, latitude, star_time_degree):
-        timed = self.apply_time(star_time_degree)
-        d = math.radians(timed.d)
-        t = math.radians(timed.a)
-        f = math.radians(latitude)
+    def to_horizontal_system(self, star_time_degree, h):
+        timed = Equatorial(self.a + star_time_degree, self.d)
+        f, t, d = apply(math.radians, h, *timed)
 
         cosz = FirstEquatorialToHorizontal.cosz(f, d, t)
         sina_sinz = FirstEquatorialToHorizontal.siza_sinz(d, t)
@@ -28,8 +25,7 @@ class Equatorial(NVector):
         cosa = cosa_sinz / sinz
         a = math.atan2(sina, cosa)
         d = math.atan2(sinz, cosz)
-        return Horizontal.star_compatible(math.degrees(a), 90 - math.degrees(d))
-
+        return Horizontal(*apply(math.degrees, a, math.pi / 2 - d))
     @property
     def a(self):
         return self[0]

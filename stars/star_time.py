@@ -27,3 +27,12 @@ class StarTime:
     @property
     def total_degree(self):
         return self.total_hours * 15
+
+    def __int__(self):
+        return int(self.total_seconds)
+
+    def __float__(self):
+        return float(self.total_seconds)
+
+    def __str__(self):
+        return str(int(self))
