@@ -10,7 +10,7 @@ class Watcher(Camera):
         # функция создает объект наблюдатель.
         # имеет координаты позиции, локальное и звездное время
         # рассчитываются на основании координат позиции и локального времени
-        super().__init__(camera.see, camera.eye_radius)
+        super().__init__(camera.see, camera.radius)
         self._position = position
         self._local_time = local_time
         self._star_time = StarTime.from_local(position.a, local_time)  # вычисляем звездное время
@@ -35,7 +35,8 @@ class Watcher(Camera):
 
     @position.setter
     def position(self, value: Horizontal):
-        self._position = Horizontal(value.a % 360, min(90, max(-90, value.h)))
+        h = value.h if 90 <= value.h <= -90 else (90 if value.h > 0 else -90)
+        self._position = Horizontal(value.a % 360, h)
         # ограничения угла альфа от -90 до 90, приводит альфа от 0 до 360
         # берем остаток от деления на 360
         self._star_time = StarTime.from_local(self.position.a, self.local_time)

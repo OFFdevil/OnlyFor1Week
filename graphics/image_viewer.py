@@ -1,3 +1,4 @@
+from datetime import datetime
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget
@@ -19,8 +20,8 @@ class ImageViewer(QWidget):  # класс, отвечающий за просм�
         self._image = value
         self.repaint()  # перерисовывает прямоугольник внутри виджета
 
-    def save_to_file(self, name: str):
-        self.image.save(name)
+    def save_to_file(self, name: str = None):
+        self.image.save(name if name is not None else datetime.now().strftime("%d.%m.%Y %H_%M_%S.jpg"))
 
     def paintEvent(self, event):
         painter = QPainter()

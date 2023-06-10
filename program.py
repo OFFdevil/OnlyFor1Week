@@ -2,9 +2,8 @@ import datetime
 import os
 from PyQt5 import QtWidgets
 from geometry.horizontal import Horizontal
-from graphics.crenderer import StarsWindow
-from geometry.horizontal import Horizontal
-from graphics.qt_stars import QtStars
+from graphics.key_controllable_sky import KeyControllableSky
+from graphics.sky import Sky
 from graphics.renderer.camera import Camera
 from graphics.renderer.watcher import Watcher
 from stars.parser import TxtDataBaseParser
@@ -26,12 +25,22 @@ def get_all_lines_in_dir(path: str, ext: str):
                 # в виде кортежа
 
 
+class City(Horizontal):
+    def __init__(self, широта, долгота):
+        super().__init__(долгота, широта)
+
+
+MAGNITOGORSK = City(53, 59)
+
+
 def main():
-    sky_base = TxtDataBaseParser().parse(get_all_lines_in_dir(r'stars\stars', '.txt'))
+    sky_base = TxtDataBaseParser().parse(
+        get_all_lines_in_dir(r'stars\stars', '.txt'))
     camera = Camera(Horizontal(0, 89), 60)
-    watcher = Watcher(Horizontal(59, 53), datetime.datetime.now(), camera)
+    watcher = Watcher(MAGNITOGORSK, datetime.datetime.now(), camera)
+
     app = QtWidgets.QApplication([])
-    QtStars(watcher, sky_base).show()
+    KeyControllableSky(watcher, sky_base).show()
     app.exec()
 
 

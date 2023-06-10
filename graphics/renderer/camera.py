@@ -21,11 +21,11 @@ class Camera:
             [list(self._ox_vector), list(self._oy), list(self._see.to_point())])
 
     @property
-    def eye_radius(self):  # возвращает радиус обзора
+    def radius(self):  # возвращает радиус обзора
         return self._radius
 
-    @eye_radius.setter
-    def eye_radius(self, radius):  # сеттер - устанавливаем значение радиуса обзора
+    @radius.setter
+    def radius(self, radius):  # сеттер - устанавливаем значение радиуса обзора
         self._radius = radius
 
     @property

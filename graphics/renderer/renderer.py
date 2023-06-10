@@ -76,20 +76,20 @@ class Renderer:
         return self._buffer
 
     def _apply_time_rotation(self, star: Star):
-        return star.position.to_horizontal_system(self.watcher.position.h, self.watcher.star_time.total_degree % 360)
+        return star.position.to_horizontal_system(self.watcher.star_time.total_degree % 360, self.watcher.position.h)
 
     def _draw_object(self, pos: Horizontal, p):
-        diameter = 0.01  # значение по умолчанию
-        # вычисляем изменение координаты звезды относительно направления камеры и проецируем на плоскость экрана
-        delta = pos.to_point() - self.watcher.see.to_point()
-        prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
+        diameter = 0.005  # значение по умолчанию
         # находим угол между направлением взгляда камеры и направлением на звезду
         # если угол <= радиусу обзора, то звезда отображается на экране
-        if self.watcher.see.angle_to(pos) <= self.watcher.eye_radius:
+        if self.watcher.see.angle_to(pos) <= self.watcher.radius:
+            # вычисляем изменение координаты звезды относительно направления камеры и проецируем на плоскость экрана
+            delta = pos.to_point() - self.watcher.see.to_point()
+            prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
             # используем функцию distortion которая на основе координат в трехмерном пространстве и радиуса обзора
             # камеры вычисляет искажение изображения, а именно смещение координат и уменьшение диаметра звезды
-            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.eye_radius, prj_delta.z)
-            diameter, _ = self._distortion(diameter, 0, self.watcher.eye_radius, prj_delta.z)
+            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.radius, prj_delta.z)
+            diameter, _ = self._distortion(diameter, 0, self.watcher.radius, prj_delta.z)
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self._width // 2 + dx, self._height // 2 + dy
             x, y = cx - diameter // 2, cy - diameter // 2

@@ -3,10 +3,7 @@ from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPen
-
-
-def sign(n):  # знак числа n
-    return -1 if n < 0 else (0 if n == 0 else 1)
+from stars.sky_math import sign
 
 
 class RenderSettings:

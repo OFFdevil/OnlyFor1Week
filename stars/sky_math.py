@@ -1,5 +1,4 @@
 from math import cos, sin
-
 import datetime
 import jdcal
 
