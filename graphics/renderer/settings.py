@@ -41,7 +41,6 @@ class RenderSettings:
 class ControllableRenderSettings:  # класс, который сохраняет настройки
     # которые связаны с отображением изображения
     def __init__(self):
-        self.fps = 30
         self.speed = 1
         self.zoom = 1
 

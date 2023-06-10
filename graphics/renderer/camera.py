@@ -1,45 +1,45 @@
 import numpy
 
-from geometry.avector import Horizontal
+from geometry.horizontal import Horizontal
 
 
 class Camera:
-    def __init__(self, sight_radius, sight_vector: Horizontal):
-        self._sight_radius = sight_radius  # радиус обзора
-        self._sight_vector = Horizontal(sight_vector.alpha, sight_vector.delta)
+    def __init__(self, see: Horizontal, radius):
+        self._radius = radius  # радиус обзора
+        self._see = Horizontal(see.a, see.h)
         # protected куда смотрим - направление взгляда
-        if sight_vector.delta == 90 or sight_vector.delta == -90:
-            sight_vector.delta += 1e-9  # погрешность
+        if see.h == 90 or see.h == -90:
+            see.h += 1e-9  # погрешность
         self._up_rotation = 0  # вращение вверх
-        self._oy_vector = Horizontal(0, 0)
+        self._oy = Horizontal(0, 0)
         self._update()
 
     def _update(self):  # обновляем значение
-        self._oy_vector = (self._sight_vector + Horizontal(self.up_rotation, -90)).to_point()
-        self._ox_vector = self._sight_vector.to_point().vector_mul(self._oy_vector)
+        self._oy = (self._see + Horizontal(self.up_rotation, -90)).to_point()
+        self._ox_vector = self._see.to_point().vector_mul(self._oy)
         self._transformation_matrix = numpy.array(
-            [list(self._ox_vector), list(self._oy_vector), list(self._sight_vector.to_point())])
+            [list(self._ox_vector), list(self._oy), list(self._see.to_point())])
 
     @property
     def eye_radius(self):  # возвращает радиус обзора
-        return self._sight_radius
+        return self._radius
 
     @eye_radius.setter
     def eye_radius(self, radius):  # сеттер - устанавливаем значение радиуса обзора
-        self._sight_radius = radius
+        self._radius = radius
 
     @property
-    def up_vector(self) -> Horizontal:  # функция вернет объект типа Horizontal
-        return self._oy_vector
+    def up(self) -> Horizontal:  # функция вернет объект типа Horizontal
+        return self._oy
 
     @property
-    def sight_vector(self):
-        return self._sight_vector
+    def see(self):
+        return self._see
 
-    @sight_vector.setter
-    def sight_vector(self, value: Horizontal):
+    @see.setter
+    def see(self, value: Horizontal):
         # TODO: подозрительно
-        self._sight_vector = Horizontal(value.alpha % 360, min(max(value.delta, -90 + 1e-9), 90 - 1e-9))
+        self._see = Horizontal(value.a % 360, min(max(value.h, -90 + 1e-9), 90 - 1e-9))
         self._update()
 
     @property
@@ -48,7 +48,7 @@ class Camera:
 
     @up_rotation.setter
     def up_rotation(self, value):
-        self._up_rotation = value
+        self._up_rotation = value % 360
         self._update()
 
     @property
