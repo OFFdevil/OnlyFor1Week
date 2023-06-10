@@ -1,6 +1,6 @@
 import re
 
-from geometry.avector import Horizontal
+from geometry.horizontal import Horizontal
 from graphics.autogui.field_item import FieldItem
 
 

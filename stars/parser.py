@@ -1,9 +1,9 @@
 import re
 import os
 
-from geometry.avector import Equatorial
-from stars.sky_math import TimeHelper
-from stars.skybase import SkyBase
+from geometry.equatorial import Equatorial
+from stars.sky_math import DegreeHelper
+from stars.skydatabase import SkyDataBase
 from stars.star import Star
 
 
@@ -32,8 +32,8 @@ def any_num_regexp(separator: str, name: str, count: int):  # функция о�
     return tmp
 
 
-#print(
-    #any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
+# print(
+# any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
 
 
 def extract_nums(parsed, name: str, count: int):  # функция извлечения распарсенных чисел
@@ -54,16 +54,16 @@ class TxtDataBaseParser:  # сам парсер
         self._regex = re.compile(map_re + pos_re)  # из двух шаблонов регулярных выражений один объект
 
     def parse(self, line_const_tuples):
-        stars = [i for i in (self.parse_star(t) for t in line_const_tuples) if i is not None]  # генератор
-        return SkyBase(stars)  # заполняем базу данных звезд
+        stars = [s for s in (self.parse_star(t) for t in line_const_tuples) if s is not None]  # генератор
+        return SkyDataBase(stars)  # заполняем базу данных звезд
 
     def parse_star(self, pair) -> Star:  # парсим звезду
         try:
             parsed = self._regex.match(pair[0]).groupdict()
             a_h, a_m, a_s = extract_nums(parsed, 'alf', 3)
             d_d, d_m, d_s = extract_nums(parsed, 'del', 3)
-            a = TimeHelper.time_to_degree(a_h, a_m, a_s)
-            d = TimeHelper.time_to_degree(0, d_m, d_s) + d_d
+            a = DegreeHelper.time_to_degree(a_h, a_m, a_s)
+            d = DegreeHelper.dtime_to_degree(d_d, d_m, d_s)
             return Star(Equatorial(a, d), pair[1])
         except Exception as ex:
             print(ex)

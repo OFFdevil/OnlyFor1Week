@@ -4,6 +4,10 @@ import datetime
 import jdcal
 
 
+def sign(n):
+    return -1 if n < 0 else (0 if n == 0 else 1)
+
+
 class FirstEquatorialToHorizontal:  # перевод из первой экваториальной в горизонтальную
     '''https://ru.wikipedia.org/wiki/%D0%93%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%BA%D0%BE%D0%BE%D1%80%D0%B4%D0%B8%D0%BD%D0%B0%D1%82'''
 
@@ -44,7 +48,7 @@ class StarTimeHelper:
         return day
 
 
-class TimeHelper:  # класс со вспомогательными функциями для работы со временем
+class DegreeHelper:  # класс со вспомогательными функциями для работы со временем
     @staticmethod
     def time_to_seconds(h, m, s):
         return float(h) * 3600 + float(m) * 60 + float(s)
@@ -55,4 +59,8 @@ class TimeHelper:  # класс со вспомогательными функц
 
     @staticmethod
     def time_to_degree(h, m, s):
-        return TimeHelper.seconds_to_degree(TimeHelper.time_to_seconds(h, m, s))
+        return DegreeHelper.seconds_to_degree(DegreeHelper.time_to_seconds(h, m, s))
+
+    @staticmethod
+    def dtime_to_degree(degree, dm, ds):
+        return sign(degree) * (abs(degree) + dm / 60 + ds / 3600)

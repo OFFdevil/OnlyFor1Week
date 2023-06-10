@@ -5,19 +5,19 @@ from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QMainWindow
 from graphics.autogui.cast_tools import to_widget
-from geometry.avector import Horizontal
+from geometry.horizontal import Horizontal
 from graphics.configurator import Configurator
 from graphics.image_viewer import ImageViewer
 from graphics.renderer.renderer import Renderer
 from graphics.renderer.settings import ControllableRenderSettings
 from graphics.renderer.watcher import Watcher
-from stars.skybase import SkyBase
+from stars.skydatabase import SkyDataBase
 
 
 # создаем класс ControllableRenderer, который наследуется от QtWidgets.QWidget
 # содержит методы для инициализации экрана рендеринга с небесной сферой и камерой, управления и перерисовкой
 class StarsWindow(QMainWindow):
-    def __init__(self, watcher: Watcher, sky_sphere: SkyBase):
+    def __init__(self, watcher: Watcher, sky_sphere: SkyDataBase):
         super().__init__()
 
         # задаем все методы

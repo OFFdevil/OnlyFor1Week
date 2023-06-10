@@ -1,4 +1,4 @@
-from geometry.avector import Equatorial
+from geometry.equatorial import Equatorial
 
 
 class Star:
@@ -9,7 +9,7 @@ class Star:
         self.constellation = constellation
 
     def __str__(self):
-        return "\{{{} in constellation {}}}".format(self.position, self.constellation)
+        return "{{{} in constellation {}}}".format(self.position, self.constellation)
 
     def __eq__(self, other):
         return self.position == other.position and self.constellation == other.constellation
