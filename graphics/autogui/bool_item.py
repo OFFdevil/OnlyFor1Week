@@ -15,6 +15,7 @@ class BoolItem(Item):  # класс отвечающий за selectable buttons
                                                v)  # сеттер/геттер устанавливаем как соотв. функции из FieldItem
         self._getter = lambda: get_attribute(obj, fname)
         self._widget.stateChanged.connect(self._on_changed)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def _on_changed(self):  # функция которая вызывается при изменении состояния boolItem
         if self._lock:

@@ -30,7 +30,7 @@ class KeyControllableSky(FiltrableSky):
             .register("menu", self._switch_menu) \
             .bind(Qt.Key_M, 'menu') \
             .register("filter", self._switch_filter) \
-            .bind(Qt.Key_Z, 'filter') \
+            .bind(Qt.Key_N, 'filter') \
             .register("image", self.viewer.save_to_file) \
             .bind(Qt.Key_I, "image") \
             .register("full_screen", self._switch_full_screen) \

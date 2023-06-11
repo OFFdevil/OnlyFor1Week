@@ -24,6 +24,7 @@ class SlideItem(Item):
         self._widget.setMaximum(max)
         self._widget.sliderPressed.connect(lambda: self._switch_edit(True))
         self._widget.sliderMoved.connect(lambda i: self._switch_apply(True))
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def _switch_edit(self, value):
         self._edit = value

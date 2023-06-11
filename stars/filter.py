@@ -11,6 +11,30 @@ class Range:  # класс, отвечающий за текущий проме�
     def max(self):
         return self._maximum
 
+    @min.setter
+    def min(self):
+        return self._minimum
+
+    @max.setter
+    def max(self):
+        return self._maximum
+
+    @property
+    def auto_min(self):
+        return min(self.min, self.max)
+
+    @property
+    def auto_max(self):
+        return max(self.min, self.max)
+
+    @auto_min.setter
+    def auto_min(self, value):
+        self._minimum = value
+
+    @auto_max.setter
+    def auto_max(self, value):
+        self._maximum = value
+
     def is_include(self, num):
         return self.min <= num <= self.max
 

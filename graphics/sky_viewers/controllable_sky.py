@@ -1,9 +1,8 @@
+from datetime import datetime
 from graphics.autogui.action_item import ActionItem
 from graphics.autogui.bool_item import BoolItem
 from graphics.autogui.field_item import FloatItem, DateTimeItem, IntItem
 from graphics.autogui.gui import GUI
-from graphics.autogui.set_item import CheckBoxSet
-from graphics.sky_viewers.items.filter_item import FilterItem
 from graphics.sky_viewers.items.horizontal_item import HorizontalItem
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.sky import Sky
@@ -29,19 +28,22 @@ class ControllableSky(Sky):  # пользовательский интерфей
         time.add(FloatItem(self.settings, "speed_rank"))  # изменение значения скорости
         time.add(IntItem(self, "delay"))
 
-        other = gui.add(GUI("OTHER"))
-        other.add(BoolItem(self._renderer.settings, "fisheye"))  # эффект рыбьего глаза
-        other.add(BoolItem(self._renderer.settings, "spectral"))
-        other.add(BoolItem(self._renderer.settings, "magnitude"))
-        # self._constellation_filter = other.add(CheckBoxSet(sorted(self._available_constellations), self._apply_constellation_filter))
-        # other.add(FilterItem(self.filter, self._available_constellations, self._apply_constellation_filter))
-
+        view = gui.add(GUI("VIEW"))
+        view.add(BoolItem(self._renderer.settings, "fisheye"))
+        view.add(BoolItem(self._renderer.settings, "spectral"))
+        view.add(BoolItem(self._renderer.settings, "magnitude"))
+        view.add(FloatItem(self._renderer.settings, "exp_factor"))
+        view.add(FloatItem(self._renderer.settings, "exp_const"))
+        view.add(FloatItem(self._renderer.settings, "pull"))
+        view.add(BoolItem(self._renderer.settings, "up_direction"))
+        view.add(BoolItem(self._renderer.settings, "see_direction"))
         # набор флажков для выбора созвездий
 
         gui.add(ActionItem("Save image", lambda: self.viewer.image.save("sky.jpg")))
         # возможность сохранить скрин
         gui.add(ActionItem("Pause", self._switch_pause))
         # возможность поставить на паузу
+        gui.add(ActionItem("Current time", self._current_time))
 
         self._configurator_widget = gui.to_widget()
         self._main.addWidget(self._configurator_widget, 0, 2)
@@ -52,8 +54,8 @@ class ControllableSky(Sky):  # пользовательский интерфей
         # selected = self._constellation_filter.selected
         # self._apply_constellation_filter(selected)
 
-        # selected = self._constellation_filter.selected
-        # self._apply_constellation_filter(selected)
+        def _current_time(self):
+            self._renderer.watcher.local_time = datetime.now()
 
     def _gui_tick(self):
         try:

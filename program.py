@@ -2,8 +2,8 @@ import datetime
 import os
 from PyQt5 import QtWidgets
 from geometry.horizontal import Horizontal
-from graphics.key_controllable_sky import KeyControllableSky
-from graphics.sky import Sky
+from graphics.sky_viewers.key_controllable_sky import KeyControllableSky
+from graphics.sky_viewers.sky import Sky
 from graphics.renderer.camera import Camera
 from graphics.renderer.watcher import Watcher
 from stars.parser import TxtDataBaseParser
@@ -36,7 +36,7 @@ YEKATERINBURG = City(56, 60)
 
 def main():
     sky_base = TxtDataBaseParser().parse(
-        get_all_lines_in_dir(r'/home/nasty/Space-second-try/stars', '.txt'))
+        get_all_lines_in_dir(r'stars/stars', '.txt'))
     camera = Camera(Horizontal(0, 90), 60)
     watcher = Watcher(MAGNITOGORSK, datetime.datetime.now(), camera)
 
