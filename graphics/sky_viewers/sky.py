@@ -40,6 +40,8 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self.setMouseTracking(True)  # включение отслеживания мыши
         self.setVisible(True)
+        self._renderer.settings.pull = 0
+        self._i = 0
 
     def _create_ui(self):  # создаем интерфейс звездного неба
         main = QtWidgets.QGridLayout()  # создаем сеточный макет main
@@ -81,9 +83,14 @@ class Sky(QMainWindow):  # окно со звездным небом
     def _rerender(self, exec_delta: datetime.timedelta):
         if exec_delta is None:
             return
-
         self._renderer.watcher.local_time += exec_delta * self.settings.second_per_second
-        self._update_image()
+        # обновление локального времени в переменной
+        self._update_image()  # обновляем изображение
+        if self._i <= 25:
+            self._renderer.settings.pull = self._i / 25
+            self._i += 1
+        elif self._i == 26:
+            self._renderer.settings.pull = 1
 
     def mousePressEvent(self, QMouseEvent):
         self.setFocus()

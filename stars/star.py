@@ -11,7 +11,7 @@ SPECTRAL_MAP = {SPECTRAL_CLASSES[i]: SPECTRAL_COLORS[i] for i in range(0, len(SP
 # SPECTRAL_MAP - словарь с парами название-цвет
 
 class Star:
-    # звезда характеризуется позицией в екватор. системе, созвездием, магнитудой, цветом и названием
+    # звезда характеризуется позицией в экватор. системе, созвездием, магнитудой, цветом и названием
     def __init__(self, pos: Equatorial,
                  constellation, magnitude, spectral_class, name):
         self._position = pos
@@ -22,11 +22,11 @@ class Star:
         if constellation is None or pos is None or magnitude is None or spectral_class is None or name is None:
             raise ValueError()
         self._hash = hash(pos)
-        self._hpos = pos.to_horizontal_system(0, 0)
+        self._hpos = pos.to_horizontal_with_time(0, 0)
 
-        @property
-        def hpos(self):
-            return self._hpos
+    @property
+    def hpos(self):
+        return self._hpos
 
     # геттеры
     @property

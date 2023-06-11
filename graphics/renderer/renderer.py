@@ -51,16 +51,14 @@ class Renderer(Projector):
         self._draw_background()
         for o in self.project(stars):
             self._draw_object(o)
-        try:
-            if self.settings.up_direction:
-                self._draw_up()
-            if self.settings.see_direction:
-                self._draw_see()
-            self._painter.end()
-            return self._buffer
-        except Exception as ex:
-            print('r')
-            print(ex)
+        if self.settings.up_direction:
+            self._draw_up()
+        if self.settings.see_direction:
+            self._draw_see()
+        if self.settings.compass:
+            self._draw_compass()
+        self._painter.end()
+        return self._buffer
 
     # рисуем звезду по данным из ProjectedStar
     def _draw_object(self, pstar: ProjectedStar, with_color=True):
@@ -102,6 +100,28 @@ class Renderer(Projector):
     # def _draw_up(self):
     #     self._draw_object(Horizontal(0, 90), None)
     #     self._draw_object(Horizontal(0, 90), None)
+
+    def _draw_compass(self):  # отрисовка компаса
+        n = self._draw_latidude_depencing_point(Equatorial(0, 90), 'north', -3)
+        s = self._draw_latidude_depencing_point(Equatorial(0, -90), 'south', -3)
+        try:
+            self.settings.apply_color('north', self._painter)
+            self._painter.drawLine(n.cx, n.cy, self.centre[0], self.centre[1])
+            self.settings.apply_color('south', self._painter)
+            self._painter.drawLine(self.centre[0], self.centre[1], s.cx, s.cy)
+        except Exception as e:
+            print(e)
+
+    def _draw_latidude_depencing_point(self, pos: Equatorial, color, size):
+        # рисует звезду в положении, которое зависит от ее широты
+        # основывается на положении наблюдателя
+        self.settings.apply_color(color, self._painter)
+        lat = pos.to_horizontal_with_latitude(self.watcher.position.h)
+        p_lat = self.project_star(lat, Star(pos, '', size, '', ''), True)
+        if p_lat is not None and p_lat.in_eye:  # если звезда в поле зрения, то рисуем ее
+            self._draw_object(p_lat, False)
+        return p_lat  # возвращает проекцию звезды на экране
+
     def _draw_up(self):  # отвечает за отрисовку точки северного полюса
         self.settings.apply_color('up', self._painter)
         if self.watcher.position is not None:

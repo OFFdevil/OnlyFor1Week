@@ -20,7 +20,7 @@ def scale_distortion(x, y, radius, z):
     return x * radius * 10, y * radius * 10
 
 
-ProjectedStar = namedtuple('ProjectedStar', ['cx', 'cy', 'horizontal', 'diameter', 'star'])
+ProjectedStar = namedtuple('ProjectedStar', ['cx', 'cy', 'horizontal', 'diameter', 'star', 'in_eye'])
 
 
 class Projector:
@@ -72,13 +72,14 @@ class Projector:
     def _apply_time_rotation(self, star: Star):
         return self.watcher.to_horizontal(star.position), star
 
-    # функция отрисовки звезды. Возвращает данные для отрисовки в функцию draw_object из renderer
-    def project_star(self, pos: Horizontal, star: Star):
+    # функция отрисовки звезды, возвращает данные для отрисовки в функцию draw_object из renderer
+    def project_star(self, pos: Horizontal, star: Star, always_project: bool=False):
         # находим диаметр звезды
         diameter = self._get_size(star.magnitude if star is not None else -1)
         # если угол между направлением взгляда камеры и направлением на звезду <=
         # радиусу обзора, то звезда отображается на экране
-        if self.watcher.see.angle_to(pos) <= self.watcher.radius:
+        in_eye = self.watcher.see.angle_to(pos) <= self.watcher.radius
+        if in_eye or always_project:
             # вычисляем изменение координаты звезды относительно направления камеры и проецируем на плоскость экрана
             delta = pos.to_point() - self.watcher.see.to_point()
             prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
@@ -88,4 +89,4 @@ class Projector:
             diameter, _ = self._distortion(diameter, 0, self.watcher.radius, prj_delta.z)
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self.centre[0] + dx, self.centre[1] + dy
-            return ProjectedStar(cx, cy, pos, diameter, star)
+            return ProjectedStar(cx, cy, pos, diameter, star, in_eye)

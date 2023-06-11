@@ -10,11 +10,14 @@ class Equatorial(NVector):
     def __init__(self, a, d):  # инициализация координат в экваториальной системе
         super().__init__((to_0_360(a), to_cos_period_cutted(d)))
 
-    def to_horizontal_system(self, star_time_degree, h):  # преобразует координаты из экваториальной
+    def apply_time_rotation(self, star_time_degree):  # позволяет обновлять восхождение
+        # для наблюдаемых объектов в зависимости от времени наблюдения.
+        return Equatorial(self.a + star_time_degree, self.d)
+
+    def to_horizontal_with_latitude(self, h) -> Horizontal:  # преобразует координаты из экваториальной
         # в горизонтальную, используя значение звездного времени (звездные градусы)
         # и высоту наблюдателя (градусы)
-        timed = Equatorial(self.a + star_time_degree, self.d)
-        f, t, d = apply(math.radians, h, *timed)
+        f, t, d = apply(math.radians, h, *self)
 
         cosz = FirstEquatorialToHorizontal.cosz(f, d, t)
         sina_sinz = FirstEquatorialToHorizontal.siza_sinz(d, t)
@@ -28,6 +31,12 @@ class Equatorial(NVector):
         a = math.atan2(sina, cosa)
         d = math.atan2(sinz, cosz)
         return Horizontal(*apply(math.degrees, a, math.pi / 2 - d))
+
+    def to_horizontal_with_time(self, star_time_degree, h) -> Horizontal:
+        return self.apply_time_rotation(star_time_degree).to_horizontal_with_latitude(h)
+        # возвращает объект в горизонтальной системе координат в зависимости
+        # от значения звездного времени
+
     @property
     def a(self):  # получаем значение прямого восхождения
         return self[0]
