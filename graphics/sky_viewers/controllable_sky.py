@@ -28,9 +28,11 @@ class ControllableSky(Sky):  # пользовательский интерфей
         time.add(FloatItem(self.settings, "second_per_second"))  # отображение скорости изменения времени
         time.add(FloatItem(self.settings, "speed_rank"))  # изменение значения скорости
         time.add(IntItem(self, "delay"))
+        time.add(IntItem(self, "_rdelay"))
 
         view = gui.add(GUI("VIEW"))
         view.add(BoolItem(self._renderer.settings, "fisheye"))
+        view.add(IntItem(self, "forecast_step"))
         view.add(BoolItem(self._renderer.settings, "spectral"))
         view.add(BoolItem(self._renderer.settings, "magnitude"))
         view.add(FloatItem(self._renderer.settings, "exp_factor"))
@@ -47,7 +49,7 @@ class ControllableSky(Sky):  # пользовательский интерфей
         # возможность поставить на паузу
         gui.add(ActionItem("Current time", self._current_time))
 
-        self._configurator_widget = gui.to_widget()
+        self._configurator_widget = gui
         self._main.addWidget(self._configurator_widget, 0, 2)
         self._gui = gui
         self._timer.timeout.connect(self._gui_tick)

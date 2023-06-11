@@ -3,7 +3,7 @@ import math
 from geometry.angle_helpers import to_0_360, to_cos_period_cutted, apply
 from geometry.horizontal import Horizontal
 from geometry.nvector import NVector
-from stars.sky_math import FirstEquatorialToHorizontal
+from stars.sky_math import FirstEquatorialToHorizontal, atan2
 
 
 class Equatorial(NVector):
@@ -28,8 +28,8 @@ class Equatorial(NVector):
             return Horizontal(0, 90)
         sina = sina_sinz / sinz
         cosa = cosa_sinz / sinz
-        a = math.atan2(sina, cosa)
-        d = math.atan2(sinz, cosz)
+        a = atan2(sina, cosa)
+        d = atan2(sinz, cosz)
         return Horizontal(*apply(math.degrees, a, math.pi / 2 - d))
 
     def to_horizontal_with_time(self, star_time_degree, h) -> Horizontal:

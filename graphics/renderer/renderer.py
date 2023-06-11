@@ -1,3 +1,5 @@
+from multiprocessing.pool import Pool
+
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
@@ -5,6 +7,7 @@ from PyQt5.QtGui import QPainter
 from geometry.equatorial import Equatorial
 from geometry.horizontal import Horizontal
 from graphics.renderer.projector import Projector, ProjectedStar
+from graphics.renderer.utility import try_or_print
 from graphics.renderer.watcher import Watcher
 from stars.star import Star
 
@@ -46,10 +49,10 @@ class Renderer(Projector):
 
     # используем значение параметра fisheye, по нему определяем нужно ли имитировать эффект съёмки широкоугольной
     # камеры или нет
-    def render(self, stars: list):
+    def render(self, stars: list, forecast: bool):
         self._painter.begin(self._buffer)
         self._draw_background()
-        for o in self.project(stars):
+        for o in self.project(stars, forecast):
             self._draw_object(o)
         if self.settings.up_direction:
             self._draw_up()
@@ -69,6 +72,7 @@ class Renderer(Projector):
                 self.settings.apply_color('star', self._painter)
             x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
             self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))
+
     # def _draw_object(self, pos: Horizontal, star: Star):
     #     if not star is None:
     #         if self.settings.spectral:
@@ -125,11 +129,14 @@ class Renderer(Projector):
     def _draw_up(self):  # отвечает за отрисовку точки северного полюса
         self.settings.apply_color('up', self._painter)
         if self.watcher.position is not None:
-            prjctd = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''))
+            prjctd = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''), True)
             # находим точку на небесной сферической системе, которая соответствует заданному
             # небесному объекту
             if prjctd is not None:
                 self._draw_object(prjctd, False)
+                if prjctd.in_eye:
+                    self._draw_object(prjctd, False)
+                self._painter.drawLine(self.centre[0], self.centre[1], prjctd.cx, prjctd.cy)
 
     def _draw_see(self):
         self.settings.apply_color('see', self._painter)  # устанавливаем цвет

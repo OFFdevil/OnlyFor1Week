@@ -6,6 +6,7 @@ from graphics.sky_viewers.filtrable_sky import FiltrableSky
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.utility import KeyProcessor
 from stars.skydatabase import SkyDataBase
+from math import sin, radians, cos
 
 
 class KeyControllableSky(FiltrableSky):
@@ -54,9 +55,9 @@ class KeyControllableSky(FiltrableSky):
 
     # функция сдвигающая небо в нужную сторону (в зависимости от клавиш)
     def _look_around(self, *delta):
-        da, dd, dr = delta
+        da, dh, dr = delta
         self._renderer.watcher.up_rotation += dr
-        self._renderer.watcher.see += Horizontal(da, dd)
+        self._renderer.watcher.see += Horizontal(da, dh)
 
     # Метод получает объект события `e`. Если нажатая клавиша является одной из ключевых команд `_key_commands`,
     # то вызывается соответствующая функция из словаря `_key_commands` для выполнения команды

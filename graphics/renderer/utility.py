@@ -8,3 +8,14 @@ def hexstr_to_color(s: str):
     g = int(s[2:4], 16)
     b = int(s[4:], 16)
     return QColor(r, g, b)
+
+
+def try_or_print(foo):
+    def decorated(*args, **kwargs):
+        try:
+            return foo(*args, **kwargs)
+        except Exception as e:
+            print(e)
+            return None
+
+    return decorated
