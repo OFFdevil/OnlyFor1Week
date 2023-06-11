@@ -43,5 +43,5 @@ class Watcher(Camera):
         self._star_time = StarTime.from_local(self.position.a, self.local_time)
         # пересчет звездного времени в зависимости от обновленных координат
 
-    def to_horizontal(self, equ: Equatorial):
-        return equ.to_horizontal_system(self.star_time.total_degree % 360, self.position.h)
+    def to_horizontal(self, equ: Equatorial):  # перевод в горизонтальную
+        return equ.to_horizontal_with_time(self.star_time.total_degree % 360, self.position.h)

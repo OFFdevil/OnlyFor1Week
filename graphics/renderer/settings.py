@@ -16,6 +16,7 @@ class Settings:
         self.magnitude = True
         self.up_direction = True
         self.see_direction = True
+        self.compass = True
         self.exp_const = 7  # 2*math.pi
         self.exp_factor = -0.3  # math.log(2) - 1
         self.exp_factor = -0.3  # math.log(2) - 1
@@ -26,6 +27,8 @@ class Settings:
         self._sky_color = QColor(0, 0, 0)
         self._up_color = QColor(255, 0, 255)
         self._see_color = QColor(0, 255, 255)
+        self._north_color = QColor(0, 128, 255)
+        self._south_color = QColor(255, 128, 0)
         # создает кисть для окрашивания области, которая соответствует объекту
         # кортеж является набором инструментов, которые используем для отрисовки объектов
         self._earth_drawer = (QBrush(self._earth_color), QPen(self._earth_color))
@@ -33,6 +36,8 @@ class Settings:
         self._sky_drawer = (QBrush(self._sky_color), QPen(self._sky_color))
         self._up_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._up_color))
         self._see_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._see_color))
+        self._north_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._north_color))
+        self._south_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._south_color))
         self._spectrals = {}
         for i in SPECTRAL_MAP.keys():
             clr = hexstr_to_color(SPECTRAL_MAP[i])
