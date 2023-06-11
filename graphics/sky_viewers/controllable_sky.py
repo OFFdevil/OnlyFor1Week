@@ -3,6 +3,7 @@ from graphics.autogui.bool_item import BoolItem
 from graphics.autogui.field_item import FloatItem, DateTimeItem, IntItem
 from graphics.autogui.gui import GUI
 from graphics.autogui.set_item import CheckBoxSet
+from graphics.sky_viewers.items.filter_item import FilterItem
 from graphics.sky_viewers.items.horizontal_item import HorizontalItem
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.sky import Sky
@@ -30,8 +31,10 @@ class ControllableSky(Sky):  # пользовательский интерфей
 
         other = gui.add(GUI("OTHER"))
         other.add(BoolItem(self._renderer.settings, "fisheye"))  # эффект рыбьего глаза
-        self._constellation_filter = other.add(
-            CheckBoxSet(sorted(self._available_constellations), self._apply_constellation_filter))
+        other.add(BoolItem(self._renderer.settings, "spectral"))
+        other.add(BoolItem(self._renderer.settings, "magnitude"))
+        # self._constellation_filter = other.add(CheckBoxSet(sorted(self._available_constellations), self._apply_constellation_filter))
+        # other.add(FilterItem(self.filter, self._available_constellations, self._apply_constellation_filter))
 
         # набор флажков для выбора созвездий
 
@@ -41,23 +44,36 @@ class ControllableSky(Sky):  # пользовательский интерфей
         # возможность поставить на паузу
 
         self._configurator_widget = gui.to_widget()
-        self._main.addWidget(self._configurator_widget, 0, 1)
+        self._main.addWidget(self._configurator_widget, 0, 2)
+        self._gui = gui
+        self._timer.timeout.connect(self._gui_tick)
 
-        self._timer.timeout.connect(lambda: gui.handle())
+        # self._timer.timeout.connect(lambda: gui.handle())
+        # selected = self._constellation_filter.selected
+        # self._apply_constellation_filter(selected)
 
-        selected = self._constellation_filter.selected
-        self._apply_constellation_filter(selected)
+        # selected = self._constellation_filter.selected
+        # self._apply_constellation_filter(selected)
+
+    def _gui_tick(self):
+        try:
+            self._gui.handle()
+        except Exception as e:
+            print(e)
 
     # определяем небесное телескопическое зрение
-
+    # определяем небесную сферу с выбранными созвездиями
     def _apply_constellation_filter(self, selected):  # передаем координаты звезд
-        stars = self._sky_sphere.get_stars(selected)
-        self._objects = stars
-        self._update_image()
+        # stars = self._sky_sphere.get_stars(selected)
+        # self._objects = stars
+        # self._update_image()
+        self.filter.constellations = selected
+        pass
 
-    # функция постановки на паузу
+    # функция постановки на паузу/ снятия с паузы
     def _switch_pause(self):
-        if self._timer.isActive():
-            self._timer.stop()
+        if self.settings.speed_rank != 0:
+            self._ssr = self.settings.speed_rank
+            self.settings.speed_rank = 0
         else:
-            self._timer.start()
+            self.settings.speed_rank = self._ssr

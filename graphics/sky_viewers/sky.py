@@ -1,11 +1,13 @@
 import datetime
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget
 from graphics.autogui.cast_tools import to_widget
 from graphics.sky_viewers.image_viewer import ImageViewer
 from graphics.sky_viewers.utility import profile
+from stars.filter import Filter, Range
 from graphics.renderer.renderer import Renderer
 from graphics.renderer.settings import ControllableRenderSettings
 from graphics.renderer.watcher import Watcher
@@ -22,6 +24,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._available_constellations = sky_base.constellations  # выбранные пользователем созвездия
         self._objects = []
         self._sky_sphere = sky_base
+        self.filter = Filter(sky_base.constellations, Range(-1, 10))  # текущий фильтр для звезд
 
         # QTimer - работа с таймером
 
@@ -44,26 +47,32 @@ class Sky(QMainWindow):  # окно со звездным небом
         main.setSpacing(0)  # устанавливаем интервалы 0 по вертикали и горизонтали
         self.viewer = ImageViewer()  # создаем
         main.addWidget(self.viewer, 0, 0)
-        main.setColumnStretch(0, 1)
+        self._filter_widget = QWidget()
+        main.addWidget(self._filter_widget, 0, 1)
+        self._filter_widget.setVisible(False)
+
+        self._configurator_widget = QWidget()
+        main.addWidget(self._configurator_widget, 0, 2)
+
+        main.setColumnStretch(0, 0)
+        main.setColumnStretch(0, 2)
 
         self._main = main
 
-        self.setWindowTitle("Space Simulator")
+        self.setWindowTitle("Sky")
         self.resize(1000, 700)
         self.setCentralWidget(to_widget(main))
         self.show()
         # создаем конфигуратор, который позволяет редактировать настройки изображения
         # он размещается во втором столбце главного макета, таким образом, пользователь может редактировать
         # настройки и в то же время видеть изменения сразу на изображении
-        self._configurator_widget = QWidget()
-        main.addWidget(self._configurator_widget, 0, 1)
 
     def _update_image(self):
         # self.viewer.width() и height - текущая ширина и высота объекта, устанавливаем их
         self._renderer.width = self.viewer.width()
         self._renderer.height = self.viewer.height()
         # генерируем новое изображение на основе объекта objects
-        image = self._renderer.render(self._objects)
+        image = self._renderer.render(self._sky_sphere.get_stars(self.filter))
         # устанавливаем новое изображение
         self.viewer.image = image
 
