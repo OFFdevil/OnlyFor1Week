@@ -29,6 +29,11 @@ class MouseControllableSky(KeyControllableSky):
         else:
             self._look_around(d[0] // 20, d[1] // 20, 0)
 
+    def _look_to_star(self, sx, sy):
+        star = self._renderer.find_star(sx, sy, 2)
+        if star is not None:
+            self._renderer.watcher.see = star.horizontal
+
     # сохраняет текущие координаты мыши и вызывает метод для применения этих изменений
     def mouseMoveEvent(self, e: QMouseEvent):
         self._mouse_delta = (e.x() - self._mouse_pos[0], e.y() - self._mouse_pos[1])
@@ -53,3 +58,8 @@ class MouseControllableSky(KeyControllableSky):
         self._mouse_pos = (e.x(), e.y())
         self._mouse_gpos = (e.globalX(), e.globalY())
         super().mouseReleaseEvent(e)
+
+    def mouseDoubleClickEvent(self, e: QMouseEvent):  # отображает звезду на карте,
+        # которая ближе всех расположена к точке с заданными координатами (x, y)
+        self._look_to_star(e.x(), e.y())
+        super().mouseDoubleClickEvent(e)

@@ -1,6 +1,11 @@
 from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtCore import Qt
+from PyQt5.QtMultimedia import QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer
+from PyQt5.QtMultimedia import QSound
 from PyQt5.QtWidgets import QToolTip
 
 from graphics.renderer.watcher import Watcher

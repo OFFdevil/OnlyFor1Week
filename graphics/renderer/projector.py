@@ -20,7 +20,7 @@ def scale_distortion(x, y, radius, z):
     return x * radius * 10, y * radius * 10
 
 
-ProjectedStar = namedtuple('ProjectedStar', ['cx', 'cy', 'diameter', 'star'])
+ProjectedStar = namedtuple('ProjectedStar', ['cx', 'cy', 'horizontal', 'diameter', 'star'])
 
 
 class Projector:
@@ -88,4 +88,4 @@ class Projector:
             diameter, _ = self._distortion(diameter, 0, self.watcher.radius, prj_delta.z)
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self.centre[0] + dx, self.centre[1] + dy
-            return ProjectedStar(cx, cy, diameter, star)
+            return ProjectedStar(cx, cy, pos, diameter, star)

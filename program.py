@@ -1,6 +1,10 @@
 import datetime
 import os
+import subprocess
+
 from PyQt5 import QtWidgets
+from PyQt5.QtMultimedia import QSound
+
 from geometry.horizontal import Horizontal
 from graphics.sky_viewers.key_controllable_sky import KeyControllableSky
 from graphics.sky_viewers.sky import Sky
@@ -9,6 +13,8 @@ from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.mouse_controllable_sky import MouseControllableSky
 from graphics.sky_viewers.named_sky import NamedSky
 from stars.parser import TxtDataBaseParser
+# import vlc
+import sys
 
 
 def get_all_files_in_dir(path: str, ext: str):  # на вход принимает путь и расширение файла
