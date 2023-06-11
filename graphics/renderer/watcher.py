@@ -9,13 +9,14 @@ from geometry.equatorial import Equatorial
 
 class Watcher(Camera):
     def __init__(self, position: Horizontal, local_time: datetime, camera: Camera):
-        # функция создает объект наблюдатель.
+        # функция создает объект наблюдатель,
         # имеет координаты позиции, локальное и звездное время
         # рассчитываются на основании координат позиции и локального времени
         super().__init__(camera.see, camera.radius)
         self._position = position
         self._local_time = local_time
         self._star_time = StarTime.from_local(position.a, local_time)  # вычисляем звездное время
+        self.position = position
 
     @property
     def local_time(self):
@@ -38,6 +39,7 @@ class Watcher(Camera):
     @position.setter
     def position(self, value: Horizontal):
         self._position = value
+        self.see = value
         self._star_time = StarTime.from_local(self.position.a, self.local_time)
         # пересчет звездного времени в зависимости от обновленных координат
 

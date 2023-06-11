@@ -19,3 +19,12 @@ class FiltrableSky(ControllableSky):
 
         # будем обновлять список созвездий с учетом заданных фильтров
         self._timer.timeout.connect(gui.handle)
+        gui.constellations.on_double_press = self._look_to
+
+    def _look_to(self, const: str):
+        # связывает двойное нажатие на элементе gui.constellations
+        # с выполнением метода _look_to(),
+        # который отвечает за переход к созвездию на карте
+        cpos = self._renderer.find_constellation(const)
+        if cpos is not None:
+            self._renderer.watcher.see = cpos

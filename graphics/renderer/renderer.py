@@ -2,10 +2,11 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
 
-from graphics.renderer.projector import Projector, ProjectedStar
 from geometry.equatorial import Equatorial
-
+from geometry.horizontal import Horizontal
+from graphics.renderer.projector import Projector, ProjectedStar
 from graphics.renderer.watcher import Watcher
+from stars.star import Star
 
 
 # в целом класс отвечает за прорисовку неба и звезд, содержит в себе несколько методов для рисования звезд на виджете
@@ -46,28 +47,30 @@ class Renderer(Projector):
     # используем значение параметра fisheye, по нему определяем нужно ли имитировать эффект съёмки широкоугольной
     # камеры или нет
     def render(self, stars: list):
+        self._painter.begin(self._buffer)
+        self._draw_background()
+        for o in self.project(stars):
+            self._draw_object(o)
         try:
-            self._painter.begin(self._buffer)
-            self._draw_background()
-            for o in self.project(stars):
-                self._draw_object(o)
-            # if self.settings.up_direction:
-            #    self._draw_up()
+            if self.settings.up_direction:
+                self._draw_up()
             if self.settings.see_direction:
                 self._draw_see()
             self._painter.end()
             return self._buffer
         except Exception as ex:
+            print('r')
             print(ex)
 
     # рисуем звезду по данным из ProjectedStar
-    def _draw_object(self, pstar: ProjectedStar):
-        if self.settings.spectral:
-            self.settings.apply_color(pstar.star.spectral_class, self._painter)
-            # находим нужные координаты и по ним рисуем
+    def _draw_object(self, pstar: ProjectedStar, with_color=True):
+        if with_color:
+            if self.settings.spectral:
+                self.settings.apply_color(pstar.star.spectral_class, self._painter)
+            else:
+                self.settings.apply_color('star', self._painter)
             x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
-            self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))
-
+            self._painter.drawEllipse(x, y, pstar.diameter, pstar.diameter)
     # def _draw_object(self, pos: Horizontal, star: Star):
     #     if not star is None:
     #         if self.settings.spectral:
@@ -99,6 +102,14 @@ class Renderer(Projector):
     # def _draw_up(self):
     #     self._draw_object(Horizontal(0, 90), None)
     #     self._draw_object(Horizontal(0, 90), None)
+    def _draw_up(self):  # отвечает за отрисовку точки северного полюса
+        self.settings.apply_color('up', self._painter)
+        if self.watcher.position is not None:
+            prjctd = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''))
+            # находим точку на небесной сферической системе, которая соответствует заданному
+            # небесному объекту
+            if prjctd is not None:
+                self._draw_object(prjctd, False)
 
     def _draw_see(self):
         self.settings.apply_color('see', self._painter)  # устанавливаем цвет

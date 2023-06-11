@@ -49,8 +49,7 @@ class MouseControllableSky(KeyControllableSky):
     # метод вызывается, когда пользователь отпускает кнопку мыши внутри области окна или виджета
     # он сохраняет позицию мыши на момент отпускания кнопки
     def mouseReleaseEvent(self, e: QMouseEvent):
-        if e.buttons() == Qt.LeftButton:  # если снова нажимаем
-            self._move_mode = False
+        self._move_mode = False
         self._mouse_pos = (e.x(), e.y())
         self._mouse_gpos = (e.globalX(), e.globalY())
         super().mouseReleaseEvent(e)

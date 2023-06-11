@@ -3,7 +3,7 @@ from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QListView
 from PyQt5.QtWidgets import QPushButton
-
+from PyQt5.QtCore import QModelIndex
 from graphics.autogui.cast_tools import to_widget
 from graphics.autogui.item import Item
 
@@ -37,7 +37,20 @@ class CheckBoxSet(Item):
 
         self._lock = False
         self._widget = view
+
+        self._widget.doubleClicked.connect(self._on_double_press)
         self.layout.addWidget(self._widget)
+
+    def _on_double_press(self):  # обработка двойного нажатия на элемент списка из виджета
+        try:
+            i = self._model.item(self._widget.currentIndex().row())
+            txt = i.text()
+        except:
+            return
+        self.on_double_press(txt)
+
+    def on_double_press(self, text: str):
+        pass
 
     def _create_buttons(self):
         buttons = QGridLayout()  # создаем кнопку- сеточный макет
