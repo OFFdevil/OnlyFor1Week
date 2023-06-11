@@ -54,7 +54,7 @@ class NVector:
     def __hash__(self):
         h = 0
         for i in self:  # XOR
-            h = h ^ i
+            h
         return h
 
     def __eq__(self, other):

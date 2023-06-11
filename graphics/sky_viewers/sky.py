@@ -4,8 +4,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget
 from graphics.autogui.cast_tools import to_widget
-from graphics.image_viewer import ImageViewer
-from graphics.utility import profile
+from graphics.sky_viewers.image_viewer import ImageViewer
+from graphics.sky_viewers.utility import profile
 from graphics.renderer.renderer import Renderer
 from graphics.renderer.settings import ControllableRenderSettings
 from graphics.renderer.watcher import Watcher
@@ -34,6 +34,8 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self._rerender()
         self._timer.start()  # запуск таймера
+
+        self.setVisible(True)
 
     def _create_ui(self):  # создаем интерфейс звездного неба
         main = QtWidgets.QGridLayout()  # создаем сеточный макет main

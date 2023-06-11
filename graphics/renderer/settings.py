@@ -3,12 +3,17 @@ from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPen
+
+from graphics.renderer.utility import hexstr_to_color
 from stars.sky_math import sign
+from stars.star import SPECTRAL_MAP
 
 
 class RenderSettings:
     def __init__(self):
         self.fisheye = True  # для обзора - чтобы было искажение рыбьего глаза
+        self.spectral = True
+        self.magnitude = True
         # задаем цвета
         self._earth_color = QColor(0, 100, 100)
         self._star_color = QColor(255, 255, 255)
@@ -22,8 +27,14 @@ class RenderSettings:
         self._sky_drawer = (QBrush(self._sky_color), QPen(self._sky_color))
         self._up_drawer = (QBrush(self._up_color), QPen(self._up_color))
         self._down_drawer = (QBrush(self._down_color), QPen(self._down_color))
+        self._spectrals = {}
+        for i in SPECTRAL_MAP.keys():
+            clr = hexstr_to_color(SPECTRAL_MAP[i])
+            self._spectrals[i] = (QBrush(clr), QPen(clr))
 
     def get_drawer(self, color_name: str):  # шаблон для создания имен соответствующих
+        if color_name in self._spectrals:
+            return self._spectrals[color_name]
         # атрибутов
         fullname = "_" + color_name + "_drawer"
         return self.__getattribute__(fullname)

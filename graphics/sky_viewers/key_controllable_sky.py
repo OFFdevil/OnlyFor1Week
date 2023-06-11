@@ -1,9 +1,9 @@
 import sys
 from PyQt5.QtCore import Qt
 from geometry.horizontal import Horizontal
-from graphics.controllable_sky import ControllableSky
+from graphics.sky_viewers.controllable_sky import ControllableSky
 from graphics.renderer.watcher import Watcher
-from graphics.utility import KeyProcessor
+from graphics.sky_viewers.utility import KeyProcessor
 from stars.skydatabase import SkyDataBase
 
 

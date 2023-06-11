@@ -18,13 +18,13 @@ class TextItem(Item):
         self._widget = QLineEdit()
         self._edit_mode = False  # false <=> не происходит редактирования
         self._apply_edit = False  # false <=> настройки не применены
-        #self.addWidget(QLabel(name), 0, 0)  # виджет для названия параметра
         label = label if label is not None else camel_case_to_normal(name)
-        self.addWidget(QLabel(label), 0, 0)
-        self.setSpacing(1)  # все внутренние расстояния между виджетами = 1
+        self.layout.addWidget(QLabel(label), 0, 0)
+        self.layout.addWidget(self._widget, 0, 1)
         self._widget.returnPressed.connect(self._inverse_editing)  # вызывает метод при нажатии
         # клавиши энтер
         self._widget.setReadOnly(ro)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def _inverse_editing(self):  # находится ли виджет в режиме
         # редактирования

@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow
 from graphics.autogui.cast_tools import to_widget
 from geometry.horizontal import Horizontal
 from graphics.configurator import Configurator
-from graphics.image_viewer import ImageViewer
+from graphics.sky_viewers.image_viewer import ImageViewer
 from graphics.renderer.renderer import Renderer
 from graphics.renderer.settings import ControllableRenderSettings
 from graphics.renderer.watcher import Watcher

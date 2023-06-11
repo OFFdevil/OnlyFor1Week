@@ -8,14 +8,15 @@ class BoolItem(Item):  # класс отвечающий за selectable buttons
     def __init__(self, obj: object, fname: str):
         super().__init__()
         self._widget = QCheckBox(fname)  # создаем виджет
-        self.addWidget(self._widget)
+        self.layout.addWidget(self._widget)
         self._buffer = None
         self._lock = False
-        self._setter = lambda v: set_attribute(obj, fname, v)  # сеттер/геттер устанавливаем как соотв. функции из FieldItem
+        self._setter = lambda v: set_attribute(obj, fname,
+                                               v)  # сеттер/геттер устанавливаем как соотв. функции из FieldItem
         self._getter = lambda: get_attribute(obj, fname)
         self._widget.stateChanged.connect(self._on_changed)
 
-    def _on_changed(self): #функция которая вызывается при изменении состояния boolItem
+    def _on_changed(self):  # функция которая вызывается при изменении состояния boolItem
         if self._lock:
             return
         s = self._widget.checkState() != 0

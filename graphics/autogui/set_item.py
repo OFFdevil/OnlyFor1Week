@@ -37,7 +37,7 @@ class CheckBoxSet(Item):
 
         self._lock = False
         self._widget = view
-        self.addWidget(self._widget)
+        self.layout.addWidget(self._widget)
 
     def _create_buttons(self):
         buttons = QGridLayout()  # создаем кнопку- сеточный макет
@@ -52,7 +52,7 @@ class CheckBoxSet(Item):
         ball.clicked.connect(lambda: self._change_state_for_all(2))
         # обе кнопки добавляются в пользовательский интерфейс
         buttons.addWidget(ball, 0, 1)
-        self.addWidget(to_widget(buttons))  # переводим кнопку в виджет и добавляем в макет
+        self.layout.addWidget(to_widget(buttons))  # переводим кнопку в виджет и добавляем в макет
 
     def _on_change(self):  # вызывается каждый раз, когда происходят изменения в модели
         if self._lock:

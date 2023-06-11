@@ -2,11 +2,10 @@ from graphics.autogui.action_item import ActionItem
 from graphics.autogui.bool_item import BoolItem
 from graphics.autogui.field_item import FloatItem, DateTimeItem, IntItem
 from graphics.autogui.gui import GUI
-from graphics.autogui.label_item import LabelItem
 from graphics.autogui.set_item import CheckBoxSet
-from graphics.horizontal_item import HorizontalItem
+from graphics.sky_viewers.items.horizontal_item import HorizontalItem
 from graphics.renderer.watcher import Watcher
-from graphics.sky import Sky
+from graphics.sky_viewers.sky import Sky
 from stars.skydatabase import SkyDataBase
 
 

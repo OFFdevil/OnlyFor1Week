@@ -10,7 +10,7 @@ class ActionItem(Item):
         self._name = name
         self._action = action
         self._widget = QPushButton(name)  # делаем виджет-командную кнопку
-        self.addWidget(self._widget)
+        self.layout.addWidget(self._widget)
         self._widget.clicked.connect(action)  # clicked - это signal, который испускается когда кнопка активирвована
 
     def try_save(self):
