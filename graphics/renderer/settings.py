@@ -9,7 +9,7 @@ from stars.sky_math import sign
 from stars.star import SPECTRAL_MAP
 
 
-class RenderSettings:
+class Settings:
     def __init__(self):
         self.fisheye = True  # для обзора - чтобы было искажение рыбьего глаза
         self.spectral = True
@@ -48,13 +48,13 @@ class RenderSettings:
     def apply_color(self, name: str, painter: QPainter):  # шаблон для применения какого-то
         # цвета
         b, p = self.get_drawer(name)
-        if not b is None:
+        if b is not None:
             painter.setBrush(b)
-        if not p is None:
+        if p is not None:
             painter.setPen(p)
 
 
-class ControllableRenderSettings:  # класс, который сохраняет настройки
+class ControllableSkySettings:  # класс, который сохраняет настройки
     # которые связаны с отображением изображения
     def __init__(self):
         self.second_per_second = 1

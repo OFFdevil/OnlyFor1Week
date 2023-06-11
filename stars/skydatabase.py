@@ -11,8 +11,11 @@ class SkyDataBase:  # класс-база данных со всеми звез�
         for star in stars:
             consts[star.constellation].append(star)
         self._constellations = {}
+        self._names = set()
         for cn in consts.keys():
             self._constellations[cn] = tuple(consts[cn])
+            for s in self._constellations[cn]:
+                self._names.add(s.name)
 
     @property
     def constellations(self):  # геттер.

@@ -1,5 +1,6 @@
 import re
 
+from stars.latin import EN2LAT_MAP
 from geometry.angle_helpers import dtime_to_degree, time_to_degree
 from geometry.equatorial import Equatorial
 from stars.skydatabase import SkyDataBase
@@ -71,6 +72,11 @@ class TxtDataBaseParser:  # сам парсер
             a = time_to_degree(a_h, a_m, a_s)
             d = dtime_to_degree(d_d, d_m, d_s)
             cls = parsed['cls'] if parsed['cls'] in SPECTRAL_CLASSES else ''
-            return Star(Equatorial(a, d), pair[1], float(parsed['mag']), cls, parsed['name'])
+            name = parsed['name']
+            if name is None:
+                name = ''
+            if name[0:3] in EN2LAT_MAP:
+                name = EN2LAT_MAP[name]
+            return Star(Equatorial(a, d), pair[1], float(parsed['mag']), cls, name)
         except Exception as ex:
             print('Can`t parse line ({}) in {}'.format(*pair))

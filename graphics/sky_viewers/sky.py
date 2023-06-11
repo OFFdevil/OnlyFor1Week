@@ -9,7 +9,7 @@ from graphics.sky_viewers.image_viewer import ImageViewer
 from graphics.sky_viewers.utility import profile
 from stars.filter import Filter, Range
 from graphics.renderer.renderer import Renderer
-from graphics.renderer.settings import ControllableRenderSettings
+from graphics.renderer.settings import ControllableSkySettings
 from graphics.renderer.watcher import Watcher
 from stars.skydatabase import SkyDataBase
 
@@ -19,7 +19,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         super().__init__()
 
         self._renderer = Renderer(watcher)  # наблюдатель
-        self.settings = ControllableRenderSettings()
+        self.settings = ControllableSkySettings()
 
         self._available_constellations = sky_base.constellations  # выбранные пользователем созвездия
         self._objects = []
@@ -38,6 +38,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._rerender()
         self._timer.start()  # запуск таймера
 
+        self.setMouseTracking(True)  # включение отслеживания мыши
         self.setVisible(True)
 
     def _create_ui(self):  # создаем интерфейс звездного неба
@@ -59,7 +60,7 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self._main = main
 
-        self.setWindowTitle("Sky")
+        self.setWindowTitle("Space Simulator")
         self.resize(1000, 700)
         self.setCentralWidget(to_widget(main))
         self.show()

@@ -14,6 +14,7 @@ class Item(QGroupBox):
         if flat:
             self.setFlat(True)
             self.setStyleSheet("border:1;")
+        self.setMouseTracking(True)  # включаем отслеживание мыши
 
     def try_save(self):
         raise NotImplementedError()

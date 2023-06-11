@@ -33,3 +33,8 @@ class GUI(Item):
         # текущего контейнера
         self.try_load()  # метод, чтобы загрузить обновленное состояние вложенных элементов
         # из предыдущего сохранения
+
+    # def to_widget(self) -> QWidget:
+    #     # widget = to_widget(self)
+    #     # widget.setStyleSheet("QWidget {margin: 0px}")
+    #     return self
