@@ -16,9 +16,10 @@ class ControllableSky(Sky):  # пользовательский интерфей
         gui = GUI("CONFIGURATOR")
 
         camera = gui.add(GUI("CAMERA"))  # объект камера, gui - интерфейс для
-        # взаимодействия пользователя с программой с помощью клавы и мыши
+        # взаимодействия пользователя с программой с помощью клавиатуры и мыши
         camera.add(HorizontalItem(self._renderer.watcher, "position", label="(долгота, широта)"))  # позиция
         camera.add(HorizontalItem(self._renderer.watcher, "see"))  # точка обзора
+        camera.add(HorizontalItem(self._renderer.watcher, "up", ro=True))
         camera.add(FloatItem(self._renderer.watcher, "up_rotation"))  # вращение вверх
 
         time = gui.add(GUI("DATE & TIME"))

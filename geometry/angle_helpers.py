@@ -6,6 +6,13 @@ def to_0_360(degree):  # делаем так, чтобы значение угл
     return (md + 360) % 360
 
 
+def to_m180_180(degree):  # приводим градус к диапазону от -180 до 180
+    zt = to_0_360(degree)
+    if zt <= 180:
+        return zt
+    return zt - 360
+
+
 def to_cos_period_cutted(degree):  # принимаем на вход угол, приводим его значение к интервалу
     # от -90 до 90
     if -90 <= degree <= 90:
