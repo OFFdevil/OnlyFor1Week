@@ -11,10 +11,6 @@ class GUI(Item):
     def __init__(self, name: str):
         super().__init__(False)
         self._nested = []  # храним инфу про вложенные виджеты и контейнеры
-        # self.addLayout(LabelItem(name, True), 0, 0)  # метод для добавления
-        # нового компонента в текущую сетку
-        # self.setContentsMargins(10, 1, 1, 10)  # устанавливает величины
-        # полей содержимого виджета
         self.setTitle(name)
 
     def add(self, item: Item) -> Item:  # добавляет новый компонент item
@@ -37,11 +33,3 @@ class GUI(Item):
         # текущего контейнера
         self.try_load()  # метод, чтобы загрузить обновленное состояние вложенных элементов
         # из предыдущего сохранения
-
-    # example:
-    # layout = GUI()
-    # layout.add()
-    def to_widget(self) -> QWidget:
-        # widget = to_widget(self)
-        # widget.setStyleSheet("QWidget {margin: 0px}")
-        return self

@@ -54,8 +54,8 @@ class ControllableSky(Sky):  # пользовательский интерфей
         # selected = self._constellation_filter.selected
         # self._apply_constellation_filter(selected)
 
-        def _current_time(self):
-            self._renderer.watcher.local_time = datetime.now()
+    def _current_time(self):
+        self._renderer.watcher.local_time = datetime.now()
 
     def _gui_tick(self):
         try:

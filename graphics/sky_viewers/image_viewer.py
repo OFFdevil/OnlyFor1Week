@@ -10,7 +10,7 @@ class ImageViewer(QWidget):  # класс, отвечающий за просм�
     def __init__(self):
         super().__init__()
         self._image = QImage(self.size(), QImage.Format_RGB32)  # создаем изображение по размеру и цветовому формату
-
+        self.setMouseTracking(True)
     @property
     def image(self):
         return self._image

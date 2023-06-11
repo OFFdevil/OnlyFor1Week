@@ -17,7 +17,6 @@ class SlideItem(Item):
         label = label if label is not None else camel_case_to_normal(name)
         self.layout.addWidget(QLabel(label), 0, 0)
         self.layout.addWidget(self._widget, 0, 1)
-        #        self.setSpacing(1)
         self._edit = False
         self._apply = False
         self._widget.setMinimum(min)
