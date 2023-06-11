@@ -7,10 +7,12 @@ from stars.sky_math import FirstEquatorialToHorizontal
 
 
 class Equatorial(NVector):
-    def __init__(self, a, d):
+    def __init__(self, a, d):  # инициализация координат в экваториальной системе
         super().__init__((to_0_360(a), to_cos_period_cutted(d)))
 
-    def to_horizontal_system(self, star_time_degree, h):
+    def to_horizontal_system(self, star_time_degree, h):  # преобразует координаты из экваториальной
+        # в горизонтальную, используя значение звездного времени (звездные градусы)
+        # и высоту наблюдателя (градусы)
         timed = Equatorial(self.a + star_time_degree, self.d)
         f, t, d = apply(math.radians, h, *timed)
 
@@ -27,18 +29,18 @@ class Equatorial(NVector):
         d = math.atan2(sinz, cosz)
         return Horizontal(*apply(math.degrees, a, math.pi / 2 - d))
     @property
-    def a(self):
+    def a(self):  # получаем значение прямого восхождения
         return self[0]
 
     @property
-    def d(self):
+    def d(self):  # получаем значение склонения
         return self[1]
 
-    def __add__(self, other):
+    def __add__(self, other):  # складываем две координаты в экваториальной системе
         return Equatorial(*self._add_(other))
 
-    def __sub__(self, other):
+    def __sub__(self, other):  # вычитаем две координаты в экваториальной системе
         return Equatorial(*self._sub_(other))
 
-    def __mul__(self, other):
+    def __mul__(self, other):  # умножаем две координаты в экваториальной системе
         return Equatorial(*self._mul_(other))
