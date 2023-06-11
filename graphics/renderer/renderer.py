@@ -70,7 +70,7 @@ class Renderer(Projector):
             else:
                 self.settings.apply_color('star', self._painter)
             x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
-            self._painter.drawEllipse(x, y, pstar.diameter, pstar.diameter)
+            self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))
     # def _draw_object(self, pos: Horizontal, star: Star):
     #     if not star is None:
     #         if self.settings.spectral:
