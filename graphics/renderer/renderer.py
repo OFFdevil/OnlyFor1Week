@@ -136,7 +136,7 @@ class Renderer(Projector):
                 self._draw_object(prjctd, False)
                 if prjctd.in_eye:
                     self._draw_object(prjctd, False)
-                self._painter.drawLine(self.centre[0], self.centre[1], prjctd.cx, prjctd.cy)
+                self._painter.drawLine(int(self.centre[0]), int(self.centre[1]), int(prjctd.cx), int(prjctd.cy))
 
     def _draw_see(self):
         self.settings.apply_color('see', self._painter)  # устанавливаем цвет

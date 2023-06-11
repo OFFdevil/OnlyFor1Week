@@ -12,7 +12,7 @@ class FiltrableSky(ControllableSky):
 
         # создаем объект, используя переданный фильтр, созвездия и функцию, выбранных созвездий
         gui = FilterItem(self.filter, self._available_constellations, self._apply_constellation_filter)
-        self._filter_widget = gui.to_widget()
+        self._filter_widget = gui
         # создаем объект, делаем его видимым и добавляем в главное окно
         self._filter_widget.setVisible(False)
         self._main.addWidget(self._filter_widget, 0, 1)
