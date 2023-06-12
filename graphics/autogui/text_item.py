@@ -43,8 +43,8 @@ class TextItem(Item):
             try:
                 self._setter(self._widget.text())
                 return False
-            except Exception as ex:
-                print(str(ex))
+            except:
+                pass
         self._apply_edit = False
         return False
 

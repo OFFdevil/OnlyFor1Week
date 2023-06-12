@@ -28,7 +28,7 @@ parser = ArgumentParser(
 parser.add_argument('-c', '--console', action='store_true', help="don`t use gui for visualization")
 parser.add_argument('-m', '--music', action='store_true', help="enable music")
 parser.add_argument('-b', '--base', type=str, metavar='PATH',
-                    default=join('stars', '/home/nasty/Space-second-try/stars'),
+                    default=join('stars', r'/stars'),
                     help="path to star date base")
 parser.add_argument('-o', '--out', type=str, metavar='PATH', default='stars when %d.%m.%Y %H_%M_%S.jpg',
                     help="name of resulted image (you can use datetime mask)")
@@ -80,14 +80,14 @@ def extract_time(string):
 def get_all_files_in_dir(path: str, ext: str):
     for fn in os.listdir(path):
         if fn.endswith(ext):
-            yield (os.path.join(path, fn), fn.split('.')[0])
+            yield os.path.join(path, fn), fn.split('.')[0]
 
 
 def get_all_lines_in_dir(path: str, ext: str):
     for p, fn in get_all_files_in_dir(path, ext):
         with open(p, 'r') as file:
             for line in file:
-                yield (line, fn)
+                yield line, fn
 
 
 Task = namedtuple('Task',

@@ -2,7 +2,7 @@ from collections import namedtuple
 from math import e
 from geometry.horizontal import Horizontal
 from graphics.renderer.settings import Settings
-from graphics.renderer.utility import try_or_print
+from utility import try_or_print
 from graphics.renderer.watcher import Watcher
 from stars.star import Star
 

@@ -36,11 +36,10 @@ class SlideItem(Item):
             self._apply = False
             self._edit = False
             try:
-                print(self._widget.value())
                 self._setter(self._widget.value())
                 return False
-            except Exception as ex:
-                print(str(ex))
+            except:
+                pass
         self._apply = False
         self._edit = False
         return False

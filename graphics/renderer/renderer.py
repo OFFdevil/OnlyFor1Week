@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPainter
 from geometry.equatorial import Equatorial
 from geometry.horizontal import Horizontal
 from graphics.renderer.projector import Projector, ProjectedStar
-from graphics.renderer.utility import try_or_print
+from utility import try_or_print
 from graphics.renderer.watcher import Watcher
 from stars.star import Star
 

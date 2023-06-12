@@ -1,11 +1,8 @@
-import math
 from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPen
-
-from graphics.renderer.utility import hexstr_to_color
-from geometry.sky_math import sign
+from utility import hexstr_to_color
 from stars.star import SPECTRAL_MAP
 
 

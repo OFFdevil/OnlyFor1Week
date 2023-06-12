@@ -1,17 +1,3 @@
-import datetime
-
-
-def profile(
-        foo):  # профилирование функций. Декоратор для функций, у которых хотим узнать производительность/время работы
-    def decorated(*args, **kwargs):
-        prev = foo.__last_call_time if "__last_call_time" in dir(foo) else None
-        lct = foo.__last_call_time = datetime.datetime.now()
-        kwargs["exec_delta"] = (lct - prev) if prev is not None else None
-        return foo(*args, **kwargs)
-
-    return decorated
-
-
 class KeyProcessorFAPIIData:
     def __init__(self, processor, name: str, key):
         self._processor = processor

@@ -8,6 +8,7 @@ from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.sky import Sky
 from stars.filter import Filter
 from stars.skydatabase import SkyDataBase
+from key_processor import try_or_print
 
 
 class ControllableSky(Sky):  # пользовательский интерфейс
@@ -62,11 +63,9 @@ class ControllableSky(Sky):  # пользовательский интерфей
     def current_time(self):
         self.renderer.watcher.local_time = datetime.now()
 
+    @try_or_print
     def _gui_tick(self):
-        try:
-            self._gui.handle()
-        except Exception as e:
-            print(e)
+        self._gui.handle()
 
     # определяем небесное телескопическое зрение
     # определяем небесную сферу с выбранными созвездиями

@@ -1,12 +1,11 @@
-import sys
 from PyQt5.QtCore import Qt
 from geometry.horizontal import Horizontal
 from graphics.sky_viewers.filterable_sky import FilterableSky
 from graphics.renderer.watcher import Watcher
-from graphics.sky_viewers.utility import KeyProcessor
+from graphics.sky_viewers.key_processor import KeyProcessor
 from stars.skydatabase import SkyDataBase
 from stars.filter import Filter
-from graphics.renderer.utility import try_or_print
+from key_processor import try_or_print
 
 
 class KeyControllableSky(FilterableSky):

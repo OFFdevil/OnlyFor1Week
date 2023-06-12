@@ -6,7 +6,6 @@ from graphics.autogui.field_item import FieldItem
 
 # класс, отвечающий за item в горизонтальной системе координат
 class HorizontalItem(FieldItem):
-    # TODO: move to Horizontal
     @staticmethod
     def parse_str(s, regexp):  # парсит строку(a и d вектора в горизонт коорд) по данной регулярке
         match = regexp.match(s)
@@ -15,7 +14,6 @@ class HorizontalItem(FieldItem):
         groups = match.groupdict()
         if (not ("a" in groups)) or (not ("d" in groups)):
             raise ValueError()
-        print(groups["a"], groups["d"])
         return Horizontal(float(groups["a"]), float(groups["d"]))
 
     def __init__(self, obj: object, fname: str, ro: bool = False, label=None):
