@@ -3,7 +3,6 @@ from task import create_task, Task
 
 Requirements((3, 5, 1)).add("PyQt5", "PyQt5>=5.7").add("jdcal", "jdcal>=1.3").critical_check()
 
-
 import subprocess
 from os.path import join
 import sys
@@ -22,6 +21,8 @@ def gui_mode(task: Task):
         sky.switch_pause()
     if task.full_screen_mode:
         sky.switch_full_screen()
+    else:
+        app.exec()
 
 
 def console_mode(task: Task):

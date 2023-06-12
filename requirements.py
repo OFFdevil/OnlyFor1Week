@@ -15,12 +15,12 @@ class Requirements:
         self._libs[import_name] = pip_name if pip_name is not None else import_name
         return self
 
-    def critical_check(self, try_install: bool=True):
+    def critical_check(self, try_install: bool = True):
         if not self.check(try_install):
             print("Requirements problems!", file=sys.stderr)
             raise RuntimeError("Bad environment!")
 
-    def check(self, try_install: bool=True):
+    def check(self, try_install: bool = True):
         if self._min_pyver and sys.version_info < self._min_pyver:
             print("Too low version of python interpreter. Expected {}.{}.{} or great".format(*self._min_pyver))
             return False

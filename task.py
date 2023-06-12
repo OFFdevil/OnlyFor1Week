@@ -12,7 +12,6 @@ from stars.filter import Filter
 from stars.filter import Range
 from stars.parser import TxtDataBaseParser
 
-
 BUILTIN_CITIES = {"MGN": Horizontal(59, 53), "EKB": Horizontal(60, 56)}
 
 parser = ArgumentParser(
@@ -74,14 +73,14 @@ def extract_time(string):
 def get_all_files_in_dir(path: str, ext: str):
     for fn in os.listdir(path):
         if fn.endswith(ext):
-            yield (os.path.join(path, fn), fn.split('.')[0])
+            yield os.path.join(path, fn), fn.split('.')[0]
 
 
 def get_all_lines_in_dir(path: str, ext: str):
     for p, fn in get_all_files_in_dir(path, ext):
         with open(p, 'r') as file:
             for line in file:
-                yield (line, fn)
+                yield line, fn
 
 
 Task = namedtuple('Task',
