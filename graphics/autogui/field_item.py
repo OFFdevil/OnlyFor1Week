@@ -1,5 +1,4 @@
 import datetime
-
 from graphics.autogui.text_item import TextItem
 
 
@@ -7,8 +6,8 @@ from graphics.autogui.text_item import TextItem
 def get_attribute(obj, fname):
     current = obj
     for part in fname.split('.'):
-        current = current.__getattribute__(
-            part)  # __getattribute__ Вызывается при попытке доступа к атрибуту сurrent типа object
+        current = current.__getattribute__(part)
+        # __getattribute__ Вызывается при попытке доступа к атрибуту сurrent типа object
     return current
 
 

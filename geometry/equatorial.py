@@ -1,5 +1,4 @@
 import math
-
 from geometry.angle_helpers import to_0_360, to_cos_period_cutted
 from geometry.horizontal import Horizontal
 from geometry.nvector import NVector
@@ -51,7 +50,7 @@ class Equatorial(NVector):
         return Equatorial(*self._add_(other))
 
     def __sub__(self, other):  # вычитаем две координаты в экваториальной системе
-        return self + other*(-1)
+        return self + other * (-1)
 
     def __mul__(self, other):  # умножаем две координаты в экваториальной системе
         return Equatorial(*self._mul_(other))

@@ -1,8 +1,6 @@
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QWidget
-
 from graphics.autogui.cast_tools import to_widget
-
 from graphics.autogui.item import Item
 from graphics.autogui.label_item import LabelItem
 
@@ -33,8 +31,3 @@ class GUI(Item):
         # текущего контейнера
         self.try_load()  # метод, чтобы загрузить обновленное состояние вложенных элементов
         # из предыдущего сохранения
-
-    # def to_widget(self) -> QWidget:
-    #     # widget = to_widget(self)
-    #     # widget.setStyleSheet("QWidget {margin: 0px}")
-    #     return self

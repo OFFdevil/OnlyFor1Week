@@ -16,7 +16,7 @@ class CheckBoxSet(Item):
         self._selected = set(str_set)
         self._handlers = [] if handler is None else [handler]  # пустой список или передается обработчик, если handler
         # не был передан
-        self._create_widget(selected)
+        self._create_widget(selected)  # методы создания виджетов и кнопок
         self._create_buttons()
 
     def _create_widget(self, selected):
@@ -37,7 +37,6 @@ class CheckBoxSet(Item):
 
         self._lock = False
         self._widget = view
-
         self._widget.doubleClicked.connect(self._on_double_press)
         self.layout.addWidget(self._widget)
 

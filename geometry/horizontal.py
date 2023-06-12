@@ -6,7 +6,6 @@ from geometry.vector import Vector
 
 
 class Horizontal(NVector):
-
     def __init__(self, a, h):
         # инициализация координат точки в горизонтальной системе
         h = to_m180_180(h)

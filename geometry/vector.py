@@ -1,5 +1,4 @@
 from math import sqrt
-
 from geometry.nvector import NVector
 
 
@@ -51,9 +50,3 @@ class Vector(NVector):
 
     def __sub__(self, other):  # разность векторов
         return Vector(*self._sub_(other))
-
-    def __str__(self):  # выводит вектор в заданном формате
-        return "({}, {}, {})".format(*self)  # * перед аргументом - перечисляем все поля
-
-    def __eq__(self, other):  # проверяет равенство
-        return self.x == other.x and self.y == other.y and self.z == other.z

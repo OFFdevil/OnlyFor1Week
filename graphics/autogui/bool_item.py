@@ -11,8 +11,8 @@ class BoolItem(Item):  # класс отвечающий за selectable buttons
         self.layout.addWidget(self._widget)
         self._buffer = None
         self._lock = False
-        self._setter = lambda v: set_attribute(obj, fname,
-                                               v)  # сеттер/геттер устанавливаем как соотв. функции из FieldItem
+        self._setter = lambda v: set_attribute(obj, fname, v)
+        # сеттер/геттер устанавливаем как соотв. функции из FieldItem
         self._getter = lambda: get_attribute(obj, fname)
         self._widget.stateChanged.connect(self._on_changed)
         self.layout.setContentsMargins(0, 0, 0, 0)
