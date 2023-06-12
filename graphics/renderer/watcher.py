@@ -3,7 +3,6 @@ import datetime
 from geometry.horizontal import Horizontal
 from stars.star_time import StarTime
 from graphics.renderer.camera import Camera
-
 from geometry.equatorial import Equatorial
 
 
@@ -16,7 +15,7 @@ class Watcher(Camera):
         self._position = position
         self._local_time = local_time
         self._star_time = StarTime.from_local(position.a, local_time)  # вычисляем звездное время
-        #self.position = position
+        # self.position = position
 
     @property
     def local_time(self):

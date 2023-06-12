@@ -1,7 +1,6 @@
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
-
 from geometry.equatorial import Equatorial
 from geometry.horizontal import Horizontal
 from graphics.renderer.projector import Projector, ProjectedStar
@@ -16,7 +15,6 @@ class Renderer(Projector):
         super().__init__(watcher)
         self._buffer = QImage(QSize(0, 0), QImage.Format_RGB32)  # создаем объект размером 0*0
         self._painter = QPainter()
-
         # ширина и высота изображения, заданного для отрисовки
         self._width = 0
         self._height = 0
@@ -65,8 +63,8 @@ class Renderer(Projector):
 
     def clear_buffer(self):
         self.settings.apply_color("sky", self._painter)  # устанавливаем цвет
-        self._painter.drawRect(0, 0, self.width,
-                               self.height)  # рисуем прямоугольник с координатами (0, 0) с данной высотой и шириной
+        self._painter.drawRect(0, 0, self.width, self.height)
+        # рисуем прямоугольник с координатами (0, 0) с данной высотой и шириной
 
     def _draw_compass(self):  # отрисовка компаса
         self._draw_point_and_direction(Equatorial(0, 90), 'north', -3, True)
@@ -88,7 +86,6 @@ class Renderer(Projector):
         # верхнего угла, далее рисуем круг
         self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
 
-    # TODO
     def _draw_point_and_direction(self, pos: Equatorial, color, size, apply_latitude):
         self.settings.apply_color(color, self._painter)
         if apply_latitude:
@@ -102,7 +99,6 @@ class Renderer(Projector):
             self._draw_object(p_lat, False)
         self._painter.drawLine(p_lat.cx, p_lat.cy, self.centre[0], self.centre[1])
 
-    # TODO
     def _draw_object(self, pstar: ProjectedStar, with_color=True):
         if with_color:
             if self.settings.spectral:

@@ -56,4 +56,3 @@ class Settings:
             painter.setBrush(b)
         if p is not None:
             painter.setPen(p)
-

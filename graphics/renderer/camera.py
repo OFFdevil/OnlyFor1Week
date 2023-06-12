@@ -35,7 +35,6 @@ class Camera:
 
     @see.setter
     def see(self, value: Horizontal):
-        # TODO: подозрительно
         self._see = Horizontal(value.a, value.h)
         self._update()
 

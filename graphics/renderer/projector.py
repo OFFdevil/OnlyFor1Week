@@ -34,9 +34,10 @@ class Projector:
         self.centre = (0, 0)
         self._constellations = {}
 
-    @try_or_print  # TODO
+    @try_or_print
     def project(self, stars: list, forecast: bool) -> list:
         self.distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
+
         good = self._objects
         self._objects = []
         all = not forecast or len(good) == 0
