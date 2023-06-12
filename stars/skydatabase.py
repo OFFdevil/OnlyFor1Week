@@ -23,5 +23,6 @@ class SkyDataBase:  # класс-база данных со всеми звез�
             if constellation not in self._constellations:  # если переданного созвездия не существует
                 continue
             for star in self._constellations[constellation]:  # добавляем все звезды всех выбранных созвездий
-                stars.append(star)
-            return stars
+                if selection.magnitude.is_include(star.magnitude):
+                    stars.append(star)
+        return stars

@@ -22,6 +22,10 @@ class Star:
 
     # геттеры
     @property
+    def hpos(self):
+        return self._hpos
+
+    @property
     def position(self):
         return self._position
 

@@ -1,5 +1,4 @@
 import re
-
 from stars.latin import EN2LAT_MAP
 from geometry.angle_helpers import dtime_to_degree, time_to_degree
 from geometry.equatorial import Equatorial
@@ -51,7 +50,6 @@ def _create_star_database_line_regexp():  # создание регулярно�
 
 
 class TxtDataBaseParser:  # сам парсер
-
     _regexp = _create_star_database_line_regexp()
 
     def parse(self, line_const_tuples):
