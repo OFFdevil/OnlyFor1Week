@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPen
 
 from graphics.renderer.utility import hexstr_to_color
-from stars.sky_math import sign
+from geometry.sky_math import sign
 from stars.star import SPECTRAL_MAP
 
 
@@ -14,8 +14,8 @@ class Settings:
         self.fisheye = True  # для обзора - чтобы было искажение рыбьего глаза
         self.spectral = True
         self.magnitude = True
-        self.up_direction = True
-        self.see_direction = True
+        self.see_points = True
+        self.screen_centre = True
         self.compass = True
         self.exp_const = 7  # 2*math.pi
         self.exp_factor = -0.3  # math.log(2) - 1
@@ -29,6 +29,7 @@ class Settings:
         self._see_color = QColor(0, 255, 255)
         self._north_color = QColor(0, 128, 255)
         self._south_color = QColor(255, 128, 0)
+        self._up_border_color = QColor(64, 255, 32)
         # создает кисть для окрашивания области, которая соответствует объекту
         # кортеж является набором инструментов, которые используем для отрисовки объектов
         self._earth_drawer = (QBrush(self._earth_color), QPen(self._earth_color))
@@ -38,6 +39,7 @@ class Settings:
         self._see_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._see_color))
         self._north_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._north_color))
         self._south_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._south_color))
+        self._up_border_drawer = (QBrush(QColor(0, 0, 0, 0)), QPen(self._up_border_color))
         self._spectrals = {}
         for i in SPECTRAL_MAP.keys():
             clr = hexstr_to_color(SPECTRAL_MAP[i])
@@ -58,26 +60,3 @@ class Settings:
         if p is not None:
             painter.setPen(p)
 
-
-class ControllableSkySettings:  # класс, который сохраняет настройки
-    # которые связаны с отображением изображения
-    def __init__(self):
-        self.second_per_second = 1
-        self.zoom = 1
-
-    @property
-    def speed_rank(self):  # ранг для скорости текущего объекта
-        # в зависимости от ее значения.
-        if self.second_per_second == 0:
-            return 0
-        return (math.log10(abs(self.second_per_second)) + 1) * sign(self.second_per_second)
-
-    @speed_rank.setter
-    def speed_rank(self, value):
-        # автоматически вычисляет и изменяет
-        # значение атрибута speed в соответствии с заданным значением.
-        if value > 10:
-            raise ValueError()
-        self.second_per_second = 10 ** (abs(value) - 1) * sign(value)
-        # новое значение атрибута second_per_second
-        # в зависимости от значения атрибута speed_rank.

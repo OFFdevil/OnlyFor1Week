@@ -5,11 +5,12 @@ from math import atan2, degrees
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.key_controllable_sky import KeyControllableSky
 from stars.skydatabase import SkyDataBase
+from stars.filter import Filter
 
 
 class MouseControllableSky(KeyControllableSky):
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase):
-        super().__init__(watcher, sky_base)
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, filter: Filter):
+        super().__init__(watcher, sky_base, filter)
         # включаем отслеживание курсора, инициализируем переменные, флаги
         self.setMouseTracking(True)
         self._move_mode = False
@@ -30,9 +31,9 @@ class MouseControllableSky(KeyControllableSky):
             self._look_around(d[0] // 20, d[1] // 20, 0)
 
     def _look_to_star(self, sx, sy):
-        star = self._renderer.find_star(sx, sy, 2)
+        star = self.renderer.find_star(sx, sy, 2)
         if star is not None:
-            self._renderer.watcher.see = star.horizontal
+            self.renderer.watcher.see = star.horizontal
 
     # сохраняет текущие координаты мыши и вызывает метод для применения этих изменений
     def mouseMoveEvent(self, e: QMouseEvent):

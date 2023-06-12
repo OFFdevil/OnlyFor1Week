@@ -1,6 +1,4 @@
-from math import sqrt, acos
-
-import numpy
+from math import sqrt
 
 from geometry.nvector import NVector
 
@@ -19,10 +17,10 @@ class Vector(NVector):
             return 0
         return (self.length**2 + other.length**2 - d.length**2)/2/self.length/other.length
 
-    def scalar_mul(self, other):  # cкалярное произведение
+    def scalar_mul(self, other):  # скалярное произведение
         return self.x * other.x + self.y * other.y + self.z * other.z
 
-    def vector_mul(self, other):  # функция вычисляет векторное произведение
+    def vector_mul(self, other):  # векторное произведение
         p, q, r = self
         m, n, t = other
         x = q * t - n * r
@@ -30,14 +28,8 @@ class Vector(NVector):
         z = (p * n - q * m)
         return Vector(x, y, z)
 
-    def rmul_to_matrix(self, matrix):  # считает скалярное произведение каждой строки матрицы на вектор  и возвращает
-        # новый вектор; в ином случае выводим сообщение об ошибке
-        try:
-            return Vector(*(self.scalar_mul(row) for row in matrix))
-        except Exception as e:
-            print('!')
-            print(type(matrix))
-            print(e)
+    def rmul_to_matrix(self, matrix):
+        return Vector(*(self.scalar_mul(row) for row in matrix))
 
     def project_to(self, plane_normal_vector):  # вычисление проекции
         sqr = plane_normal_vector.scalar_mul(plane_normal_vector)

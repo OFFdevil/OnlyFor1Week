@@ -1,11 +1,15 @@
-import datetime
 import os
-import subprocess
-
+from os.path import join
+from argparse import ArgumentParser
+import datetime
 from PyQt5 import QtWidgets
 from PyQt5.QtMultimedia import QSound
-
+from graphics.renderer.renderer import Renderer
+from graphics.renderer.settings import Settings
+from stars.filter import Filter, Range
+from stars.skydatabase import SkyDataBase
 from geometry.horizontal import Horizontal
+from task import create_task, Task
 from graphics.sky_viewers.key_controllable_sky import KeyControllableSky
 from graphics.sky_viewers.sky import Sky
 from graphics.renderer.camera import Camera
@@ -13,45 +17,31 @@ from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.mouse_controllable_sky import MouseControllableSky
 from graphics.sky_viewers.named_sky import NamedSky
 from stars.parser import TxtDataBaseParser
-# import vlc
 import sys
 
 
-def get_all_files_in_dir(path: str, ext: str):  # на вход принимает путь и расширение файла
-    for fn in os.listdir(path):  # перебор всех файлов в директории
-        if fn.endswith(ext):
-            yield os.path.join(path, fn), fn.split('.')[0]
-            # возвращает путь к файлу, если у него нужное расширение
-
-
-def get_all_lines_in_dir(path: str, ext: str):
-    for p, fn in get_all_files_in_dir(path, ext):
-        # получили список файлов
-        with open(p, 'r') as file:  # открываем каждый найденный файл
-            for line in file:  # перебор строк в файле
-                yield line, fn  # строка и имя файла без расширения возвращаются
-                # в виде кортежа
-
-
-class City(Horizontal):
-    def __init__(self, широта, долгота):
-        super().__init__(долгота, широта)
-
-
-MAGNITOGORSK = City(53, 59)
-YEKATERINBURG = City(56, 60)
-
-
-def main():
-    sky_base = TxtDataBaseParser().parse(
-        get_all_lines_in_dir(r'stars/stars', '.txt'))
-    camera = Camera(Horizontal(0, 90), 60)
-    watcher = Watcher(MAGNITOGORSK, datetime.datetime.now(), camera)
-
+def gui_mode(task: Task):
     app = QtWidgets.QApplication([])
-    NamedSky(watcher, sky_base)
-    app.exec()
+    sky = NamedSky(task.watcher, task.database, task.filter)
+    sky.renderer.settings = task.render_settings
+    sky.viewer.out_file_name = task.out_file_name
+    sky.animation = task.animation
+    if task.pause:
+        sky.switch_pause()
+    if task.full_screen_mode:
+        sky.switch_full_screen()
 
 
-if __name__ == '__main__':
-    main()
+def console_mode(task: Task):
+    renderer = Renderer(task.watcher)
+    renderer.settings = task.render_settings
+    image = renderer.render(task.database.get_stars(task.filter), False)
+    fname = task.watcher.local_time.strftime(task.out_file_name)
+
+
+if __name__ == "__main__":
+    task = create_task()
+    if task.console_mode:
+        console_mode(task)
+    else:
+        gui_mode(task)

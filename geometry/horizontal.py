@@ -1,6 +1,6 @@
 import math
-from stars.sky_math import sin, cos
-from geometry.angle_helpers import to_0_360, to_cos_period_cutted, to_m180_180
+from geometry.sky_math import sin, cos
+from geometry.angle_helpers import to_0_360, to_m180_180
 from geometry.nvector import NVector
 from geometry.vector import Vector
 

@@ -1,5 +1,3 @@
-from multiprocessing.pool import Pool
-
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 from PyQt5.QtGui import QPainter
@@ -22,6 +20,8 @@ class Renderer(Projector):
         # ширина и высота изображения, заданного для отрисовки
         self._width = 0
         self._height = 0
+        self.width = 1920
+        self.height = 1080
         # self._distortion = fisheye_distortion  # хранит значение искажения в съемке с широкоугольной камеры
 
     @property
@@ -51,52 +51,19 @@ class Renderer(Projector):
     # камеры или нет
     def render(self, stars: list, forecast: bool):
         self._painter.begin(self._buffer)
-        self._draw_background()
+        self.clear_buffer()
         for o in self.project(stars, forecast):
             self._draw_object(o)
-        if self.settings.up_direction:
-            self._draw_up()
-        if self.settings.see_direction:
-            self._draw_see()
+        if self.settings.see_points:
+            self._draw_see_points()
+        if self.settings.screen_centre:
+            self._draw_screen_centre()
         if self.settings.compass:
             self._draw_compass()
         self._painter.end()
         return self._buffer
 
-    # рисуем звезду по данным из ProjectedStar
-    def _draw_object(self, pstar: ProjectedStar, with_color=True):
-        if with_color:
-            if self.settings.spectral:
-                self.settings.apply_color(pstar.star.spectral_class, self._painter)
-            else:
-                self.settings.apply_color('star', self._painter)
-            x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
-            self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))
-
-    # def _draw_object(self, pos: Horizontal, star: Star):
-    #     if not star is None:
-    #         if self.settings.spectral:
-    #             self.settings.apply_color(star.spectral_class, self._painter)
-    #         diameter = self._get_size(star.magnitude)
-    #     else:
-    #         self.settings.apply_color('up', self._painter)
-    #         diameter = self._get_size(-1)
-    #     # находим угол между направлением взгляда камеры и направлением на звезду
-    #     # если угол <= радиусу обзора, то звезда отображается на экране
-    #     if self.watcher.see.angle_to(pos) <= self.watcher.radius:
-    #         # вычисляем изменение координаты звезды относительно направления камеры и проецируем на плоскость экрана
-    #         delta = pos.to_point() - self.watcher.see.to_point()
-    #         prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
-    #         # используем функцию distortion которая на основе координат в трехмерном пространстве и радиуса обзора
-    #         # камеры вычисляет искажение изображения, а именно смещение координат и уменьшение диаметра звезды
-    #         dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.radius, prj_delta.z)
-    #         diameter, _ = self._distortion(diameter, 0, self.watcher.radius, prj_delta.z)
-    #         # вычисляются координаты отрисовки эллипса на плоскости экрана
-    #         cx, cy = self._width // 2 + dx, self._height // 2 + dy
-    #         x, y = cx - diameter // 2, cy - diameter // 2
-    #         self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
-
-    def _draw_background(self):
+    def clear_buffer(self):
         self.settings.apply_color("sky", self._painter)  # устанавливаем цвет
         self._painter.drawRect(0, 0, self.width,
                                self.height)  # рисуем прямоугольник с координатами (0, 0) с данной высотой и шириной
@@ -106,15 +73,17 @@ class Renderer(Projector):
     #     self._draw_object(Horizontal(0, 90), None)
 
     def _draw_compass(self):  # отрисовка компаса
-        n = self._draw_latidude_depencing_point(Equatorial(0, 90), 'north', -3)
-        s = self._draw_latidude_depencing_point(Equatorial(0, -90), 'south', -3)
-        try:
-            self.settings.apply_color('north', self._painter)
-            self._painter.drawLine(n.cx, n.cy, self.centre[0], self.centre[1])
-            self.settings.apply_color('south', self._painter)
-            self._painter.drawLine(self.centre[0], self.centre[1], s.cx, s.cy)
-        except Exception as e:
-            print(e)
+        # n = self._draw_latidude_depencing_point(Equatorial(0, 90), 'north', -3)
+        # s = self._draw_latidude_depencing_point(Equatorial(0, -90), 'south', -3)
+        # try:
+        #     self.settings.apply_color('north', self._painter)
+        #     self._painter.drawLine(n.cx, n.cy, self.centre[0], self.centre[1])
+        #     self.settings.apply_color('south', self._painter)
+        #     self._painter.drawLine(self.centre[0], self.centre[1], s.cx, s.cy)
+        # except Exception as e:
+        #     print(e)
+        self._draw_point_and_direction(Equatorial(0, 90), 'north', -3, True)
+        self._draw_point_and_direction(Equatorial(0, -90), 'south', -3, True)
 
     def _draw_latidude_depencing_point(self, pos: Equatorial, color, size):
         # рисует звезду в положении, которое зависит от ее широты
@@ -126,27 +95,58 @@ class Renderer(Projector):
             self._draw_object(p_lat, False)
         return p_lat  # возвращает проекцию звезды на экране
 
-    def _draw_up(self):  # отвечает за отрисовку точки северного полюса
-        self.settings.apply_color('up', self._painter)
-        if self.watcher.position is not None:
-            prjctd = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''), True)
-            # находим точку на небесной сферической системе, которая соответствует заданному
-            # небесному объекту
-            if prjctd is not None:
-                self._draw_object(prjctd, False)
-                if prjctd.in_eye:
-                    self._draw_object(prjctd, False)
-                self._painter.drawLine(int(self.centre[0]), int(self.centre[1]), int(prjctd.cx), int(prjctd.cy))
+    @try_or_print
+    def _draw_see_points(self):  # отвечает за отрисовку точки северного полюса
+        # if self.watcher.position is not None:
+        #     # находим точку на небесной сферической системе, которая соответствует заданному
+        #     # небесному объекту
+        #     forward = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''), True)
+        #     upborder = self.project_star(Horizontal(0, 90), Star(Equatorial(0, 90), '', -1, '', ''), True)
+        #     downborder = self.project_star(Horizontal(0, -90), Star(Equatorial(0, 90), '', -1, '', ''), True)
+        #     self.settings.apply_color('up', self._painter)
+        #     if forward.in_eye:
+        #         self._draw_object(forward, False)
+        #     self._painter.drawLine(self.centre[0], self.centre[1], forward.cx, forward.cy)
+        #     self.settings.apply_color('up_border', self._painter)
+        #     if upborder.in_eye:
+        #         self._draw_object(upborder, False)
+        #     self._painter.drawLine(self.centre[0], self.centre[1], upborder.cx, upborder.cy)
+        #     if downborder.in_eye:
+        #         self._draw_object(downborder, False)
+        #     self._painter.drawLine(self.centre[0], self.centre[1], downborder.cx, downborder.cy)
+        self._draw_point_and_direction(self.watcher.position, 'up', -1, False)
+        self._draw_point_and_direction(Equatorial(0, 90), 'up_border', -1, False)
+        self._draw_point_and_direction(Equatorial(0, -90), 'up_border', -1, False)
 
-    def _draw_see(self):
+    def _draw_screen_centre(self):
         self.settings.apply_color('see', self._painter)  # устанавливаем цвет
         diameter = self._get_size(-2)
-        diameter, _ = self._distortion(diameter, 0, self.watcher.radius, 0)  # считаем диаметр на основании
-        # параметров объекта
-        # cx, cy = self._width // 2, self._height // 2  # определяем координаты центра
-        # x, y = cx - diameter // 2, cy - diameter // 2  # по координатам центра и диаметру находим коорд левого
+        diameter, _ = self.distortion(diameter, 0, self.watcher.radius, 0)  # считаем диаметр на основании
         # верхнего угла, далее рисуем круг
         x, y = self.centre[0] - diameter // 2, self.centre[
             1] - diameter // 2  # по координатам центра и диаметру находим коорд левого
         # верхнего угла, далее рисуем круг
         self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
+
+    def _draw_point_and_direction(self, pos: Equatorial, color, size, apply_latitude):
+        self.settings.apply_color(color, self._painter)
+        if apply_latitude:
+            horizontal = pos.to_horizontal_with_latitude(self.watcher.position.h)
+        elif isinstance(pos, Equatorial):
+            horizontal = Horizontal(pos.a, pos.d)
+        else:
+            horizontal = pos
+        p_lat = self.project_star(horizontal, Star(pos, '', size, '', ''), True)
+        if p_lat is not None and p_lat.in_eye:
+            self._draw_object(p_lat, False)
+        self._painter.drawLine(int(p_lat.cx), int(p_lat.cy), int(self.centre[0]), int(self.centre[1]))
+
+    def _draw_object(self, pstar: ProjectedStar, with_color=True):
+        if with_color:
+            if self.settings.spectral:
+                self.settings.apply_color(pstar.star.spectral_class, self._painter)
+            else:
+                self.settings.apply_color('star', self._painter)
+
+        x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
+        self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))

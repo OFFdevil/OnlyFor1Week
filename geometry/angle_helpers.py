@@ -1,4 +1,4 @@
-from stars.sky_math import sign
+from geometry.sky_math import sign
 
 
 def to_0_360(degree):  # делаем так, чтобы значение угла лежало в промежутке между 0 и 360

@@ -1,11 +1,10 @@
 from collections import namedtuple
-from math import sqrt, e, log, pi
+from math import e
 from geometry.horizontal import Horizontal
 from graphics.renderer.settings import Settings
 from graphics.renderer.utility import try_or_print
 from graphics.renderer.watcher import Watcher
 from stars.star import Star
-from multiprocessing.pool import Pool
 
 
 # функция считает искажение, которое возникает при съёмке с широкоугольной камеры (искажение рыбьего глаза) она
@@ -30,20 +29,22 @@ class Projector:
         super().__init__()
         self.settings = Settings()
         self.watcher = watcher
-        self._distortion = fisheye_distortion
+        self.distortion = fisheye_distortion
         self._objects = []
         self.centre = (0, 0)
         self._constellations = {}
 
     @try_or_print
     def project(self, stars: list, forecast: bool) -> list:
-        self._distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
+        self.distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
         good = self._objects
         self._objects = []
-        self._constellations = {}
-        src = stars if not forecast or len(good) == 0 else (s.star for s in good)
-        rotayted = map(self._apply_time_rotation, src)
-        for o in rotayted:
+        all = not forecast or len(good) == 0
+        src = stars if all else (s.star for s in good)
+        if all:
+            self._constellations = {}
+        actual = map(self._apply_time_rotation, src)
+        for o in actual:
             if o[1].constellation in self._constellations:
                 current = self._constellations[o[1].constellation]
                 self._constellations[o[1].constellation] = min(current, o, key=lambda s: s[1].magnitude)
@@ -90,8 +91,8 @@ class Projector:
             prj_delta = delta.rmul_to_matrix(self.watcher.transformation_matrix)
             # используем функцию distortion которая на основе координат в трехмерном пространстве и радиуса обзора
             #         # камеры вычисляет искажение изображения, а именно смещение координат и уменьшение диаметра звезды
-            dx, dy = self._distortion(prj_delta.x, prj_delta.y, self.watcher.radius, prj_delta.z)
-            diameter, _ = self._distortion(diameter, 0, self.watcher.radius, prj_delta.z)
+            dx, dy = self.distortion(prj_delta.x, prj_delta.y, self.watcher.radius, prj_delta.z)
+            diameter, _ = self.distortion(diameter, 0, self.watcher.radius, prj_delta.z)
             # вычисляются координаты отрисовки эллипса на плоскости экрана
             cx, cy = self.centre[0] + dx, self.centre[1] + dy
             return ProjectedStar(cx, cy, pos, diameter, star, in_eye)

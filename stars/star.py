@@ -4,7 +4,7 @@ from geometry.equatorial import Equatorial
 SPECTRAL_CLASSES = ('', 'O', 'B', 'A', 'F', 'G', 'K', 'M')
 SPECTRAL_COLORS = (
     '00ff00', '9aafff', 'cad7ff', 'f8f7ff', 'fff4ea', 'fff2a1', 'ffc46f',
-    'ff6060')  # для каждой буквы задаем соотв. цвет
+    'ff6060')
 SPECTRAL_MAP = {SPECTRAL_CLASSES[i]: SPECTRAL_COLORS[i] for i in range(0, len(SPECTRAL_CLASSES))}
 
 
@@ -12,8 +12,7 @@ SPECTRAL_MAP = {SPECTRAL_CLASSES[i]: SPECTRAL_COLORS[i] for i in range(0, len(SP
 
 class Star:
     # звезда характеризуется позицией в экватор. системе, созвездием, магнитудой, цветом и названием
-    def __init__(self, pos: Equatorial,
-                 constellation, magnitude, spectral_class, name):
+    def __init__(self, pos: Equatorial, constellation, magnitude, spectral_class, name):
         self._position = pos
         self._constellation = constellation
         self._magnitude = magnitude
@@ -22,11 +21,6 @@ class Star:
         if constellation is None or pos is None or magnitude is None or spectral_class is None or name is None:
             raise ValueError()
         self._hash = hash(pos)
-        self._hpos = pos.to_horizontal_with_time(0, 0)
-
-    @property
-    def hpos(self):
-        return self._hpos
 
     # геттеры
     @property

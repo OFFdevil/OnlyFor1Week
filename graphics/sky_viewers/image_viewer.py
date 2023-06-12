@@ -11,6 +11,8 @@ class ImageViewer(QWidget):  # класс, отвечающий за просм�
         super().__init__()
         self._image = QImage(self.size(), QImage.Format_RGB32)  # создаем изображение по размеру и цветовому формату
         self.setMouseTracking(True)
+        self.out_file_name = 'sky.jpg'
+
     @property
     def image(self):
         return self._image
@@ -20,8 +22,8 @@ class ImageViewer(QWidget):  # класс, отвечающий за просм�
         self._image = value
         self.repaint()  # перерисовывает прямоугольник внутри виджета
 
-    def save_to_file(self, name: str = None):
-        self.image.save(name if name is not None else datetime.now().strftime("%d.%m.%Y %H_%M_%S.jpg"))
+    def save_to_file(self):
+        self.image.save(datetime.now().strftime(self.out_file_name))
 
     def paintEvent(self, event):
         painter = QPainter()

@@ -11,4 +11,4 @@ class FilterItem(GUI):
     def __init__(self, filter: Filter, constellations, handler):
         super().__init__("FILTER")
         self.magnitude = self.add(RangeItem(filter, "magnitude", -1, 10))
-        self.constellations = self.add(CheckBoxSet(sorted(constellations), handler))
+        self.constellations = self.add(CheckBoxSet(sorted(constellations), filter.constellations, handler))

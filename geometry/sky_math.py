@@ -2,7 +2,6 @@ from functools import lru_cache
 from math import cos as mcos, sin as msin, atan2 as matan2, floor
 import datetime
 import jdcal
-from graphics.renderer.utility import try_or_print
 
 
 def sign(n):

@@ -9,42 +9,40 @@ from graphics.sky_viewers.image_viewer import ImageViewer
 from graphics.sky_viewers.utility import profile
 from stars.filter import Filter, Range
 from graphics.renderer.renderer import Renderer
-from graphics.renderer.settings import ControllableSkySettings
+from graphics.sky_viewers.settings import ControllableSkySettings
 from graphics.renderer.watcher import Watcher
 from stars.skydatabase import SkyDataBase
 
 
 class Sky(QMainWindow):  # окно со звездным небом
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase):  # атрибуты - наблюдатель и база данных звезд
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase,
+                 filter: Filter):  # атрибуты - наблюдатель, база данных звезд и фильтр
         super().__init__()
 
-        self._renderer = Renderer(watcher)  # наблюдатель
+        self.renderer = Renderer(watcher)  # наблюдатель
         self.settings = ControllableSkySettings()
 
         self._available_constellations = sky_base.constellations  # выбранные пользователем созвездия
         self._objects = []
         self._sky_sphere = sky_base
-        self.filter = Filter(sky_base.constellations, Range(-1, 10))  # текущий фильтр для звезд
+        self.filter = filter  # текущий фильтр для звезд
 
         # QTimer - работа с таймером
 
         self._create_ui()
-        self.setFocus()  # передает фокус ввода с клавиатуры этому виджету, если этот виджет или один из его родителей является активным окном.
 
-        self._timer = QtCore.QTimer(self)  # создаем таймер
-        self._timer.timeout.connect(self._rerender)  # соединяем таймер с тем, что будем обрабатывать
-        self._timer.setInterval(33)  # устанавливаем интервал 33 милисекунды
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.rerender)
+        self.timer.setInterval(33)
+        self.timer.start()
 
-        self._rerender()
-        self._timer.start()  # запуск таймера
-
-        self.setMouseTracking(True)  # включение отслеживания мыши
-        self.setVisible(True)
-        self._renderer.settings.pull = 0
+        self.renderer.settings.pull = 0
         self._i = 0
         self._switcher = 0
         self._rdelay = 1
         self.forecast_step = 10
+
+        self.rerender()
 
     def _create_ui(self):  # создаем интерфейс звездного неба
         main = QtWidgets.QGridLayout()  # создаем сеточный макет main
@@ -69,42 +67,43 @@ class Sky(QMainWindow):  # окно со звездным небом
         self.resize(1000, 700)
         self.setCentralWidget(to_widget(main))
         self.show()
-        # создаем конфигуратор, который позволяет редактировать настройки изображения
-        # он размещается во втором столбце главного макета, таким образом, пользователь может редактировать
-        # настройки и в то же время видеть изменения сразу на изображении
+        self.setFocus()
+        self.setMouseTracking(True)
+        self.setVisible(True)
 
     def _update_image(self):
         # self.viewer.width() и height - текущая ширина и высота объекта, устанавливаем их
-        self._renderer.width = self.viewer.width()
-        self._renderer.height = self.viewer.height()
+        self.renderer.width = self.viewer.width()
+        self.renderer.height = self.viewer.height()
         # генерируем новое изображение на основе объекта objects
-        image = self._renderer.render(self._sky_sphere.get_stars(self.filter), self._switcher > 1)
+        image = self.renderer.render(self._sky_sphere.get_stars(self.filter), self._switcher > 1)
         if self.forecast_step > 0:
             self._switcher = (self._switcher + 1) % self.forecast_step
         # устанавливаем новое изображение
         self.viewer.image = image
 
     @profile
-    def _rerender(self, exec_delta: datetime.timedelta):
+    def rerender(self, exec_delta: datetime.timedelta):
         if exec_delta is None:
             return
         self._rdelay = exec_delta.microseconds / 1000
-        self._renderer.watcher.local_time += exec_delta * self.settings.second_per_second
+        self.renderer.watcher.local_time += exec_delta * self.settings.second_per_second
         # обновление локального времени в переменной
         self._update_image()  # обновляем изображение
         if self._i <= 25:
-            self._renderer.settings.pull = self._i / 25
+            self.renderer.settings.pull = self._i / 25
             self._i += 1
-        elif self._i == 26:
-            self._renderer.settings.pull = 1
+        else:
+            self.renderer.settings.pull = 1
+        self._update_image()
 
     def mousePressEvent(self, QMouseEvent):
         self.setFocus()
 
     @property
     def delay(self):
-        return self._timer.interval()
+        return self.timer.interval()
 
     @delay.setter
     def delay(self, value):
-        self._timer.setInterval(value)
+        self.timer.setInterval(value)

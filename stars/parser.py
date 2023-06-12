@@ -7,10 +7,6 @@ from stars.skydatabase import SkyDataBase
 from stars.star import Star, SPECTRAL_CLASSES
 
 
-# TODO: change regexpes!!!
-# TODO: rename static methods!!!
-# TODO: make refactoring
-
 # в каждом файле директории stars лежит информация про звезды соответствующего созвездия.
 # parser парсит из этого файла характеристики звезды, такие как: Right ascension, declination,
 # stellar classification, масса и тд
@@ -32,12 +28,6 @@ def any_num_regexp(separator: str, name: str, count: int):  # функция о�
     return tmp
 
 
-SPECTRAL_CLASSES_SET = str.join('', SPECTRAL_CLASSES) #далем set
-
-# print(
-# any_num_regexp(':', "alf", 3))  # пример, парсим Alf: [0; 23] : [0; 59] : [0; 59] - time : hours : minutes : seconds
-
-
 def extract_nums(parsed, name: str, count: int):  # функция извлечения распарсенных чисел
     nums = []
     for i in range(0, count):
@@ -47,6 +37,9 @@ def extract_nums(parsed, name: str, count: int):  # функция извлеч�
         else:
             raise ValueError()
     return nums
+
+
+SPECTRAL_CLASSES_SET = str.join('', SPECTRAL_CLASSES)
 
 
 class TxtDataBaseParser:  # сам парсер

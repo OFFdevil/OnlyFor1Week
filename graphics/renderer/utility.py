@@ -15,7 +15,7 @@ def try_or_print(foo):
         try:
             return foo(*args, **kwargs)
         except Exception as e:
-            print(e)
+            print("Exception in {}({}; {}): {}".format(foo.__name__, e, args, kwargs))
             return None
 
     return decorated

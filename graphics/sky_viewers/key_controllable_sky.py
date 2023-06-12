@@ -1,63 +1,61 @@
 import sys
 from PyQt5.QtCore import Qt
 from geometry.horizontal import Horizontal
-from graphics.sky_viewers.controllable_sky import ControllableSky
-from graphics.sky_viewers.filtrable_sky import FiltrableSky
+from graphics.sky_viewers.filterable_sky import FilterableSky
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.utility import KeyProcessor
 from stars.skydatabase import SkyDataBase
-from math import sin, radians, cos
+from stars.filter import Filter
+from graphics.renderer.utility import try_or_print
 
 
-class KeyControllableSky(FiltrableSky):
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase):
-        super().__init__(watcher, sky_base)
+class KeyControllableSky(FilterableSky):
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, filter: Filter):
+        super().__init__(watcher, sky_base, filter)
 
         self.setFocus()
 
         self._configurator_widget.setVisible(False)
         # прописывание команд, которые выполняются при нажатии клавиш движение вверх, вниз, вправо, влево, пауза,
         # сохранение изображения, открытие меню и изображения на полный экран
-        self._key_processor = KeyProcessor() \
-            .register("look", self._look_around) \
-            .bind(Qt.Key_W, 'look', (0, 2, 0)) \
-            .bind(Qt.Key_A, 'look', (2, 0, 0)) \
-            .bind(Qt.Key_S, 'look', (0, -2, 0)) \
-            .bind(Qt.Key_D, 'look', (-2, 0, 0)) \
-            .bind(Qt.Key_Q, 'look', (0, 0, 2)) \
-            .bind(Qt.Key_E, 'look', (0, 0, -2)) \
-            .register("pause", self._switch_pause) \
-            .bind(Qt.Key_Space, 'pause') \
-            .register("menu", self._switch_menu) \
-            .bind(Qt.Key_M, 'menu') \
-            .register("filter", self._switch_filter) \
-            .bind(Qt.Key_N, 'filter') \
-            .register("image", self.viewer.save_to_file) \
-            .bind(Qt.Key_I, "image") \
-            .register("full_screen", self._switch_full_screen) \
-            .bind(Qt.Key_F, "full_screen") \
-            .register("exit", lambda: sys.exit(0)) \
-            .bind(Qt.Key_Escape, "exit")
+        pr = self._key_processor = KeyProcessor()
+        pr.should_be_called(self._look_around) \
+            .when_pressed(Qt.Key_W).with_arguments(0, 2, 0) \
+            .when_pressed(Qt.Key_A).with_arguments(2, 0, 0) \
+            .when_pressed(Qt.Key_S).with_arguments(0, -2, 0) \
+            .when_pressed(Qt.Key_D).with_arguments(-2, 0, 0) \
+            .when_pressed(Qt.Key_Q).with_arguments(0, 0, 2) \
+            .when_pressed(Qt.Key_E).with_arguments(0, 0, -2)
+        pr.should_be_called(self.switch_pause).when_pressed(Qt.Key_Space)
+        pr.should_be_called(self.switch_menu).when_pressed(Qt.Key_M)
+        pr.should_be_called(self.switch_filter).when_pressed(Qt.Key_N)
+        pr.should_be_called(self.switch_full_screen).when_pressed(Qt.Key_F)
+        pr.should_be_called(self.viewer.save_to_file).when_pressed(Qt.Key_I)
+        pr.should_be_called(self.close).when_pressed(Qt.Key_Escape)
+        pr.should_be_called(self.rerender).when_pressed(Qt.Key_R)
 
     # функция открытия на полный экран
-    def _switch_full_screen(self):
+    def switch_full_screen(self):
         if self.isFullScreen():
             self.showNormal()
         else:
             self.showFullScreen()
 
     # функция открытия меню
-    def _switch_menu(self):
+    def switch_menu(self):
         self._configurator_widget.setVisible(not self._configurator_widget.isVisible())
 
-    def _switch_filter(self):  # изменение состояния виджета(если бы видимым, станет невидимым и наоборот)
+    def switch_filter(self):  # изменение состояния виджета(если бы видимым, станет невидимым и наоборот)
         self._filter_widget.setVisible(not self._filter_widget.isVisible())
 
     # функция сдвигающая небо в нужную сторону (в зависимости от клавиш)
+    @try_or_print
     def _look_around(self, *delta):
         da, dh, dr = delta
-        self._renderer.watcher.up_rotation += dr
-        self._renderer.watcher.see += Horizontal(da, dh)
+        self.renderer.watcher.up_rotation += dr
+        if abs(self.renderer.watcher.see.h + dh) > 90:
+            return
+        self.renderer.watcher.see += Horizontal(da, dh)
 
     # Метод получает объект события `e`. Если нажатая клавиша является одной из ключевых команд `_key_commands`,
     # то вызывается соответствующая функция из словаря `_key_commands` для выполнения команды

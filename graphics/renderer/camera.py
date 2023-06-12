@@ -40,6 +40,10 @@ class Camera:
         self._update()
 
     @property
+    def oy(self):
+        return self._oy
+
+    @property
     def up_rotation(self):
         return self._up_rotation
 
