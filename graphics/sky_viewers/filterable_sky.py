@@ -1,9 +1,8 @@
-from graphics.autogui.gui import GUI
 from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.controllable_sky import ControllableSky
 from graphics.sky_viewers.items.filter_item import FilterItem
-from stars.skydatabase import SkyDataBase
 from stars.filter import Filter
+from stars.skydatabase import SkyDataBase
 
 
 # класс, отвечающий за отображение только выбранных пользователем созвездий

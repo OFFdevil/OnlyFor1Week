@@ -22,6 +22,7 @@ def hexstr_to_color(s: str):
     return QColor(r, g, b)
 
 
+# выводим все исключения других функций на экран без прерывания выполнения программы
 def try_or_print(foo):
     def decorated(*args, **kwargs):
         try:
@@ -33,6 +34,7 @@ def try_or_print(foo):
     return decorated
 
 
+# определяем декоратор, передавая элемент перечисления в качестве аргумента
 def foreach(name, enum):
     def decorator(foo):
         def decorated(*args, **kwargs):

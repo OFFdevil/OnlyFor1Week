@@ -18,7 +18,7 @@ class Watcher(Camera):
         # self.position = position
 
     @property
-    def local_time(self):
+    def local_time(self):  # геттер
         return self._local_time
 
     @local_time.setter
@@ -28,11 +28,11 @@ class Watcher(Camera):
         self._star_time = StarTime.from_local(self.position.a, self.local_time)
 
     @property
-    def star_time(self) -> StarTime:
+    def star_time(self) -> StarTime:  # геттер
         return self._star_time
 
     @property
-    def position(self):
+    def position(self):  # геттер
         return self._position
 
     @position.setter

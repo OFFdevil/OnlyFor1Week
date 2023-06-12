@@ -1,16 +1,15 @@
 import datetime
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget
 from graphics.autogui.cast_tools import to_widget
-from graphics.sky_viewers.image_viewer import ImageViewer
-from utility import profile
-from stars.filter import Filter
 from graphics.renderer.renderer import Renderer
 from graphics.sky_viewers.settings import ControllableSkySettings
 from graphics.renderer.watcher import Watcher
+from graphics.sky_viewers.image_viewer import ImageViewer
+from utility import profile
+from stars.filter import Filter
 from stars.skydatabase import SkyDataBase
 
 
@@ -38,6 +37,7 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self.renderer.settings.pull = 0
         self._i = 0
+        self.animation = True
         self._switcher = 0
         self._rdelay = 1
         self.forecast_step = 10
@@ -51,6 +51,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         main.setSpacing(0)  # устанавливаем интервалы 0 по вертикали и горизонтали
         self.viewer = ImageViewer()  # создаем
         main.addWidget(self.viewer, 0, 0)
+
         self._filter_widget = QWidget()
         main.addWidget(self._filter_widget, 0, 1)
         self._filter_widget.setVisible(False)
@@ -58,9 +59,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._configurator_widget = QWidget()
         main.addWidget(self._configurator_widget, 0, 2)
 
-        main.setColumnStretch(0, 0)
         main.setColumnStretch(0, 2)
-
         self._main = main
 
         self.setWindowTitle("Space Simulator")
@@ -89,8 +88,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._rdelay = exec_delta.microseconds / 1000
         self.renderer.watcher.local_time += exec_delta * self.settings.second_per_second
         # обновление локального времени в переменной
-        self._update_image()  # обновляем изображение
-        if self._i <= 25:
+        if self._i <= 25 and self.animation:
             self.renderer.settings.pull = self._i / 25
             self._i += 1
         else:

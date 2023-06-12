@@ -86,8 +86,9 @@ class Renderer(Projector):
         # верхнего угла, далее рисуем круг
         self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
 
+    # отрисовываем точку и направление на сферической проекции неба
     def _draw_point_and_direction(self, pos: Equatorial, color, size, apply_latitude):
-        self.settings.apply_color(color, self._painter)
+        self.settings.apply_color(color, self._painter)  # цвет
         if apply_latitude:
             horizontal = pos.to_horizontal_with_latitude(self.watcher.position.h)
         elif isinstance(pos, Equatorial):
@@ -97,14 +98,16 @@ class Renderer(Projector):
         p_lat = self.project_star(horizontal, Star(pos, '', size, '', ''), True)
         if p_lat is not None and p_lat.in_eye:
             self._draw_object(p_lat, False)
+        # рисуем линия от точки до центра проекции
         self._painter.drawLine(int(p_lat.cx), int(p_lat.cy), int(self.centre[0]), int(self.centre[1]))
 
+    # отрисовываем звезду
     def _draw_object(self, pstar: ProjectedStar, with_color=True):
-        if with_color:
+        if with_color:  # задаем её цвет, в зависимомти от класса спектра звезды
             if self.settings.spectral:
                 self.settings.apply_color(pstar.star.spectral_class, self._painter)
             else:
                 self.settings.apply_color('star', self._painter)
-
+        # определяем координаты центра звезды, отрисовываем эллипс
         x, y = pstar.cx - pstar.diameter // 2, pstar.cy - pstar.diameter // 2
         self._painter.drawEllipse(int(x), int(y), int(pstar.diameter), int(pstar.diameter))

@@ -49,6 +49,7 @@ class FirstEquatorialToHorizontal:  # перевод из первой эква�
 class StarTimeHelper:
     """http://www.jgiesen.de/astro/astroJS/siderealClock/sidClock.js"""
 
+    # определяем звездное время в часах для определенной даты и местности
     @staticmethod
     def get_star_hour(longitude, dt: datetime):
         """see: GM_Sidereal_Time, LM_Sidereal_Time"""
@@ -61,6 +62,7 @@ class StarTimeHelper:
                 8640184.812866 + (0.093104 - 0.0000062 * t_eph) * t_eph) * t_eph / 3600.0
         return GM0ST + longitude / 15
 
+    # представляет дату в системе юлианского календаря из грегорианского
     @staticmethod
     def get_julian_day(dt: datetime):
         day = sum(jdcal.gcal2jd(dt.year, dt.month, dt.day))

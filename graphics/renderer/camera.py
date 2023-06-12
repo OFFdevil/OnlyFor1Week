@@ -21,7 +21,7 @@ class Camera:
     def radius(self):  # возвращает радиус обзора
         return self._radius
 
-    @property
+    @property  # геттер
     def radius_low_bound(self):
         return self._radius_lb
 
@@ -29,28 +29,28 @@ class Camera:
     def up(self) -> Horizontal:  # функция вернет объект типа Horizontal
         return self._oy
 
-    @property
+    @property  # геттер
     def see(self):
         return self._see
 
-    @see.setter
+    @see.setter  # сеттер
     def see(self, value: Horizontal):
         self._see = Horizontal(value.a, value.h)
         self._update()
 
-    @property
+    @property  # геттер
     def oy(self):
         return self._oy
 
-    @property
+    @property  # геттер
     def up_rotation(self):
         return self._up_rotation
 
-    @up_rotation.setter
+    @up_rotation.setter  # сеттер
     def up_rotation(self, value):
         self._up_rotation = value % 360
         self._update()
 
-    @property
+    @property  # геттер
     def transformation_matrix(self):
         return self._transformation_matrix

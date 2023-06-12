@@ -1,4 +1,4 @@
-class KeyProcessorFAPIIData:
+class KeyProcessorFAPIIData:  # обработчик клавиш
     def __init__(self, processor, name: str, key):
         self._processor = processor
         self._name = name
@@ -39,7 +39,7 @@ class KeyProcessor:
             self._keys[alias] = self._keys[key]
         return self
 
-    def execute(self, key):
+    def execute(self, key):  # проверяем присутствие ключа в словаре, если да, то запускаем значение
         pair = self._find_key(key)
         if pair is None:
             return False
@@ -52,7 +52,7 @@ class KeyProcessor:
         instruction(*data[0], **data[1])
         return True
 
-    def _find_key(self, key):
+    def _find_key(self, key):  # поиск ключа в словаре
         if key in self._keys:
             return self._keys[key]
         if str(key) in self._keys:

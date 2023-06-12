@@ -23,8 +23,8 @@ class BoolItem(Item):  # класс отвечающий за selectable buttons
         s = self._widget.checkState() != 0
         self._buffer = s
 
-    def try_save(self):
-        if self._buffer != None:
+    def try_save(self):  # проверяет, есть ли в текущем объекте данные для сохранения
+        if self._buffer is not None:
             try:
                 self._setter(self._buffer)
                 self._buffer = None
@@ -33,9 +33,9 @@ class BoolItem(Item):  # класс отвечающий за selectable buttons
                 self._buffer = None
         return False
 
-    def try_load(self):
-        if self._buffer == None:
+    def try_load(self):  # обновляем значение виджета на основе переданного значения
+        if self._buffer is None:
             v = self._getter()
-            self._lock = True
+            self._lock = True  # используется, чтобы блокировать обновление значения, если оно было изменено
             self._widget.setChecked(2 if v else 0)
             self._lock = False

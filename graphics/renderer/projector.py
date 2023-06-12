@@ -36,9 +36,10 @@ class Projector:
 
     @try_or_print
     def project(self, stars: list, forecast: bool) -> list:
+        # устанавливаем тип искажения, которое будет использоваться при проекции на экран
         self.distortion = fisheye_distortion if self.settings.fisheye else scale_distortion
 
-        good = self._objects
+        good = self._objects  # сохраняем список всех верно отображенных объектов
         self._objects = []
         all = not forecast or len(good) == 0
         src = stars if all else (s.star for s in good)
@@ -47,7 +48,8 @@ class Projector:
         actual = map(self._apply_time_rotation, src)
         for o in actual:
             if o[1].constellation in self._constellations:
-                current = self._constellations[o[1].constellation]
+                current = self._constellations[o[1].constellation]  # присваиваем позицию в звездной системе координат
+                # если он принадлежит текущему созвездию, то добавляем в словарь, иначе не добавляется
                 self._constellations[o[1].constellation] = min(current, o, key=lambda s: s[1].magnitude)
             else:
                 self._constellations[o[1].constellation] = o
@@ -69,7 +71,7 @@ class Projector:
         if name in self._constellations:
             return self._constellations[name][0]
 
-    def _get_size(self, mag):
+    def _get_size(self, mag):  # передаем магнитуду, возвращаем размер объекта
         mag = e ** (self.settings.exp_const + mag * self.settings.exp_factor)
         mag = max(1, mag / self.watcher.radius)
         mag = 0.005 if not self.settings.magnitude else mag / 500

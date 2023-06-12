@@ -14,7 +14,7 @@ class ImageViewer(QWidget):  # класс, отвечающий за просм�
         self.out_file_name = 'sky.jpg'
 
     @property
-    def image(self):
+    def image(self):  # геттер
         return self._image
 
     @image.setter

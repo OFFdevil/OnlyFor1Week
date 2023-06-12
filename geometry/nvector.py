@@ -11,7 +11,7 @@ class NVector:
         return self._rank
 
     @property
-    def length(self):
+    def length(self):  # считаем длину вектора
         s = 0
         for i in self:
             s += i ** 2
@@ -36,16 +36,16 @@ class NVector:
             v.append(self[i] + other[i])
         return NVector(v)
 
-    def _mul_(self, other):
+    def _mul_(self, other):  # умножаем каждую компоненту вектора на переданный параметр
         v = []
         for i in range(0, self.rank):
             v.append(self[i] * other)
         return NVector(v)
 
-    def _sub_(self, other):
+    def _sub_(self, other):  # вычитание
         return self._add_(other._mul_(-1))
 
-    def __str__(self):
+    def __str__(self):  # преобразование в строку
         s = "("
         for i in self:
             s += str(i) + ', '
@@ -57,7 +57,7 @@ class NVector:
             h ^= hash(i)
         return h
 
-    def __eq__(self, other):
+    def __eq__(self, other):  # определяет равны объекты или нет
         if self.rank != other.rank:
             return False
         for i in range(0, self.rank):

@@ -17,7 +17,7 @@ class Vector(NVector):
         z = (p * n - q * m)
         return Vector(x, y, z)
 
-    def rmul_to_matrix(self, matrix):
+    def rmul_to_matrix(self, matrix):  # умножение вектора на матрицу
         return Vector(*(self.scalar_mul(row) for row in matrix))
 
     def project_to(self, plane_normal_vector):  # вычисление проекции

@@ -25,13 +25,13 @@ class SlideItem(Item):
         self._widget.sliderMoved.connect(lambda i: self._switch_apply(True))
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def _switch_edit(self, value):
+    def _switch_edit(self, value):  # сеттер
         self._edit = value
 
-    def _switch_apply(self, value):
+    def _switch_apply(self, value):  # сеттер
         self._apply = value
 
-    def try_save(self):
+    def try_save(self):  # проверяет изменения в виджете
         if self._apply:
             self._apply = False
             self._edit = False

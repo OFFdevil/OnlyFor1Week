@@ -3,8 +3,8 @@ from graphics.autogui.action_item import ActionItem
 from graphics.autogui.bool_item import BoolItem
 from graphics.autogui.field_item import FloatItem, DateTimeItem, IntItem
 from graphics.autogui.gui import GUI
-from graphics.sky_viewers.items.horizontal_item import HorizontalItem
 from graphics.renderer.watcher import Watcher
+from graphics.sky_viewers.items.horizontal_item import HorizontalItem
 from graphics.sky_viewers.sky import Sky
 from stars.filter import Filter
 from stars.skydatabase import SkyDataBase
@@ -19,7 +19,7 @@ class ControllableSky(Sky):  # пользовательский интерфей
 
         camera = gui.add(GUI("CAMERA"))  # объект камера, gui - интерфейс для
         # взаимодействия пользователя с программой с помощью клавиатуры и мыши
-        camera.add(HorizontalItem(self.renderer.watcher, "position", label="(долгота, широта)"))  # позиция
+        camera.add(HorizontalItem(self.renderer.watcher, "position", label="(longitude, latitude)"))  # позиция
         camera.add(HorizontalItem(self.renderer.watcher, "see"))  # точка обзора
         camera.add(HorizontalItem(self.renderer.watcher, "up", ro=True))
         camera.add(FloatItem(self.renderer.watcher, "up_rotation"))  # вращение вверх
@@ -56,7 +56,7 @@ class ControllableSky(Sky):  # пользовательский интерфей
         self._gui = gui
         self.timer.timeout.connect(self._gui_tick)
 
-    def set_current_time(self):
+    def set_current_time(self):  # установка текущего времени
         self.renderer.watcher.local_time = datetime.now()
 
     @try_or_print
@@ -66,11 +66,7 @@ class ControllableSky(Sky):  # пользовательский интерфей
     # определяем небесное телескопическое зрение
     # определяем небесную сферу с выбранными созвездиями
     def _apply_constellation_filter(self, selected):  # передаем координаты звезд
-        # stars = self._sky_sphere.get_stars(selected)
-        # self._objects = stars
-        # self._update_image()
         self.filter.constellations = selected
-        pass
 
     # функция постановки на паузу/ снятия с паузы
     def switch_pause(self):

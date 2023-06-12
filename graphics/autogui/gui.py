@@ -20,7 +20,7 @@ class GUI(Item):
     def try_load(self):
         pass
 
-    def try_save(self):
+    def try_save(self):  # проверяет сохранение каждого вложенного объекта
         for h in self._nested:
             if not h.try_save():
                 h.try_load()

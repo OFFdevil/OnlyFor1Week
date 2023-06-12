@@ -1,19 +1,17 @@
 from PyQt5.QtCore import Qt
 from geometry.horizontal import Horizontal
-from graphics.sky_viewers.filterable_sky import FilterableSky
-from graphics.renderer.watcher import Watcher
-from graphics.sky_viewers.key_processor import KeyProcessor
-from stars.skydatabase import SkyDataBase
-from stars.filter import Filter
 from utility import try_or_print
+from graphics.renderer.watcher import Watcher
+from graphics.sky_viewers.filterable_sky import FilterableSky
+from graphics.sky_viewers.key_processor import KeyProcessor
+from stars.filter import Filter
+from stars.skydatabase import SkyDataBase
 
 
 class KeyControllableSky(FilterableSky):
     def __init__(self, watcher: Watcher, sky_base: SkyDataBase, selector: Filter):
         super().__init__(watcher, sky_base, selector)
-
         self.setFocus()
-
         self._configurator_widget.setVisible(False)
         # прописывание команд, которые выполняются при нажатии клавиш движение вверх, вниз, вправо, влево, пауза,
         # сохранение изображения, открытие меню и изображения на полный экран
