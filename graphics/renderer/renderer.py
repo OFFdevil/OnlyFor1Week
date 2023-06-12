@@ -97,7 +97,7 @@ class Renderer(Projector):
         p_lat = self.project_star(horizontal, Star(pos, '', size, '', ''), True)
         if p_lat is not None and p_lat.in_eye:
             self._draw_object(p_lat, False)
-        self._painter.drawLine(p_lat.cx, p_lat.cy, self.centre[0], self.centre[1])
+        self._painter.drawLine(int(p_lat.cx), int(p_lat.cy), int(self.centre[0]), int(self.centre[1]))
 
     def _draw_object(self, pstar: ProjectedStar, with_color=True):
         if with_color:
