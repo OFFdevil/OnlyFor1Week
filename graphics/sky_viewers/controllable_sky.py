@@ -8,12 +8,12 @@ from graphics.renderer.watcher import Watcher
 from graphics.sky_viewers.sky import Sky
 from stars.filter import Filter
 from stars.skydatabase import SkyDataBase
-from key_processor import try_or_print
+from utility import try_or_print
 
 
 class ControllableSky(Sky):  # пользовательский интерфейс
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, filter: Filter):
-        super().__init__(watcher, sky_base, filter)
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, selector: Filter):
+        super().__init__(watcher, sky_base, selector)
 
         gui = GUI("CONFIGURATOR")
 

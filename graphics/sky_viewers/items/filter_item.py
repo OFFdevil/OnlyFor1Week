@@ -8,7 +8,7 @@ from stars.filter import Filter
 
 # класс, отвечающий за выбор звезд при изменении ползунка
 class FilterItem(GUI):
-    def __init__(self, filter: Filter, constellations, handler):
+    def __init__(self, selector: Filter, constellations, handler):
         super().__init__("FILTER")
-        self.magnitude = self.add(RangeItem(filter, "magnitude", -1, 10))
-        self.constellations = self.add(CheckBoxSet(sorted(constellations), filter.constellations, handler))
+        self.magnitude = self.add(RangeItem(selector, "magnitude", -1, 10))
+        self.constellations = self.add(CheckBoxSet(sorted(constellations), selector.constellations, handler))

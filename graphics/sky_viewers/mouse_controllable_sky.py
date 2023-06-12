@@ -9,8 +9,8 @@ from stars.filter import Filter
 
 
 class MouseControllableSky(KeyControllableSky):
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, filter: Filter):
-        super().__init__(watcher, sky_base, filter)
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, selector: Filter):
+        super().__init__(watcher, sky_base, selector)
         # включаем отслеживание курсора, инициализируем переменные, флаги
         self.setMouseTracking(True)
         self._move_mode = False

@@ -16,7 +16,7 @@ from stars.skydatabase import SkyDataBase
 
 class Sky(QMainWindow):  # окно со звездным небом
     def __init__(self, watcher: Watcher, sky_base: SkyDataBase,
-                 filter: Filter):  # атрибуты - наблюдатель, база данных звезд и фильтр
+                 selector: Filter):  # атрибуты - наблюдатель, база данных звезд и фильтр
         super().__init__()
 
         self.renderer = Renderer(watcher)  # наблюдатель
@@ -25,7 +25,7 @@ class Sky(QMainWindow):  # окно со звездным небом
         self._available_constellations = sky_base.constellations  # выбранные пользователем созвездия
         self._objects = []
         self._sky_sphere = sky_base
-        self.filter = filter  # текущий фильтр для звезд
+        self.filter = selector  # текущий фильтр для звезд
 
         # QTimer - работа с таймером
 

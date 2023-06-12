@@ -9,6 +9,7 @@ def profile(foo):  # декоратор функции profile
         lct = foo.__last_call_time = datetime.datetime.now()
         kwargs["exec_delta"] = (lct - prev) if not prev is None else None
         return foo(*args, **kwargs)
+
     return decorated
 
 
@@ -30,3 +31,19 @@ def try_or_print(foo):
             return None
 
     return decorated
+
+
+def foreach(name, enum):
+    def decorator(foo):
+        def decorated(*args, **kwargs):
+            if not kwargs:
+                kwargs = {}
+            results = []
+            for i in enum:
+                kwargs[name] = i
+                results.append(foo(*args, **kwargs))
+            return results
+
+        return decorated
+
+    return decorator

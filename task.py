@@ -123,8 +123,8 @@ def create_task():
     watcher = Watcher(pos, dt, camera)
 
     consts = args.constellations if args.constellations else database.constellations
-    range = Range(min(*args.magnitude_range), max(*args.magnitude_range))
-    filter = Filter(consts, range)
+    m_range = Range(min(*args.magnitude_range), max(*args.magnitude_range))
+    selector = Filter(consts, m_range)
 
-    return Task(database, filter, watcher, rset, args.out, args.music, args.console, args.full_screen, args.on_pause,
+    return Task(database, selector, watcher, rset, args.out, args.music, args.console, args.full_screen, args.on_pause,
                 not args.disable_animation)

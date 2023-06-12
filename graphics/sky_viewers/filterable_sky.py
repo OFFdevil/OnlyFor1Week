@@ -8,8 +8,8 @@ from stars.filter import Filter
 
 # класс, отвечающий за отображение только выбранных пользователем созвездий
 class FilterableSky(ControllableSky):
-    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, filter: Filter):
-        super().__init__(watcher, sky_base, filter)
+    def __init__(self, watcher: Watcher, sky_base: SkyDataBase, selector: Filter):
+        super().__init__(watcher, sky_base, selector)
 
         # создаем объект, используя переданный фильтр, созвездия и функцию, выбранных созвездий
         gui = FilterItem(self.filter, self._available_constellations, self._apply_constellation_filter)

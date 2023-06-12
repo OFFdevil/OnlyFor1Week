@@ -1,14 +1,12 @@
 from geometry.equatorial import Equatorial
 
-# спектральный класс звезды - по сути ее цвет. О -голубой, А - белый и тд
-SPECTRAL_CLASSES = ('', 'O', 'B', 'A', 'F', 'G', 'K', 'M')
-SPECTRAL_COLORS = (
-    '00ff00', '9aafff', 'cad7ff', 'f8f7ff', 'fff4ea', 'fff2a1', 'ffc46f',
-    'ff6060')
-SPECTRAL_MAP = {SPECTRAL_CLASSES[i]: SPECTRAL_COLORS[i] for i in range(0, len(SPECTRAL_CLASSES))}
+"""Спектральный класс звезды - по сути ее цвет. О -голубой, А - белый и тд"""
+"""SPECTRAL_MAP - словарь с парами символ- код цвета"""
+SPECTRAL_MAP = {'': '00ff00', 'B': 'cad7ff',
+                'O': '9aafff', 'K': 'ffc46f',
+                'M': 'ff6060', 'F': 'fff4ea',
+                'A': 'f8f7ff', 'G': 'fff2a1'}
 
-
-# SPECTRAL_MAP - словарь с парами название-цвет
 
 class Star:
     # звезда характеризуется позицией в экватор. системе, созвездием, магнитудой, цветом и названием

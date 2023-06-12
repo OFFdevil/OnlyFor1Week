@@ -1,7 +1,8 @@
 """Обозначения Байера. Буква характеризует яркость звезды. Аlp - самая яркая, Bet - менее яркая и тд """
 
-EN_NAMES = ['', 'Alp', 'Bet', 'Chi', 'Del', 'Eps', 'Eta', 'Gam', 'Iot', 'Kap', 'Lam', 'Mu', 'Nu', 'Ome', 'Omi', 'Phi',
-            'Pi', 'Psi', 'Rho', 'Sig', 'Tau', 'The', 'Ups', 'Xi', 'Zet']
-LAT_NAMES = ['?', 'α', 'β', 'χ', 'δ', 'ε', 'η', 'ɣ', 'ɩ', 'ϰ', 'λ', 'μ', 'ν', 'ω', 'ο', 'ϕ', 'π', 'ψ', 'ϱ', 'σ', 'τ',
-             'ϑ', 'Ʊ', 'ξ', 'ζ']
-EN2LAT_MAP = {EN_NAMES[i]: LAT_NAMES[i] for i in range(0, len(EN_NAMES))}
+EN2LAT_MAP = {'': '?', 'Iot': 'ɩ', 'Ups': 'Ʊ', 'Rho': 'ϱ',
+              'Alp': 'α', 'Kap': 'ϰ', 'Zet': 'ζ', 'Pi': 'π',
+              'Chi': 'χ', 'Tau': 'τ', 'Nu': 'ν', 'Omi': 'ο',
+              'Phi': 'ϕ', 'The': 'ϑ', 'Xi': 'ξ', 'Eps': 'ε',
+              'Psi': 'ψ', 'Bet': 'β', 'Ome': 'ω', 'Sig': 'σ',
+              'Lam': 'λ', 'Eta': 'η', 'Gam': 'ɣ', 'Del': 'δ', 'Mu': 'μ'}
