@@ -56,11 +56,7 @@ class ControllableSky(Sky):  # пользовательский интерфей
         self._gui = gui
         self.timer.timeout.connect(self._gui_tick)
 
-        # self._timer.timeout.connect(lambda: gui.handle())
-        # selected = self._constellation_filter.selected
-        # self._apply_constellation_filter(selected)
-
-    def current_time(self):
+    def set_current_time(self):
         self.renderer.watcher.local_time = datetime.now()
 
     @try_or_print

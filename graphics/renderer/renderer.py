@@ -68,52 +68,12 @@ class Renderer(Projector):
         self._painter.drawRect(0, 0, self.width,
                                self.height)  # рисуем прямоугольник с координатами (0, 0) с данной высотой и шириной
 
-    # def _draw_up(self):
-    #     self._draw_object(Horizontal(0, 90), None)
-    #     self._draw_object(Horizontal(0, 90), None)
-
     def _draw_compass(self):  # отрисовка компаса
-        # n = self._draw_latidude_depencing_point(Equatorial(0, 90), 'north', -3)
-        # s = self._draw_latidude_depencing_point(Equatorial(0, -90), 'south', -3)
-        # try:
-        #     self.settings.apply_color('north', self._painter)
-        #     self._painter.drawLine(n.cx, n.cy, self.centre[0], self.centre[1])
-        #     self.settings.apply_color('south', self._painter)
-        #     self._painter.drawLine(self.centre[0], self.centre[1], s.cx, s.cy)
-        # except Exception as e:
-        #     print(e)
         self._draw_point_and_direction(Equatorial(0, 90), 'north', -3, True)
         self._draw_point_and_direction(Equatorial(0, -90), 'south', -3, True)
 
-    def _draw_latidude_depencing_point(self, pos: Equatorial, color, size):
-        # рисует звезду в положении, которое зависит от ее широты
-        # основывается на положении наблюдателя
-        self.settings.apply_color(color, self._painter)
-        lat = pos.to_horizontal_with_latitude(self.watcher.position.h)
-        p_lat = self.project_star(lat, Star(pos, '', size, '', ''), True)
-        if p_lat is not None and p_lat.in_eye:  # если звезда в поле зрения, то рисуем ее
-            self._draw_object(p_lat, False)
-        return p_lat  # возвращает проекцию звезды на экране
-
     @try_or_print
     def _draw_see_points(self):  # отвечает за отрисовку точки северного полюса
-        # if self.watcher.position is not None:
-        #     # находим точку на небесной сферической системе, которая соответствует заданному
-        #     # небесному объекту
-        #     forward = self.project_star(self.watcher.position, Star(Equatorial(0, 90), '', -1, '', ''), True)
-        #     upborder = self.project_star(Horizontal(0, 90), Star(Equatorial(0, 90), '', -1, '', ''), True)
-        #     downborder = self.project_star(Horizontal(0, -90), Star(Equatorial(0, 90), '', -1, '', ''), True)
-        #     self.settings.apply_color('up', self._painter)
-        #     if forward.in_eye:
-        #         self._draw_object(forward, False)
-        #     self._painter.drawLine(self.centre[0], self.centre[1], forward.cx, forward.cy)
-        #     self.settings.apply_color('up_border', self._painter)
-        #     if upborder.in_eye:
-        #         self._draw_object(upborder, False)
-        #     self._painter.drawLine(self.centre[0], self.centre[1], upborder.cx, upborder.cy)
-        #     if downborder.in_eye:
-        #         self._draw_object(downborder, False)
-        #     self._painter.drawLine(self.centre[0], self.centre[1], downborder.cx, downborder.cy)
         self._draw_point_and_direction(self.watcher.position, 'up', -1, False)
         self._draw_point_and_direction(Equatorial(0, 90), 'up_border', -1, False)
         self._draw_point_and_direction(Equatorial(0, -90), 'up_border', -1, False)
@@ -128,6 +88,7 @@ class Renderer(Projector):
         # верхнего угла, далее рисуем круг
         self._painter.drawEllipse(int(x), int(y), int(diameter), int(diameter))
 
+    # TODO
     def _draw_point_and_direction(self, pos: Equatorial, color, size, apply_latitude):
         self.settings.apply_color(color, self._painter)
         if apply_latitude:
@@ -139,8 +100,9 @@ class Renderer(Projector):
         p_lat = self.project_star(horizontal, Star(pos, '', size, '', ''), True)
         if p_lat is not None and p_lat.in_eye:
             self._draw_object(p_lat, False)
-        self._painter.drawLine(int(p_lat.cx), int(p_lat.cy), int(self.centre[0]), int(self.centre[1]))
+        self._painter.drawLine(p_lat.cx, p_lat.cy, self.centre[0], self.centre[1])
 
+    # TODO
     def _draw_object(self, pstar: ProjectedStar, with_color=True):
         if with_color:
             if self.settings.spectral:

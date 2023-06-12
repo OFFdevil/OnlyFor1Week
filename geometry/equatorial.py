@@ -17,7 +17,7 @@ class Equatorial(NVector):
     def to_horizontal_with_latitude(self, h) -> Horizontal:  # преобразует координаты из экваториальной
         # в горизонтальную, используя значение звездного времени (звездные градусы)
         # и высоту наблюдателя (градусы)
-        f, t, d = map(math.radians, h, *self)
+        f, t, d = map(math.radians, (h, *self))
 
         cosz = FirstEquatorialToHorizontal.cosz(f, d, t)
         sina_sinz = FirstEquatorialToHorizontal.siza_sinz(d, t)
@@ -32,7 +32,7 @@ class Equatorial(NVector):
         cosa = cosa_sinz / sinz
         a = atan2(sina, cosa)
         d = atan2(sinz, cosz)
-        return Horizontal(*map(math.degrees, a, math.pi / 2 - d))
+        return Horizontal(*map(math.degrees, (a, math.pi / 2 - d)))
 
     def to_horizontal_with_time(self, star_time_degree, h) -> Horizontal:
         return self.apply_time_rotation(star_time_degree).to_horizontal_with_latitude(h)

@@ -1,23 +1,15 @@
-import os
-from os.path import join
-from argparse import ArgumentParser
-import datetime
-from PyQt5 import QtWidgets
-from PyQt5.QtMultimedia import QSound
-from graphics.renderer.renderer import Renderer
-from graphics.renderer.settings import Settings
-from stars.filter import Filter, Range
-from stars.skydatabase import SkyDataBase
-from geometry.horizontal import Horizontal
+from requirements import Requirements
 from task import create_task, Task
-from graphics.sky_viewers.key_controllable_sky import KeyControllableSky
-from graphics.sky_viewers.sky import Sky
-from graphics.renderer.camera import Camera
-from graphics.renderer.watcher import Watcher
-from graphics.sky_viewers.mouse_controllable_sky import MouseControllableSky
-from graphics.sky_viewers.named_sky import NamedSky
-from stars.parser import TxtDataBaseParser
+
+Requirements((3, 5, 1)).add("PyQt5", "PyQt5>=5.7").add("jdcal", "jdcal>=1.3").critical_check()
+
+
+import subprocess
+from os.path import join
 import sys
+from PyQt5 import QtWidgets
+from graphics.renderer.renderer import Renderer
+from graphics.sky_viewers.named_sky import NamedSky
 
 
 def gui_mode(task: Task):
@@ -37,6 +29,8 @@ def console_mode(task: Task):
     renderer.settings = task.render_settings
     image = renderer.render(task.database.get_stars(task.filter), False)
     fname = task.watcher.local_time.strftime(task.out_file_name)
+    image.save(fname)
+    print("Image has been successful saved to {}".format(fname))
 
 
 if __name__ == "__main__":

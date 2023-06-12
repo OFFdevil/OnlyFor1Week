@@ -61,6 +61,3 @@ class KeyControllableSky(FilterableSky):
 
     def keyPressEvent(self, e):
         self._key_processor.execute(e.key())
-
-    def mousePressEvent(self, QMouseEvent):
-        self.setFocus()

@@ -16,7 +16,6 @@ class CheckBoxSet(Item):
         self._selected = set(str_set)
         self._handlers = [] if handler is None else [handler]  # пустой список или передается обработчик, если handler
         # не был передан
-        self._create_widget()  # методы создания виджетов и кнопок
         self._create_widget(selected)
         self._create_buttons()
 
