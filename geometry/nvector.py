@@ -43,7 +43,7 @@ class NVector:
         return NVector(v)
 
     def _sub_(self, other):
-        return self + other * (-1)
+        return self._add_(other._mul_(-1))
 
     def __str__(self):
         s = "("

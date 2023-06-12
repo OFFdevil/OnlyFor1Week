@@ -7,16 +7,6 @@ class Vector(NVector):
     def __init__(self, x, y, z):
         super().__init__((x, y, z))
 
-    @property
-    def length(self):  # длина вектора
-        return sqrt(self.scalar_mul(self))
-
-    def cos_to(self, other):  # угол между векторами
-        d = other - self
-        if self.length == 0 or other.length == 0:
-            return 0
-        return (self.length**2 + other.length**2 - d.length**2)/2/self.length/other.length
-
     def scalar_mul(self, other):  # скалярное произведение
         return self.x * other.x + self.y * other.y + self.z * other.z
 
