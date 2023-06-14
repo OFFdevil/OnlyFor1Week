@@ -55,7 +55,6 @@ parser.add_argument('--constellations', type=str, nargs='*', metavar='NAME', def
                     help='Constellations filter for stars')
 
 
-# принимает строку в формате даты и времени и возвращает нужный формат объекта
 def extract_time(string):
     full_year = ["%d.%m.%Y %H:%M:%S", "%d.%m.%Y %H:%M", "%d.%m.%Y %H", "%d.%m.%Y"]
     short_year = ["%d.%m.%y %H:%M:%S", "%d.%m.%y %H:%M", "%d.%m.%y %H", "%d.%m.%y"]
@@ -72,7 +71,6 @@ def extract_time(string):
     return full_year, short_year, time
 
 
-# получаем все файлы из нужной папки
 def get_all_files_in_dir(path: str, ext: str):
     for fn in os.listdir(path):
         if fn.endswith(ext):
@@ -91,8 +89,7 @@ Task = namedtuple('Task',
                    'full_screen_mode', 'pause', 'animation'])
 
 
-def create_task():  # анализируем парамтеры командной строки, задает базу данных и др параметры
-    # возвращаем объект, содержащий информацию о базе данных
+def create_task():
     args = parser.parse_args()
     dt = extract_time(args.d)
     if isinstance(dt, tuple):

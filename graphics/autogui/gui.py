@@ -1,14 +1,10 @@
-from PyQt5.QtWidgets import QGridLayout
-from PyQt5.QtWidgets import QWidget
-from graphics.autogui.cast_tools import to_widget
 from graphics.autogui.item import Item
-from graphics.autogui.label_item import LabelItem
 
 
 class GUI(Item):
     def __init__(self, name: str):
         super().__init__(False)
-        self._nested = []  # храним инфу про вложенные виджеты и контейнеры
+        self._nested = []
         self.setTitle(name)
 
     def add(self, item: Item) -> Item:  # добавляет новый компонент item

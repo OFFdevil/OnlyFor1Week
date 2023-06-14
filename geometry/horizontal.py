@@ -38,22 +38,21 @@ class Horizontal(NVector):
         return 1 - d.length ** 2 / 2
 
     @property
-    def a(self):  # получаем значение азимута
+    def a(self):
         return self[0]
 
     @property
-    def h(self):  # получаем значение высоты
+    def h(self):
         return self[1]
 
-    def __add__(self, other):  # складываем две координаты в горизонтальной системе
+    def __add__(self, other):
         return Horizontal(*self._add_(other))
 
-    def __sub__(self, other):  # вычитаем две координаты в горизонтальной системе
+    def __sub__(self, other):
         return Horizontal(*self._sub_(other))
 
-    def __mul__(self, other):  # умножаем две координаты в горизонтальной системе
+    def __mul__(self, other):
         return Horizontal(*self._mul_(other))
 
-    def __str__(self):  # возвращает строковое представление объекта класса
-        # в виде пары чисел, округленных до 2х знаков
+    def __str__(self):
         return "({:.2f}, {:.2f})".format(self.a, self.h)

@@ -1,11 +1,6 @@
-from unittest import TestCase
 from unittest import main
-from math import cos, radians, sin
-from geometry.equatorial import Equatorial
-from geometry.horizontal import Horizontal
 from geometry.vector import Vector
 from tests.double_testcase import DoubleTestCase
-from utility import foreach
 
 
 class VectorTest(DoubleTestCase):

@@ -13,8 +13,6 @@ class KeyControllableSky(FilterableSky):
         super().__init__(watcher, sky_base, selector)
         self.setFocus()
         self._configurator_widget.setVisible(False)
-        # прописывание команд, которые выполняются при нажатии клавиш движение вверх, вниз, вправо, влево, пауза,
-        # сохранение изображения, открытие меню и изображения на полный экран
         pr = self._key_processor = KeyProcessor()
         pr.should_be_called(self._look_around) \
             .when_pressed(Qt.Key_W).with_arguments(0, 2, 0) \
@@ -31,21 +29,18 @@ class KeyControllableSky(FilterableSky):
         pr.should_be_called(self.close).when_pressed(Qt.Key_Escape)
         pr.should_be_called(self.rerender).when_pressed(Qt.Key_R)
 
-    # функция открытия на полный экран
     def switch_full_screen(self):
         if self.isFullScreen():
             self.showNormal()
         else:
             self.showFullScreen()
 
-    # функция открытия меню
     def switch_menu(self):
         self._configurator_widget.setVisible(not self._configurator_widget.isVisible())
 
-    def switch_filter(self):  # изменение состояния виджета(если бы видимым, станет невидимым и наоборот)
+    def switch_filter(self):
         self._filter_widget.setVisible(not self._filter_widget.isVisible())
 
-    # функция сдвигающая небо в нужную сторону (в зависимости от клавиш)
     @try_or_print
     def _look_around(self, *delta):
         da, dh, dr = delta
@@ -53,9 +48,6 @@ class KeyControllableSky(FilterableSky):
         if abs(self.renderer.watcher.see.h + dh) > 90:
             return
         self.renderer.watcher.see += Horizontal(da, dh)
-
-    # Метод получает объект события `e`. Если нажатая клавиша является одной из ключевых команд `_key_commands`,
-    # то вызывается соответствующая функция из словаря `_key_commands` для выполнения команды
 
     def keyPressEvent(self, e):
         self._key_processor.execute(e.key())

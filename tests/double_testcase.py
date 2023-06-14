@@ -10,4 +10,4 @@ class DoubleTestCase(TestCase):
         elif mod is None:
             self.assertLess(abs(first - second), epsilon, msg)
         else:
-            self.assertLess(abs(first - second)%mod, epsilon, msg)
+            self.assertLess(abs(first - second) % mod, epsilon, msg)

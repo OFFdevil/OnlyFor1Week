@@ -1,4 +1,3 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QSlider
 from graphics.autogui.field_item import set_attribute, get_attribute
@@ -6,7 +5,6 @@ from graphics.autogui.item import Item
 from graphics.autogui.text_item import camel_case_to_normal
 
 
-# класс ползунок(для настроек, какие звезды показывать в зависимости от размера)
 class SlideItem(Item):
     def __init__(self, obj, name: str, min: int, max: int, label: str = None):
         super().__init__()
@@ -25,13 +23,13 @@ class SlideItem(Item):
         self._widget.sliderMoved.connect(lambda i: self._switch_apply(True))
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def _switch_edit(self, value):  # сеттер
+    def _switch_edit(self, value):
         self._edit = value
 
-    def _switch_apply(self, value):  # сеттер
+    def _switch_apply(self, value):
         self._apply = value
 
-    def try_save(self):  # проверяет изменения в виджете
+    def try_save(self):
         if self._apply:
             self._apply = False
             self._edit = False

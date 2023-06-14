@@ -11,24 +11,23 @@ from stars.skydatabase import SkyDataBase
 from utility import try_or_print
 
 
-class ControllableSky(Sky):  # пользовательский интерфейс
+class ControllableSky(Sky):
     def __init__(self, watcher: Watcher, sky_base: SkyDataBase, selector: Filter):
         super().__init__(watcher, sky_base, selector)
 
         gui = GUI("CONFIGURATOR")
 
-        camera = gui.add(GUI("CAMERA"))  # объект камера, gui - интерфейс для
-        # взаимодействия пользователя с программой с помощью клавиатуры и мыши
-        camera.add(HorizontalItem(self.renderer.watcher, "position", label="(longitude, latitude)"))  # позиция
-        camera.add(HorizontalItem(self.renderer.watcher, "see"))  # точка обзора
+        camera = gui.add(GUI("CAMERA"))
+        camera.add(HorizontalItem(self.renderer.watcher, "position", label="(longitude, latitude)"))
+        camera.add(HorizontalItem(self.renderer.watcher, "see"))
         camera.add(HorizontalItem(self.renderer.watcher, "up", ro=True))
-        camera.add(FloatItem(self.renderer.watcher, "up_rotation"))  # вращение вверх
+        camera.add(FloatItem(self.renderer.watcher, "up_rotation"))
 
         time = gui.add(GUI("DATE & TIME"))
-        time.add(DateTimeItem(self.renderer.watcher, "local_time"))  # отображение текущего времени
+        time.add(DateTimeItem(self.renderer.watcher, "local_time"))
         time.add(FloatItem(self.renderer.watcher, "star_time", True))
-        time.add(FloatItem(self.settings, "second_per_second"))  # отображение скорости изменения времени
-        time.add(FloatItem(self.settings, "speed_rank"))  # изменение значения скорости
+        time.add(FloatItem(self.settings, "second_per_second"))
+        time.add(FloatItem(self.settings, "speed_rank"))
         time.add(IntItem(self, "delay"))
         time.add(IntItem(self, "_rdelay"))
 
@@ -43,12 +42,9 @@ class ControllableSky(Sky):  # пользовательский интерфей
         view.add(BoolItem(self.renderer, "settings.see_points"))
         view.add(BoolItem(self.renderer, "settings.screen_centre"))
         view.add(BoolItem(self.renderer, "settings.compass"))
-        # набор флажков для выбора созвездий
 
         gui.add(ActionItem("Save image", self.viewer.save_to_file))
-        # возможность сохранить скрин
         gui.add(ActionItem("Pause", self.switch_pause))
-        # возможность поставить на паузу
         gui.add(ActionItem("Current time", self.set_current_time))
 
         self._configurator_widget = gui
@@ -56,19 +52,16 @@ class ControllableSky(Sky):  # пользовательский интерфей
         self._gui = gui
         self.timer.timeout.connect(self._gui_tick)
 
-    def set_current_time(self):  # установка текущего времени
+    def set_current_time(self):
         self.renderer.watcher.local_time = datetime.now()
 
     @try_or_print
     def _gui_tick(self):
         self._gui.handle()
 
-    # определяем небесное телескопическое зрение
-    # определяем небесную сферу с выбранными созвездиями
-    def _apply_constellation_filter(self, selected):  # передаем координаты звезд
+    def _apply_constellation_filter(self, selected):
         self.filter.constellations = selected
 
-    # функция постановки на паузу/ снятия с паузы
     def switch_pause(self):
         if self.settings.speed_rank != 0:
             self._ssr = self.settings.speed_rank

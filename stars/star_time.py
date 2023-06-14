@@ -4,39 +4,35 @@ from geometry.sky_math import StarTimeHelper
 '''https://en.wikipedia.org/wiki/Sidereal_time'''
 
 
-class StarTime:  # класс для работы со звездным временем - lst - куда надо направить телескоп
-    # чтобы увидеть нужный объект (с помощью звездного времени вычисляют положение объекта на небе)
+class StarTime:
     @staticmethod
     def from_local(longitude: float, local: datetime):
         return StarTime(StarTimeHelper.get_star_hour(longitude, local))
 
-    def __init__(self, hours: int):  # _hours - количество звездных часов
+    def __init__(self, hours: int):
         self._hours = hours
 
     @property
-    def total_hours(self):  # подсчет общего кол-ва звездных часов
+    def total_hours(self):
         return self._hours
 
     @property
-    def total_minutes(self):  # подсчет общего кол-ва звездных минут
+    def total_minutes(self):
         return self.total_hours * 60
 
     @property
-    def total_seconds(self):  # подсчет общего кол-ва звездных секунд
+    def total_seconds(self):
         return self.total_minutes * 60
 
     @property
-    def total_degree(self):  # возвращает общее кол-во звездных градусов, умножаем на 15
-        # тк в одном звездном часе содержится 15 звездных градусов
+    def total_degree(self):
         return self.total_hours * 15
 
-    def __int__(self):  # возвращает целую часть общего количества звездных секунд
+    def __int__(self):
         return int(self.total_seconds)
 
-    def __float__(self):  # возвращает общее количество звездных секунд
-        # в виде числа с плавающей запятой
+    def __float__(self):
         return float(self.total_seconds)
 
-    def __str__(self):  # возвращает строковое представление целой части
-        # общего количества звездных секунд.
+    def __str__(self):
         return str(int(self))

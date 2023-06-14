@@ -8,7 +8,7 @@ from stars.star import SPECTRAL_MAP
 
 class Settings:
     def __init__(self):
-        self.fisheye = True  # для обзора - чтобы было искажение рыбьего глаза
+        self.fisheye = True
         self.spectral = True
         self.magnitude = True
         self.see_points = True
@@ -18,7 +18,6 @@ class Settings:
         self.exp_factor = -0.3  # math.log(2) - 1
         self.exp_factor = -0.3  # math.log(2) - 1
         self.pull = 1
-        # задаем цвета
         self._earth_color = QColor(0, 100, 100)
         self._star_color = QColor(255, 255, 255)
         self._sky_color = QColor(0, 0, 0)
@@ -27,8 +26,6 @@ class Settings:
         self._north_color = QColor(0, 128, 255)
         self._south_color = QColor(255, 128, 0)
         self._up_border_color = QColor(64, 255, 32)
-        # создает кисть для окрашивания области, которая соответствует объекту
-        # кортеж является набором инструментов, которые используем для отрисовки объектов
         self._earth_drawer = (QBrush(self._earth_color), QPen(self._earth_color))
         self._star_drawer = (QBrush(self._star_color), QPen(self._star_color))
         self._sky_drawer = (QBrush(self._sky_color), QPen(self._sky_color))
@@ -42,15 +39,14 @@ class Settings:
             clr = hexstr_to_color(SPECTRAL_MAP[i])
             self._spectrals[i] = (QBrush(clr), QPen(clr))
 
-    def get_drawer(self, color_name: str):  # шаблон для создания имен соответствующих
+    def get_drawer(self, color_name: str):
         if color_name in self._spectrals:
             return self._spectrals[color_name]
         # атрибутов
         fullname = "_" + color_name + "_drawer"
         return self.__getattribute__(fullname)
 
-    def apply_color(self, name: str, painter: QPainter):  # шаблон для применения какого-то
-        # цвета
+    def apply_color(self, name: str, painter: QPainter):
         b, p = self.get_drawer(name)
         if b is not None:
             painter.setBrush(b)

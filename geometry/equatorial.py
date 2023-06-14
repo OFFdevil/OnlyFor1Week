@@ -6,16 +6,13 @@ from geometry.sky_math import FirstEquatorialToHorizontal, atan2
 
 
 class Equatorial(NVector):
-    def __init__(self, a, d):  # инициализация координат в экваториальной системе
+    def __init__(self, a, d):
         super().__init__((to_0_360(a), to_cos_period_cutted(d)))
 
-    def apply_time_rotation(self, star_time_degree):  # позволяет обновлять восхождение
-        # для наблюдаемых объектов в зависимости от времени наблюдения.
+    def apply_time_rotation(self, star_time_degree):
         return Equatorial(self.a + star_time_degree, self.d)
 
-    def to_horizontal_with_latitude(self, h) -> Horizontal:  # преобразует координаты из экваториальной
-        # в горизонтальную, используя значение звездного времени (звездные градусы)
-        # и высоту наблюдателя (градусы)
+    def to_horizontal_with_latitude(self, h) -> Horizontal:
         f, t, d = map(math.radians, (h, *self))
 
         cosz = FirstEquatorialToHorizontal.cosz(f, d, t)
@@ -35,22 +32,20 @@ class Equatorial(NVector):
 
     def to_horizontal_with_time(self, star_time_degree, h) -> Horizontal:
         return self.apply_time_rotation(star_time_degree).to_horizontal_with_latitude(h)
-        # возвращает объект в горизонтальной системе координат в зависимости
-        # от значения звездного времени
 
     @property
-    def a(self):  # получаем значение прямого восхождения
+    def a(self):
         return self[0]
 
     @property
-    def d(self):  # получаем значение склонения
+    def d(self):
         return self[1]
 
-    def __add__(self, other):  # складываем две координаты в экваториальной системе
+    def __add__(self, other):
         return Equatorial(*self._add_(other))
 
-    def __sub__(self, other):  # вычитаем две координаты в экваториальной системе
+    def __sub__(self, other):
         return self + other * (-1)
 
-    def __mul__(self, other):  # умножаем две координаты в экваториальной системе
+    def __mul__(self, other):
         return Equatorial(*self._mul_(other))

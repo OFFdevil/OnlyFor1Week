@@ -1,6 +1,4 @@
-from unittest import TestCase
-
-from math import atan2, cos, radians, sin
+from math import cos, radians, sin
 
 from geometry.equatorial import Equatorial
 from geometry.horizontal import Horizontal

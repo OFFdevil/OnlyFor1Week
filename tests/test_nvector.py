@@ -1,4 +1,3 @@
-from unittest import TestCase
 from unittest import main
 from geometry.nvector import NVector
 from tests.double_testcase import DoubleTestCase

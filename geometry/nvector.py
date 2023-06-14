@@ -2,25 +2,24 @@ from math import sqrt
 
 
 class NVector:
-    def __init__(self, dimensions):  # создаем объект класса по заданным координатам
-        self._items = tuple(dimensions)  # храним координаты
-        self._rank = len(self._items)  # и размерность
+    def __init__(self, dimensions):
+        self._items = tuple(dimensions)
+        self._rank = len(self._items)
 
     @property
     def rank(self):
         return self._rank
 
     @property
-    def length(self):  # считаем длину вектора
+    def length(self):
         s = 0
         for i in self:
             s += i ** 2
         return sqrt(s)
 
-    def __getitem__(self, index):  # возвращает координату номера index
+    def __getitem__(self, index):
         return self._items[index]
 
-    # next & iter - для итерации по координатам вектора, как по контейнеру
     def __next__(self):
         for i in self._items:
             yield i
@@ -29,23 +28,22 @@ class NVector:
         for i in self._items:
             yield i
 
-    # перегрузка арифметических функций
     def _add_(self, other):
         v = []
         for i in range(0, self.rank):
             v.append(self[i] + other[i])
         return NVector(v)
 
-    def _mul_(self, other):  # умножаем каждую компоненту вектора на переданный параметр
+    def _mul_(self, other):
         v = []
         for i in range(0, self.rank):
             v.append(self[i] * other)
         return NVector(v)
 
-    def _sub_(self, other):  # вычитание
+    def _sub_(self, other):
         return self._add_(other._mul_(-1))
 
-    def __str__(self):  # преобразование в строку
+    def __str__(self):
         s = "("
         for i in self:
             s += str(i) + ', '
@@ -53,11 +51,11 @@ class NVector:
 
     def __hash__(self):
         h = 0
-        for i in self:  # XOR
+        for i in self:
             h ^= hash(i)
         return h
 
-    def __eq__(self, other):  # определяет равны объекты или нет
+    def __eq__(self, other):
         if self.rank != other.rank:
             return False
         for i in range(0, self.rank):

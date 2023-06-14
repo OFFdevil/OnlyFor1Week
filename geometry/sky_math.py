@@ -23,16 +23,10 @@ def atan2(y, x):
     return matan2(y, x)
 
 
-class FirstEquatorialToHorizontal:  # перевод из первой экваториальной в горизонтальную
+class FirstEquatorialToHorizontal:
     """https://ru.wikipedia.org/wiki/%D0%93%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0
     %D1%8F_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%BA%D0%BE%D0%BE%D1%80%D0%B4%D0%B8%D0%BD%D0%B0%D1%82"""
 
-    # далее вспомогательные функции для перехода из первой экваториальной в горизонтальную(формулы с вики)
-    # f-широта
-    # t- часовой угол светила
-    # d-склонение светила
-    # z-Зенитное расстояние z
-    # a-Азимут светила
     @staticmethod
     def cosz(f, d, t):
         return sin(f) * sin(d) + cos(d) * cos(f) * cos(t)
@@ -49,7 +43,6 @@ class FirstEquatorialToHorizontal:  # перевод из первой эква�
 class StarTimeHelper:
     """http://www.jgiesen.de/astro/astroJS/siderealClock/sidClock.js"""
 
-    # определяем звездное время в часах для определенной даты и местности
     @staticmethod
     def get_star_hour(longitude, dt: datetime):
         """see: GM_Sidereal_Time, LM_Sidereal_Time"""
@@ -62,7 +55,6 @@ class StarTimeHelper:
                 8640184.812866 + (0.093104 - 0.0000062 * t_eph) * t_eph) * t_eph / 3600.0
         return GM0ST + longitude / 15
 
-    # представляет дату в системе юлианского календаря из грегорианского
     @staticmethod
     def get_julian_day(dt: datetime):
         day = sum(jdcal.gcal2jd(dt.year, dt.month, dt.day))

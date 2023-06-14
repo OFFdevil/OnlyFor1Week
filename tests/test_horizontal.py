@@ -1,4 +1,3 @@
-from unittest import TestCase
 from unittest import main
 from math import cos, radians, sin
 from geometry.equatorial import Equatorial

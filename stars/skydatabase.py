@@ -1,9 +1,9 @@
 from stars.filter import Filter
 
 
-class SkyDataBase:  # класс-база данных со всеми звездами
-    def __init__(self, stars):  # атрибуты классы - звезды и созвездия
-        consts = {star.constellation: [] for star in stars}  # созвездия - это массивы звезд
+class SkyDataBase:
+    def __init__(self, stars):
+        consts = {star.constellation: [] for star in stars}
         for star in stars:
             consts[star.constellation].append(star)
         self._constellations = {}
@@ -14,15 +14,15 @@ class SkyDataBase:  # класс-база данных со всеми звез�
                 self._names.add(s.name)
 
     @property
-    def constellations(self):  # геттер.
-        return self._constellations.keys()  # функция keys по сути возвращает ключи словаря(то есть названия созвездий)
+    def constellations(self):
+        return self._constellations.keys()
 
-    def get_stars(self, selection: Filter):  # возвращает звезды данных созвездий(передаем Filter)
+    def get_stars(self, selection: Filter):
         stars = []
-        for constellation in selection.constellations:  # получаем звезды из выбранных созвездий
-            if constellation not in self._constellations:  # если переданного созвездия не существует
+        for constellation in selection.constellations:
+            if constellation not in self._constellations:
                 continue
-            for star in self._constellations[constellation]:  # добавляем все звезды всех выбранных созвездий
+            for star in self._constellations[constellation]:
                 if selection.magnitude.is_include(star.magnitude):
                     stars.append(star)
         return stars

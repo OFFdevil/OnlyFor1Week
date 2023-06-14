@@ -4,10 +4,9 @@ from geometry.horizontal import Horizontal
 from graphics.autogui.field_item import FieldItem
 
 
-# класс, отвечающий за item в горизонтальной системе координат
 class HorizontalItem(FieldItem):
     @staticmethod
-    def parse_str(s, regexp):  # парсит строку(a и d вектора в горизонт коорд) по данной регулярке
+    def parse_str(s, regexp):
         match = regexp.match(s)
         if match is None:
             raise ValueError()
@@ -17,9 +16,8 @@ class HorizontalItem(FieldItem):
         return Horizontal(float(groups["a"]), float(groups["d"]))
 
     def __init__(self, obj: object, fname: str, ro: bool = False, label=None):
-        pregex = "^\(?(?P<a>[+-]?[\d.]+?), (?P<d>[+-]?[\d.]+?)\)?$"  # сама регулярка
+        pregex = "^\(?(?P<a>[+-]?[\d.]+?), (?P<d>[+-]?[\d.]+?)\)?$"
         cpregexp = re.compile(pregex)
         builder = str
-        parser = lambda s: HorizontalItem.parse_str(s, cpregexp)  # парсер. принимает строку s возвращает
-        # объект типа horizontal
-        super().__init__(obj, fname, builder, parser, ro, label)  # инициализируем HorizontalItem
+        parser = lambda s: HorizontalItem.parse_str(s, cpregexp)
+        super().__init__(obj, fname, builder, parser, ro, label)

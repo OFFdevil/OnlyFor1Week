@@ -9,7 +9,6 @@ SPECTRAL_MAP = {'': '00ff00', 'B': 'cad7ff',
 
 
 class Star:
-    # звезда характеризуется позицией в экватор. системе, созвездием, магнитудой, цветом и названием
     def __init__(self, pos: Equatorial, constellation, magnitude, spectral_class, name):
         self._position = pos
         self._constellation = constellation

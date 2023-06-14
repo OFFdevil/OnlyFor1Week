@@ -13,21 +13,18 @@ from stars.filter import Filter
 from stars.skydatabase import SkyDataBase
 
 
-class Sky(QMainWindow):  # окно со звездным небом
+class Sky(QMainWindow):
     def __init__(self, watcher: Watcher, sky_base: SkyDataBase,
-                 selector: Filter):  # атрибуты - наблюдатель, база данных звезд и фильтр
+                 selector: Filter):
         super().__init__()
 
-        self.renderer = Renderer(watcher)  # наблюдатель
+        self.renderer = Renderer(watcher)
         self.settings = ControllableSkySettings()
 
-        self._available_constellations = sky_base.constellations  # выбранные пользователем созвездия
+        self._available_constellations = sky_base.constellations
         self._objects = []
         self._sky_sphere = sky_base
-        self.filter = selector  # текущий фильтр для звезд
-
-        # QTimer - работа с таймером
-
+        self.filter = selector
         self._create_ui()
 
         self.timer = QtCore.QTimer(self)
@@ -44,12 +41,11 @@ class Sky(QMainWindow):  # окно со звездным небом
 
         self.rerender()
 
-    def _create_ui(self):  # создаем интерфейс звездного неба
-        main = QtWidgets.QGridLayout()  # создаем сеточный макет main
-        main.setContentsMargins(0, 0, 0,
-                                0)  # (int left, int top, int right, int bottom) - устанавливаем поля для использования вокруг макета
-        main.setSpacing(0)  # устанавливаем интервалы 0 по вертикали и горизонтали
-        self.viewer = ImageViewer()  # создаем
+    def _create_ui(self):
+        main = QtWidgets.QGridLayout()
+        main.setContentsMargins(0, 0, 0, 0)
+        main.setSpacing(0)
+        self.viewer = ImageViewer()
         main.addWidget(self.viewer, 0, 0)
 
         self._filter_widget = QWidget()
@@ -71,14 +67,11 @@ class Sky(QMainWindow):  # окно со звездным небом
         self.setVisible(True)
 
     def _update_image(self):
-        # self.viewer.width() и height - текущая ширина и высота объекта, устанавливаем их
         self.renderer.width = self.viewer.width()
         self.renderer.height = self.viewer.height()
-        # генерируем новое изображение на основе объекта objects
         image = self.renderer.render(self._sky_sphere.get_stars(self.filter), self._switcher > 1)
         if self.forecast_step > 0:
             self._switcher = (self._switcher + 1) % self.forecast_step
-        # устанавливаем новое изображение
         self.viewer.image = image
 
     @profile
@@ -87,7 +80,6 @@ class Sky(QMainWindow):  # окно со звездным небом
             return
         self._rdelay = exec_delta.microseconds / 1000
         self.renderer.watcher.local_time += exec_delta * self.settings.second_per_second
-        # обновление локального времени в переменной
         if self._i <= 25 and self.animation:
             self.renderer.settings.pull = self._i / 25
             self._i += 1

@@ -1,5 +1,5 @@
 from math import cos, radians, sin
-from geometry.angle_helpers import to_0_360, to_m180_180, to_cos_period_cutted, time_to_seconds, seconds_to_degree, \
+from geometry.angle_helpers import to_0_360, to_m180_180, time_to_seconds, seconds_to_degree, \
     time_to_degree, dtime_to_degree
 from tests.double_testcase import DoubleTestCase
 from utility import foreach
